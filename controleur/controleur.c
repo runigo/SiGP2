@@ -98,20 +98,33 @@ int controleurActionClavier(controleurT * controleur)
 
 void controleurEvolution(controleurT * controleur)
 	{
+	//printf("Entrée dans controleurEvolution, SDL_GetTicks() = %d\n",(int)(SDL_GetTicks()));
+
 		//fprintf(stderr, "    Durée entre affichage = %d\n",horlogeChronoDuree(&(*controleur).horloge));
-	//horlogeChronoDepart(&(*controleur).horloge);
+	horlogeChronoDepart(&(*controleur).horloge);
 
-		//fprintf(stderr, "Projection du système sur la représentation graphique\n");
+		//fprintf(stderr, "\nProjection du système sur la représentation graphique");
 	controleurProjection(controleur);
+		//fprintf(stderr, "    Durée = %d\n",horlogeChronoDuree(&(*controleur).horloge));
 
-		//fprintf(stderr, "Evolution temporelle du systeme\n");
 	if((*controleur).mode > 0)
-		controleurEvolutionSysteme(controleur);
+		{
+			horlogeChronoDepart(&(*controleur).horloge);
+			//fprintf(stderr, "Evolution temporelle du systeme");
+			controleurEvolutionSysteme(controleur);
+			//fprintf(stderr, "    Durée = %d\n",horlogeChronoDuree(&(*controleur).horloge));
+		}
 
-		//fprintf(stderr, "Mise à jour de la fenêtre graphique\n");
+	horlogeChronoDepart(&(*controleur).horloge);
+
+		//fprintf(stderr, "Mise à jour de la fenêtre graphique");
 	controleurConstructionGraphique(controleur);
+		//fprintf(stderr, "    Durée = %d\n",horlogeChronoDuree(&(*controleur).horloge));
 
+	//horlogeChronoDepart(&(*controleur).horloge);
 	//fprintf(stderr, "    Durée des évolutions = %d\n",horlogeChronoDuree(&(*controleur).horloge));
+	//printf("Sortie de controleurEvolution, SDL_GetTicks() = %d\n",(int)(SDL_GetTicks()));
+		//fprintf(stderr, "    Durée entre affichage = %d\n",horlogeChronoDuree(&(*controleur).horloge));
 
 	return;
 	}

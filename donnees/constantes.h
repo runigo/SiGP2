@@ -47,7 +47,7 @@ termes.
 
 #define ALEA 77 // Taille du tableau de nombre aléatoire
 
-#define NOMBRE 249 // Nombre de particules
+#define NOMBRE 149 // Nombre de particules
 #define TAILLE_MAX 19 // Taille maximale des particules
 #define TAILLE 5 // Taille des particules
 //#define IMPACT 1 // Influence des chocs avec les parois
