@@ -1,10 +1,10 @@
 
 /*
-Copyright avril 2018, Stephan Runigo
+Copyright mai 2018, Stephan Runigo
 runigo@free.fr
-SiGP 1.4  simulateur de gaz parfait
-Ce logiciel est un programme informatique servant à simuler un gaz parfait
-et à en donner une représentation graphique. Il permet d'observer une détente
+SiGP 2.1  simulateur de gaz parfait
+Ce logiciel est un programme informatique servant à simuler un gaz et à
+en donner une représentation graphique. Il permet d'observer une détente
 de Joule ainsi que des transferts thermiques avec des thermostats.
 Ce logiciel est régi par la licence CeCILL soumise au droit français et
 respectant les principes de diffusion des logiciels libres. Vous pouvez
@@ -33,6 +33,9 @@ termes.
 
 #include "controleur.h"
 
+void controleurChangeMode(controleurT * controleur);
+void controleurChangeVitesse(controleurT * controleur, float facteur);
+
 void controleurEvolution(controleurT * controleur);
 int controleurProjection(controleurT * controleur);
 int controleurEvolutionSysteme(controleurT * controleur);
@@ -40,6 +43,21 @@ int controleurConstructionGraphique(controleurT * controleur);
 int controleurActionClavier(controleurT * controleur);
 
 int controleurTraiteEvenement(controleurT * controleur);
+
+
+int controleurActionClavier(controleurT * controleur);
+int controleurClavierMaj(controleurT * controleur);
+int controleurClavierCtrl(controleurT * controleur);
+
+int controleurCommandes(controleurT * controleur, int zone);
+int controleurInitialiseParametres(controleurT * controleur, int forme);
+
+int controleurSouris(controleurT * controleur);
+int controleurDefile(controleurT * controleur);
+int controleurDefilePointDeVue(controleurT * controleur);
+int controleurDefileCommandes(controleurT * controleur, int zone);
+void controleurBoutonSouris(controleurT * controleur, int appui);
+void controleurAfficheSouris(controleurT * controleur);
 
 int controleurClavier(controleurT * controleur);
 int controleurClavierMaj(controleurT * controleur);
@@ -49,6 +67,56 @@ void controleurBoutonSouris(controleurT * controleur, int appui);
 
 void controleurChangeMode(controleurT * controleur);
 void controleurChangeVitesse(controleurT * controleur, float facteur);
+
+int controleurInitialise(controleurT * controleur)
+	{
+
+	(*controleur).duree = (*controleur).options.duree;	// nombre d'évolution du système par affichage
+
+	(*controleur).modePause = -1;	// Évolution du système si < 0
+	(*controleur).sortie = 0;	// Sortie de SiCP si > 0
+	(*controleur).appui = 0;	// Appuie sur la souris
+
+		fprintf(stderr, " Initialisation du système\n");
+		// Initialisation géométrique de l'enceinte
+
+	(*controleur).systeme.montage.largeur = (LARGEUR-MARGE); // Largeur
+	(*controleur).systeme.montage.hauteur = (HAUTEUR-MARGE);// Hauteur
+	(*controleur).systeme.montage.demiLargeur = (LARGEUR-MARGE)/2; // Demi largeur
+	(*controleur).systeme.montage.demiHauteur = (HAUTEUR-MARGE)/2;// Demi hauteur
+
+	(*controleur).systeme.montage.paroiCentrale = (*controleur).options.cloison;// 0 : pas de paroi centrale. 
+	(*controleur).systeme.montage.trou = (*controleur).options.trou;// Taille du trou, sur 2
+
+		// Initialisation du thermostat
+
+	(*controleur).systeme.montage.thermostat.temperature = (*controleur).options.temperature;//	Température initiale
+	(*controleur).systeme.montage.thermostat.gauche = (*controleur).options.gauche;	//	Température thermostat gauche
+	(*controleur).systeme.montage.thermostat.droite = (*controleur).options.droite;	//	Température thermostat droite
+
+	(*controleur).systeme.montage.thermostat.actif = (*controleur).options.thermostat;	//	0 : Système isolé, 1:température uniforme, 2:active gauche-droite
+
+		// Initialisation du système
+	systemeInitialise(&(*controleur).systeme, TAILLE, sqrt((*controleur).options.temperature));
+
+
+		// Initialisation du graphe
+	//grapheInitialise(&(*controleur).graphe, (*controleur).options.cloison, (*controleur).options.thermostat);
+	grapheInitialise(&(*controleur).graphe);
+
+		fprintf(stderr, " Initialisation SDL\n");
+	interfaceInitialisationSDL();
+		//fprintf(stderr, " Création de l'interface SDL\n");
+	interfaceCreation(&(*controleur).interface);
+		//fprintf(stderr, " Création du rendu\n");
+	graphiqueCreation(&(*controleur).graphique, &(*controleur).interface);
+
+		fprintf(stderr, " Initialisation horloge SDL\n");
+	horlogeCreation(&(*controleur).horloge);
+
+
+	return 0;
+	}
 
 int controleurDestruction(controleurT * control)
 	{
@@ -72,7 +140,6 @@ int controleurSimulationGraphique(controleurT * controleur)
 	{
 		//fprintf(stderr, "Entrée dans la boucle SDL\n");
 	do	{
-			//fprintf(stderr, "Prise en compte des actions clavier\n");
 		controleurActionClavier(controleur);
 		}
 	while((*controleur).sortie == 0);
@@ -82,18 +149,12 @@ int controleurSimulationGraphique(controleurT * controleur)
 
 int controleurActionClavier(controleurT * controleur)
 	{
-	int sortie = 0;
-		//fprintf(stderr, "Traitement des évenements, mode %d\n", (*controleur).option.mode);
-	if(SDL_WaitEvent(&(*controleur).interface.evenement))
+		//fprintf(stderr, "Prise en compte des actions clavier\n");
+	if (SDL_WaitEvent(&(*controleur).interface.evenement))
 		{
-		sortie += controleurTraiteEvenement(controleur);
+		controleurTraiteEvenement(controleur);
 		}
-	if(sortie != 0)
-		{
-		fprintf(stderr, "sortie <> 0\n");
-		(*controleur).sortie = 1;
-		}
-	return sortie;
+	return (*controleur).sortie;
 	}
 
 void controleurEvolution(controleurT * controleur)
@@ -101,21 +162,21 @@ void controleurEvolution(controleurT * controleur)
 	//printf("Entrée dans controleurEvolution, SDL_GetTicks() = %d\n",(int)(SDL_GetTicks()));
 
 		//fprintf(stderr, "    Durée entre affichage = %d\n",horlogeChronoDuree(&(*controleur).horloge));
-	horlogeChronoDepart(&(*controleur).horloge);
+	//horlogeChronoDepart(&(*controleur).horloge);
 
 		//fprintf(stderr, "\nProjection du système sur la représentation graphique");
 	controleurProjection(controleur);
 		//fprintf(stderr, "    Durée = %d\n",horlogeChronoDuree(&(*controleur).horloge));
 
-	if((*controleur).mode > 0)
+	if((*controleur).modePause < 0)
 		{
-			horlogeChronoDepart(&(*controleur).horloge);
+			//horlogeChronoDepart(&(*controleur).horloge);
 			//fprintf(stderr, "Evolution temporelle du systeme");
 			controleurEvolutionSysteme(controleur);
 			//fprintf(stderr, "    Durée = %d\n",horlogeChronoDuree(&(*controleur).horloge));
 		}
 
-	horlogeChronoDepart(&(*controleur).horloge);
+	//horlogeChronoDepart(&(*controleur).horloge);
 
 		//fprintf(stderr, "Mise à jour de la fenêtre graphique");
 	controleurConstructionGraphique(controleur);
@@ -131,8 +192,34 @@ void controleurEvolution(controleurT * controleur)
 
 int controleurProjection(controleurT * controleur)
 	{
+		//fprintf(stderr, "Projection du système sur la représentation graphique\n");
+	int largeur;
+	int hauteur;
+	int x, y;
+
+		//void SDL_GetWindowSize(SDL_Window* window, int* w, int* h)
+	SDL_GetWindowSize((*controleur).interface.fenetre, &largeur, &hauteur);
+
+		// Réinitialisation des commandes si la fenêtre change de taille
+	if((*controleur).graphique.largeur!=largeur || (*controleur).graphique.hauteur!=hauteur)
+		{
+		(*controleur).graphique.largeur=largeur;
+		(*controleur).graphique.hauteur=hauteur;
+		commandesInitialiseBoutons(&(*controleur).commandes, largeur, hauteur);
+		}
+
+		// Réinitialisation des commandes de la souris
+	SDL_PumpEvents();
+	SDL_GetMouseState(&x,&y);
+	commandesInitialiseSouris(&(*controleur).commandes, x, y);
+
+		//fprintf(stderr, "projectionInitialiseLongueurs\n");
+	projectionInitialiseLongueurs(&(*controleur).projection, hauteur*RATIO_H_L, largeur);
+
 		// Projection du système sur le graphique
-	projectionSystemeGraphe(&(*controleur).systeme,&(*controleur).graphe);
+	projectionSystemeGraphe(&(*controleur).systeme, &(*controleur).projection, &(*controleur).graphe);
+
+	projectionSystemeCommandes(&(*controleur).systeme, &(*controleur).projection, &(*controleur).commandes, (*controleur).options.duree, (*controleur).modePause);
 
 	return (*controleur).sortie;
 	}
@@ -167,6 +254,8 @@ int controleurTraiteEvenement(controleurT * controleur)
 		{
 		case SDL_QUIT:
 			sortie = 1;break;
+		case SDL_MOUSEWHEEL:
+			controleurDefile(controleur);break;
 		case SDL_MOUSEMOTION:
 			sortie = controleurSouris(controleur);break;
 		case SDL_MOUSEBUTTONDOWN:
@@ -184,8 +273,8 @@ int controleurTraiteEvenement(controleurT * controleur)
 				}
 			else
 				{
-				if ((((*controleur).interface.evenement.key.keysym.mod & KMOD_LSHIFT) == KMOD_LCTRL)
-				|| (((*controleur).interface.evenement.key.keysym.mod & KMOD_RSHIFT) == KMOD_RCTRL))
+				if ((((*controleur).interface.evenement.key.keysym.mod & KMOD_LCTRL) == KMOD_LCTRL)
+				|| (((*controleur).interface.evenement.key.keysym.mod & KMOD_RCTRL) == KMOD_RCTRL))
 					{
 					sortie = controleurClavierCtrl(controleur);break;
 					}
@@ -209,7 +298,7 @@ int controleurTraiteEvenement(controleurT * controleur)
 
 void controleurChangeMode(controleurT * controleur)
 	{
-	(*controleur).mode=-(*controleur).mode;
+	(*controleur).modePause=-(*controleur).modePause;
 
 	return;
 	}
@@ -632,7 +721,255 @@ int controleurSouris(controleurT * controleur)
 
 void controleurBoutonSouris(controleurT * controleur, int appui)
 	{
+
 	(*controleur).appui=appui;
+	
+	if(appui==1)
+		{
+		if((*controleur).commandes.sourisX>(*controleur).commandes.rotatifs)
+			{
+			if((*controleur).commandes.sourisX>(*controleur).commandes.boutons)
+				{
+				controleurCommandes(controleur, 2);
+				}
+			else
+				{
+				controleurCommandes(controleur, 1);
+				}
+			}
+		else
+			{
+			if((*controleur).commandes.sourisY>(*controleur).commandes.bas)
+				{
+				controleurCommandes(controleur, 3);
+				}
+			else
+				{
+				controleurCommandes(controleur, 0);
+				}
+			}
+		}
 	return;
 	}
+
+int controleurCommandes(controleurT * controleur, int zone)
+	{
+	int commande;
+	if(zone==2)
+		{
+		commande = commandeBoutons(&(*controleur).commandes);
+		switch(commande)	//	
+			{// 0 : Pas de cloison, 1 : Cloison fermée, 2 : Cloison percée, 3 : Maxwell
+			case 0: // Cloison
+				systemeChangeCloison(&(*controleur).systeme, 1);break;
+			case 1: // Trou
+				systemeChangeCloison(&(*controleur).systeme, 2);break;
+			case 2: // Max.
+				systemeChangeCloison(&(*controleur).systeme, 0);break;
+			case 3: // Démon
+				systemeChangeCloison(&(*controleur).systeme, 3);break;
+			case 4: // Particule
+				;break;
+			case 5: // Particule
+				;break;
+			case 6: // Particule
+				;break;
+			case 7: // Marche
+				thermostatChangeEtat(&(*controleur).systeme.montage.thermostat, 1);break;
+			case 8: // Arrêt
+				thermostatChangeEtat(&(*controleur).systeme.montage.thermostat, 0);break;
+			case 9: // 
+				;break;
+			case 10: // thermostatChangeEtat(&(*controleur).systeme.montage.thermostat, )
+				;break;
+			case 11: // Marche Gauche
+				thermostatChangeEtat(&(*controleur).systeme.montage.thermostat, 2);break;
+			case 12: // Arrêt
+				thermostatChangeEtat(&(*controleur).systeme.montage.thermostat, 0);break;
+			case 13: // 
+				;break;
+			case 14: // Marche Droite
+				thermostatChangeEtat(&(*controleur).systeme.montage.thermostat, 2);break;
+			case 15: // Arrêt
+				thermostatChangeEtat(&(*controleur).systeme.montage.thermostat, 0);break;
+			case 16: // 
+				;break;
+			default:
+				;
+			}
+		}
+	if(zone==3)
+		{
+		commande = commandeTriangles(&(*controleur).commandes);
+		switch(commande)	//	
+			{
+			case 0:
+				;break;
+			case 1:
+				;break;
+			case 2:
+				;break;
+			case 3:
+				;break;
+			case 4:
+				;break;
+			case 5:
+				controleurChangeVitesse(controleur, 0.32);break;
+			case 6:
+				controleurChangeVitesse(controleur, 0.91);break;
+			case 7:
+				controleurChangeMode(controleur);break;
+			case 8:
+				controleurChangeVitesse(controleur, -1.0);break;
+			case 9:
+				controleurChangeVitesse(controleur, 1.1);break;
+			case 10:
+				controleurChangeVitesse(controleur, 3.1);break;
+		/*	case 11:
+				systemeInitialisePosition(&(*controleur).systeme, 0);break;
+			case 12:
+				systemeInitialisePosition(&(*controleur).systeme, 1);break;
+			case 13:
+				systemeInitialisePosition(&(*controleur).systeme, 2);break;
+			case 14:
+				systemeInitialisePosition(&(*controleur).systeme, 4);break;
+			case 15:
+				systemeInitialisePosition(&(*controleur).systeme, 5);break;
+			case 16:
+				systemeInitialisePosition(&(*controleur).systeme, 6);break;
+			case 17:
+				controleurInitialiseParametres(controleur, 0);break;
+			case 18:
+				controleurInitialiseParametres(controleur, 1);break;
+			case 19:
+				controleurInitialiseParametres(controleur, 2);break;
+			case 20:
+				controleurInitialiseParametres(controleur, 3);break;
+		*/	default:
+				;
+			}
+		}
+	return 0;
+	}
+/*
+int controleurInitialiseParametres(controleurT * controleur, int forme)
+	{
+	(*controleur).systeme.premier->pendule.dephasage = 0; // Supprime les fluxons
+	changeConditionsLimites(&(*controleur).systeme, 1); // Libre
+	moteursChangeEtatJosephson(&(*controleur).systeme.moteurs,0); // Josephson
+
+	switch(forme)
+		{
+		case 0:
+			changeCouplage(&(*controleur).systeme, 1.1);
+			changeConditionsLimites(&(*controleur).systeme, 1);break;
+		case 1:
+			changeDissipation(&(*controleur).systeme, 1.1);break;
+		case 2:
+			moteursChangeEtatJosephson(&(*controleur).systeme.moteurs,1);break;
+		case 3:
+			changeConditionsLimites(&(*controleur).systeme, 0);break;
+		case 4:
+			changeConditionsLimites(&(*controleur).systeme, 0);break;
+		default:
+			;
+		}
+	return 0;
+	}
+*/
+
+int controleurDefile(controleurT * controleur)
+	{
+	if((*controleur).commandes.sourisX>(*controleur).commandes.rotatifs)
+		{
+		controleurDefileCommandes(controleur, 1);
+		}
+	else
+		{
+		if((*controleur).commandes.sourisY>(*controleur).commandes.bas)
+			{
+			controleurDefileCommandes(controleur, 3);
+			}
+		}
+	return 0;
+	}
+
+int controleurDefileCommandes(controleurT * controleur, int zone)
+	{
+	int commande;
+	if(zone==1)
+		{
+		commande = commandeRotatifs(&(*controleur).commandes);
+		if((*controleur).interface.evenement.wheel.y > 0) // scroll up
+			{
+			switch(commande)
+				{
+				case 0:
+					montageChangeTrou(&(*controleur).systeme.montage, 1.1);break;
+				case 1:
+					systemeChangeDiametre(&(*controleur).systeme, 1.1);break;
+				case 2:	//	Valeur de la température
+					thermostatChangeTemperature(&(*controleur).systeme.montage.thermostat, 1.1);break;
+				case 3:	//	Température à gauche
+					thermostatChangeTemperatureGauche(&(*controleur).systeme.montage.thermostat,1.1);break;
+				case 4:	//	Température à droite
+					thermostatChangeTemperatureDroite(&(*controleur).systeme.montage.thermostat,1.1);break;
+				default:
+					;
+				}
+			}
+		else if((*controleur).interface.evenement.wheel.y < 0) // scroll down
+			{
+			switch(commande)	
+				{
+				case 0:
+					montageChangeTrou(&(*controleur).systeme.montage, 0.91);break;
+				case 1:
+					systemeChangeDiametre(&(*controleur).systeme, 0.91);break;
+				case 2:
+					thermostatChangeTemperature(&(*controleur).systeme.montage.thermostat, 0.91);break;
+				case 3:
+					thermostatChangeTemperatureGauche(&(*controleur).systeme.montage.thermostat, 0.91);break;
+				case 4:
+					thermostatChangeTemperatureDroite(&(*controleur).systeme.montage.thermostat, 0.91);break;
+				default:
+					;
+				}
+			}
+		}
+
+	if(zone==3)
+		{
+		commande = commandeLineaires(&(*controleur).commandes);
+		if((*controleur).interface.evenement.wheel.y > 0) // scroll up
+			{
+			switch(commande)
+				{
+				default:
+					;
+				}
+			}
+		else if((*controleur).interface.evenement.wheel.y < 0) // scroll down
+			{
+			switch(commande)	
+				{
+				default:
+					;
+				}
+			}
+		}
+	return 0;
+	}
+
+void controleurAfficheSouris(controleurT * controleur)
+	{
+	fprintf(stderr, "(*controleur).graphique.hauteur = %d\n", (*controleur).graphique.hauteur);
+	fprintf(stderr, "(*controleur).commandes.sourisY = %d\n", (*controleur).commandes.sourisY);
+	fprintf(stderr, "(*controleur).graphique.largeur = %d\n", (*controleur).graphique.largeur);
+	fprintf(stderr, "(*controleur).commandes.sourisX = %d\n", (*controleur).commandes.sourisX);
+
+	return ;
+	}
+
+//////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////

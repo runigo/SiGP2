@@ -94,7 +94,7 @@ void systemeMoteur(systemeT * systeme)
 	systemeIncremente(systeme); // Fait disparaitre l'ancien
 
 		//fprintf(stderr, "systemeInertie, Propagation inertielle\n");
-	systemeInertie(systeme); // Calcul un nouveau
+	systemeInertie(systeme); // Calcule la nouvelle position
 
 		//fprintf(stderr, "systemeChocsParticules, Chocs entre particules\n");
 	systemeChocsParticules(systeme); // Corrige les coordonnées

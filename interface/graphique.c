@@ -1,8 +1,8 @@
 
 /*
-Copyright avril 2018, Stephan Runigo
+Copyright mai 2018, Stephan Runigo
 runigo@free.fr
-SiGP 2.0  simulateur de gaz parfait
+SiGP 2.1  simulateur de gaz parfait
 Ce logiciel est un programme informatique servant à simuler un gaz et à
 en donner une représentation graphique. Il permet d'observer une détente
 de Joule ainsi que des transferts thermiques avec des thermostats.
@@ -40,9 +40,16 @@ int graphiqueDestruction(graphiqueT * graphique)
 	}
 
 
-int graphiqueInitialisation(graphiqueT * graphique, interfaceT * interface, int taille, int fond)
+int graphiqueCreation(graphiqueT * graphique, interfaceT * interface)
 	{
-	(void)taille;
+	int largeur;
+	int hauteur;
+	SDL_GetWindowSize((*interface).fenetre, &largeur, &hauteur);
+	(*graphique).largeur=largeur;
+	(*graphique).hauteur=hauteur;
+
+	(*graphique).taille=TAILLE;
+
 		// Création du rendu
 	(*graphique).rendu = SDL_CreateRenderer((*interface).fenetre, -1 , 
 					SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
@@ -52,7 +59,7 @@ int graphiqueInitialisation(graphiqueT * graphique, interfaceT * interface, int 
 		return EXIT_FAILURE;
 		}
 
-
+	int fond = 10;
 	//SDL_Color orange = {255, 127, 40, 255};
 	(*graphique).fond.r = fond;
 	(*graphique).fond.g = fond;
@@ -79,7 +86,7 @@ int graphiqueInitialisation(graphiqueT * graphique, interfaceT * interface, int 
 	(*graphique).vert.b = 47;
 	(*graphique).vert.a = 255;
 
-	//SDL_Texture *particule;
+	int retour = 0;
 
 	SDL_Surface *image = 0;
 
@@ -87,14 +94,14 @@ int graphiqueInitialisation(graphiqueT * graphique, interfaceT * interface, int 
 	if (!image)
 		{
 		fprintf(stderr,"Erreur chargement image, particule.bmp : %s\n",SDL_GetError());
-		return 0;
+		retour = 0;
 		}
 	(*graphique).particule = SDL_CreateTextureFromSurface((*graphique).rendu, image);
 	SDL_FreeSurface(image);
 	if ((*graphique).particule == 0)
 		{
 		fprintf(stderr,"grapheInitialisation : Erreur creation texture : %s\n",SDL_GetError());
-		return 0;
+		retour = 0;
 		}
 
 		// Activation de la transparence
@@ -102,15 +109,61 @@ int graphiqueInitialisation(graphiqueT * graphique, interfaceT * interface, int 
 	if(SDL_SetTextureBlendMode((*graphique).particule, SDL_BLENDMODE_MOD) < 0)
 		fprintf(stderr, "grapheInitialisation : Erreur SDL_SetRenderDrawBlendMode : %s.", SDL_GetError());
 
-	return 0;
+	SDL_Surface *panneau = 0;
+
+	panneau = SDL_LoadBMP("./interface/sigp.bmp");
+	if (!panneau)
+		{
+		fprintf(stderr,"ERREUR chargement image, sigp.bmp : %s\n",SDL_GetError());
+		retour = 1;
+		}
+	(*graphique).SiGP = SDL_CreateTextureFromSurface((*graphique).rendu, panneau);
+	SDL_FreeSurface(panneau);
+	if ((*graphique).SiGP == 0)
+		{
+		fprintf(stderr,"ERREUR grapheInitialisation : Erreur creation texture : %s\n",SDL_GetError());
+		retour = 2;
+		}
+
+	SDL_Surface *lumiereVerte = 0;
+
+	lumiereVerte = SDL_LoadBMP("./interface/lumiereVerte.bmp");
+	if (!lumiereVerte)
+		{
+		fprintf(stderr,"ERREUR chargement image, lumiereVerte.bmp : %s\n",SDL_GetError());
+		retour = 5;
+		}
+	(*graphique).lumiereVerte = SDL_CreateTextureFromSurface((*graphique).rendu, lumiereVerte);
+	SDL_FreeSurface(lumiereVerte);
+	if ((*graphique).lumiereVerte == 0)
+		{
+		fprintf(stderr,"ERREUR grapheInitialisation : Erreur creation texture : %s\n",SDL_GetError());
+		retour = 6;
+		}
+
+	SDL_Surface *lumiereRouge = 0;
+
+	lumiereRouge = SDL_LoadBMP("./interface/lumiereRouge.bmp");
+	if (!lumiereRouge)
+		{
+		fprintf(stderr,"ERREUR chargement image, lumiereRouge.bmp : %s\n",SDL_GetError());
+		retour = 7;
+		}
+	(*graphique).lumiereRouge = SDL_CreateTextureFromSurface((*graphique).rendu, lumiereRouge);
+	SDL_FreeSurface(lumiereRouge);
+	if ((*graphique).lumiereRouge == 0)
+		{
+		fprintf(stderr,"ERREUR grapheInitialisation : Erreur creation texture : %s\n",SDL_GetError());
+		retour = 8;
+		}
+
+
+	return retour;
 }
 
 int graphiqueNettoyage(graphiqueT * graphique)
 	{
-	//int fond = (*graphique).fond;
-	SDL_SetRenderDrawColor((*graphique).rendu, (*graphique).fond.r, (*graphique).fond.g, (*graphique).fond.b, 0);//SDL_ALPHA_OPAQUE
 	SDL_RenderClear((*graphique).rendu);
-	//SDL_SetRenderDrawColor((*graphique).rendu, 255-(*graphique).fond.r, 255-(*graphique).fond.g, 255-(*graphique).fond.b, 0);
 	return 0;
 	}
 
@@ -123,9 +176,7 @@ int graphiqueMiseAJour(graphiqueT * graphique)
 int graphiqueChangeCouleur(graphiqueT * graphique, SDL_Color couleur)
 	{
 	if(SDL_SetRenderDrawColor((*graphique).rendu, couleur.r, couleur.g, couleur.b, couleur.a) < 0)
-	return -1;
-	//if(SDL_RenderClear(renderer) < 0)
-		//return -1;
+		{return -1;}
 	return 0;  
 	}
 
@@ -138,53 +189,38 @@ void graphiqueDessineGraphe(graphiqueT * graphique, grapheT * graphe)
 	SDL_Rect coordonnee = {0, 0, 8, 8};
 
 	  //fprintf(stderr, "Particules\n");
-		// Particules
-	//graphiqueChangeCouleur(graphique, (*graphique).orange);
 	for(i=0;i<NOMBRE;i++)
-		{/*
-		x=(*graphe).ancienAbscisse[i];
-		y=(*graphe).ancienOrdonnee[i];
-		coordonnee.x = x - centrage;
-		coordonnee.y = y - centrage;*/
-		//SDL_RenderCopy((*graphique).rendu, (*graphique).particule, NULL, &coordonnee);
-		//X=(*graphe).actuelAbscisse[i];
-		//Y=(*graphe).actuelOrdonnee[i];
-		//coordonnee.x = X - centrage;
-		//coordonnee.y = Y - centrage;
-		//SDL_RenderCopy((*graphique).rendu, (*graphique).particule, NULL, &coordonnee);
-		//SDL_RenderDrawLine((*graphique).rendu, X, Y, x, y);
-		x=(*graphe).nouveauAbscisse[i];
-		y=(*graphe).nouveauOrdonnee[i];
+		{
+		x=(*graphe).abscisse[i];
+		y=(*graphe).ordonnee[i];
 		coordonnee.x = x - centrage;
 		coordonnee.y = y - centrage;
 		SDL_RenderCopy((*graphique).rendu, (*graphique).particule, NULL, &coordonnee);
-		//SDL_RenderDrawLine((*graphique).rendu, X, Y, x, y);
 		}
 
-		// Parois horizontales
-	//graphiqueLigneDroite((*graphe).ax, (*graphe).dy, (*graphe).cx, (*graphe).dy, couleurTrace1);
-	//graphiqueLigneDroite((*graphe).ax, (*graphe).gy, (*graphe).cx, (*graphe).gy, couleurTrace1);
 	graphiqueChangeCouleur(graphique, (*graphique).contraste);
+
+		// Parois horizontales
 
 	SDL_RenderDrawLine((*graphique).rendu, (*graphe).ax, (*graphe).dy, (*graphe).cx, (*graphe).dy);
 	SDL_RenderDrawLine((*graphique).rendu, (*graphe).ax, (*graphe).gy, (*graphe).cx, (*graphe).gy);
+	SDL_RenderDrawLine((*graphique).rendu, (*graphe).ax, (*graphe).dy-1, (*graphe).cx, (*graphe).dy-1);
+	SDL_RenderDrawLine((*graphique).rendu, (*graphe).ax, (*graphe).gy+1, (*graphe).cx, (*graphe).gy+1);
+
 		// Parois verticales
-	//graphiqueLigneDroite((*graphe).ax, (*graphe).dy, (*graphe).ax, (*graphe).gy, couleurTrace1);
-	//graphiqueLigneDroite((*graphe).cx, (*graphe).dy, (*graphe).cx, (*graphe).gy, couleurTrace1);
-	graphiqueChangeCouleur(graphique, (*graphique).contraste);
 
 	SDL_RenderDrawLine((*graphique).rendu, (*graphe).ax, (*graphe).dy, (*graphe).ax, (*graphe).gy);
 	SDL_RenderDrawLine((*graphique).rendu, (*graphe).cx, (*graphe).dy, (*graphe).cx, (*graphe).gy);
+	SDL_RenderDrawLine((*graphique).rendu, (*graphe).ax-1, (*graphe).dy, (*graphe).ax-1, (*graphe).gy);
+	SDL_RenderDrawLine((*graphique).rendu, (*graphe).cx+1, (*graphe).dy, (*graphe).cx+1, (*graphe).gy);
 
 		// Paroi centrale
 	if((*graphe).cloison != 0)
 		{
-		//graphiqueLigneDroite((*graphe).bx, (*graphe).dy, (*graphe).bx, (*graphe).ey, couleurTrace1);
-		//graphiqueLigneDroite((*graphe).bx, (*graphe).fy, (*graphe).bx, (*graphe).gy, couleurTrace1);
-	graphiqueChangeCouleur(graphique, (*graphique).contraste);
-
-	SDL_RenderDrawLine((*graphique).rendu, (*graphe).bx, (*graphe).dy, (*graphe).bx, (*graphe).ey);
-	SDL_RenderDrawLine((*graphique).rendu, (*graphe).bx, (*graphe).fy, (*graphe).bx, (*graphe).gy);
+		SDL_RenderDrawLine((*graphique).rendu, (*graphe).bx, (*graphe).dy, (*graphe).bx, (*graphe).ey);
+		SDL_RenderDrawLine((*graphique).rendu, (*graphe).bx, (*graphe).fy, (*graphe).bx, (*graphe).gy);
+		SDL_RenderDrawLine((*graphique).rendu, (*graphe).bx-1, (*graphe).dy, (*graphe).bx-1, (*graphe).ey);
+		SDL_RenderDrawLine((*graphique).rendu, (*graphe).bx-1, (*graphe).fy, (*graphe).bx-1, (*graphe).gy);
 		}
 
 	return;

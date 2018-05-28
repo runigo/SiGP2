@@ -1,0 +1,336 @@
+\documentclass{article}
+%\usepackage[greek, frenchb]{babel}
+%\usepackage[latin1]{inputenc}%\usepackage[utf8]{inputenc}
+%\usepackage[T1]{fontenc}
+%
+%\documentclass{article}
+\usepackage[T1]{fontenc}
+\usepackage[latin1]{inputenc}
+\usepackage[greek, frenchb]{babel}
+\usepackage{enumitem}
+\usepackage{graphicx}
+\usepackage{multirow}
+\usepackage{multicol}
+\usepackage{amsmath}
+\usepackage{tabularx}
+\usepackage{color}
+%
+%\usepackage{pslatex}
+%\usepackage{chemist}
+%\usepackage[version=3]{mhchem}
+%\usepackage{cmbright}%\usepackage{ae, lmodern, arev}
+%
+%\usepackage[a4paper]{geometry}
+\usepackage[a4paper, landscape]{geometry}
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\geometry{top=1.3cm, bottom=1.3cm, left=1.5cm , right=1.5cm}
+\setlength{\columnsep}{20pt}
+%\setlength{\columnsep}{30pt}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\geometry{top=1.5cm, bottom=1.5cm, left=1.5cm , right=1.5cm}
+%\geometry{top=1.3cm, bottom=1.3cm, left=1.3cm , right=1.3cm}
+\setlength{\columnsep}{3cm}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%
+%
+\begin{document}
+\pagestyle{empty}
+%
+%               POLICE
+%
+%\fontfamily{cmbright}\fontseries{m}\selectfont
+\fontfamily{cmdh}\fontseries{m}\selectfont
+\sffamily
+%
+%
+%                 TABLEAU
+%
+\renewcommand{\arraystretch}{1.9}
+\renewcommand{\arraystretch}{1.7}
+\begin{tabular}{|l|l|l|l|l|l|l|l|l|}%\begin{center}%\multicolumn{4}{|c|}{}\\%\cline{2-7}\hline
+\begin{center}
+\begin{tabular}{rc|cl}
+\multicolumn{4}{|c|}{}\\
+\multicolumn{3}{|c|}{Cloison} & \multicolumn{3}{|c|}{Trou} & \multicolumn{3}{|c|}{Thermostat} \\
+Sans & Percé & démon & Max & Min & Nul & Sans & 1 & 2
+\end{tabular}
+\end{center}
+%
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\end{document}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%                 NUMÉROTATION
+%
+%\ding{32}
+\begin{enumerate}[label=\alph*., leftmargin=0.3cm, itemsep=25pt]
+%\begin{enumerate}[label=\arabic*., leftmargin=0.9cm, itemsep=3pt]
+%\begin{enumerate}[label=\Roman*., leftmargin=0.1cm, itemsep=35pt]
+\item \end{enumerate}
+%
+\begin{description}[leftmargin=1cm, labelindent=1cm, itemsep=3pt]\end{description}
+%
+%\ding{32}
+\begin{itemize}[leftmargin=0.3cm, itemsep=1pt]
+\item 
+\item 
+\end{itemize}
+%                 IMAGE
+%
+\begin{center}
+\includegraphics[width=.45\textwidth]{pression}
+\end{center}
+%
+%                 TABLEAU
+%
+\renewcommand{\arraystretch}{1.9}
+\renewcommand{\arraystretch}{1.7}
+\begin{tabular}{r|l}%\begin{center}%\multicolumn{4}{|c|}{}\\%\cline{2-7}\hline
+\begin{center}
+\begin{tabular}{rc|cl}
+\multicolumn{4}{|c|}{}\\
+\end{tabular}
+\end{center}
+%
+%                 COLONE
+%
+\begin{multicols}{2}\end{multicols}
+\begin{multicols}{2}%\columnbreak\end{multicols}
+%
+%                 MINIPAGE
+%
+\begin{minipage}[c]{0.45\linewidth}
+Contenu de ma première colonne
+\end{minipage}
+\begin{minipage}[c]{0.45\linewidth}
+Contenu de ma deuxième colonne
+\end{minipage}
+%
+%                 COLONNE
+%
+\begin{columns}
+\begin{column}{6cm}
+Contenu de ma première colonne
+\end{column}
+\begin{column}{6cm}
+Contenu de ma deuxième colonne
+\end{column}
+\end{columns}
+%
+%
+%                 BOITE
+%
+\begin{center}
+\setlength{\fboxsep}{3mm}
+\fbox{\parbox{17cm}{
+%\fbox{\parbox{18cm}{
+}}
+\end{center}
+
+\hspace{.3cm}
+%
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\end{document}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%PREAMBULE
+\usepackage{pgfplots}
+\usepackage{tikz}
+\usepackage[european resistor, european voltage, european current]{circuitikz}
+\usetikzlibrary{arrows,shapes,positioning}
+\usetikzlibrary{decorations.markings,decorations.pathmorphing,
+decorations.pathreplacing}
+\usetikzlibrary{calc,patterns,shapes.geometric}
+%FIN PREAMBULE
+%
+%    Mémo
+%
+%\fontfamily{cmbright}\fontseries{m}\selectfont \sffamily
+%\Huge (géant)          \normalsize (normal)
+%\huge (énorme)         \small (petit)
+%\LARGE (très grand)    \footnotesize (assez petit)
+%\Large (plus grand)    \scriptsize (très petit)
+%\large (grand)         \tiny (minuscule)
+
+%\rm roman              \sf sans serif
+%\tt machine à écrire 	\bf gras
+%\sl slanted            \it italique
+%\sc petites majuscules
+
+%
+%    Ligne du tableau en gris
+%
+    \usepackage{xcolor}
+    \makeatletter
+    \def\colorhline#1{%
+      \noalign{\ifnum0=`}\fi\begingroup\color{#1}\hrule \@height \arrayrulewidth\endgroup \futurelet
+       \reserved@a\@xhline}
+    \makeatother
+%
+%
+\begin{enumerate}[label=\Roman*., leftmargin=0.1cm, itemsep=35pt]
+%
+%                                QUESTIONS PRÉLIMINAIRE
+%
+\item {\large \bf Questions préliminaires}
+  \begin{enumerate}[label=\arabic*., leftmargin=0.9cm, itemsep=3pt]
+  \item 
+  \end{enumerate}
+%
+%                                PROTOCOLE EXPÉRIMENTAL
+%
+\item {\large \bf Protocole expérimental}
+  \begin{enumerate}[label=\arabic*., leftmargin=0.9cm, itemsep=3pt]
+  \item 
+  \end{enumerate}
+%
+%                                EXPLOITATION DES RÉSULTATS
+%
+\item {\large \bf Exploitation des résultats}
+
+  \begin{enumerate}[label=\arabic*., leftmargin=0.9cm, itemsep=3pt]
+  \item 
+  \end{enumerate}
+%
+\end{enumerate}
+%
+%
+%                                TABLEAU D'AVANCEMENT         DÉBUT
+%
+{\large \item \bf Tableau d'avancement}
+\begin{center}%%%%%%%%%%%%%%%%%%%%%%       
+\renewcommand{\arraystretch}{1.5}
+\begin{tabular}{|c|c|c|c|c|c|c|c|}
+\cline{3-8}
+\multicolumn{2}{r|}{} & \multicolumn{6}{c|}{ \hspace{3.3cm} $\to$ \hspace{6cm} }\\
+\cline{3-8}
+\multicolumn{2}{r|}{} & \hspace{2.3cm} & \hspace{2.3cm} & \hspace{2.3cm} & \hspace{2.3cm} & \hspace{0.9cm} & \hspace{0.9cm} \\
+\hline
+{\scriptsize \rm Avant la transformation } & 0 &  &  & 0 & 0 &  &  \\ \hline
+{\scriptsize \rm Pendant la transformation } & x &  &  &  & &  &   \\ \hline
+{\scriptsize \rm Après la transformation } & x$_{\text{max}}$  &  &  &  & &  &   \\ \hline
+\end{tabular}
+\end{center}
+%
+%                                TABLEAU D'AVANCEMENT            FIN
+%
+%
+%
+%                                FIGURE ET MINIPAGE
+%
+%
+\begin{figure}[htbp]
+\begin{minipage}[c]{.45\linewidth}
+\begin{center}
+\includegraphics[scale=0.25]{./titre/heisenberg2}
+%\caption{SiCF}
+%\label{fig:image1}
+\end{center}
+\end{minipage}
+\hfill
+\begin{minipage}[c]{.45\linewidth}
+\begin{center}
+\includegraphics[scale=0.25]{./titre/heisenberg3}
+%\caption{diagramme des tâches.}
+%\label{SiCP}
+\end{center}
+\end{minipage}
+\end{figure}
+%\textsc{\LARGE Complément nutritionnel}\\[1.5cm]
+~\\[1cm]
+
+%%%%%%%%%%%%%%%%%%%%%
+\section{Perspective et repère SiCP}
+%%%%%%%%%%%%%%%%%%%%%
+Cette section traite de la définition des coordonnées intervenant dans la projection en perspective de SiCP
+\subsection{Schéma}
+%\includepdf{./illustration/repereSiCP.pdf}
+
+\begin{figure}[h!]
+	\begin{minipage}[c]{.46\linewidth}
+	$\overrightarrow{r}  = \text{} .
+	\begin{pmatrix}
+		\cos \psi . \sin \phi \\
+		\sin \psi . \sin \phi \\
+		\cos \phi
+	\end{pmatrix}$,
+
+	$\overrightarrow{\psi} = \text{largeur} .
+	\begin{pmatrix}
+		- \sin \psi \\
+		\cos \psi \\
+		0
+	\end{pmatrix}$,
+
+	$\overrightarrow{\phi} = \text{hauteur} .
+	\begin{pmatrix}
+		- \cos \psi . \cos \phi \\
+		- \sin \psi . \cos \phi \\
+		\sin \phi
+	\end{pmatrix}$.
+	\end{minipage} \hfill
+	\begin{minipage}[c]{.46\linewidth}
+	\includegraphics[scale=.77]{./illustration/repereSiCP}
+	\end{minipage}
+\end{figure}
+
+%
+%
+\begin{center}
+ de SiCP
+\end{center}
+
+
+\subsection{Mathématique}
+\begin{description}[leftmargin=0.1cm, itemsep=5pt]
+\item{\bf System} : $\theta _\text{i}$.
+\item{\bf Chaine} : {\bf r}$_\text{i}$.
+\item{\bf Support} : {\bf R}$_\text{i}$.
+\item{\bf Point de vue} : {\bf M}, {\bf i}$_\text{M}$,
+                                   {\bf j}$_\text{M}$,
+                                   {\bf k}$_\text{M}$.
+\end{description}
+\subsection{Classes}
+\begin{description}[leftmargin=0.1cm, itemsep=5pt]
+\item{\bf System} : nouveau[N].
+\item{\bf Chaine} : chaine[N], support[12], largeur, hauteur.
+\item{\bf Point de vue} : perspective, distance, psi, phi.
+\end{description}
+\subsection{Projection}
+\begin{description}[leftmargin=0.1cm, itemsep=5pt]
+\item{\bf System-Chaine} : r$_\text{i} = 
+	\begin{pmatrix}
+		\text{largeur} / 2 \text{N} ( \text{i} - \text{N} / 2 ) \\
+		\text{hauteur}. \sin \theta _\text{i} \\
+		\text{hauteur}. \cos \theta _\text{i}
+	\end{pmatrix}$.
+\item{\bf Point de vue} : 
+	$\overrightarrow{r}  = \text{} .
+	\begin{pmatrix}
+		\cos \psi . \sin \phi \\
+		\sin \psi . \sin \phi \\
+		\cos \phi
+	\end{pmatrix}$,
+	$\overrightarrow{\psi} = \text{largeur} .
+	\begin{pmatrix}
+		- \sin \psi \\
+		\cos \psi \\
+		0
+	\end{pmatrix}$,
+	$\overrightarrow{\phi} = \text{hauteur} .
+	\begin{pmatrix}
+		- \cos \psi . \cos \phi \\
+		- \sin \psi . \cos \phi \\
+		\sin \phi
+	\end{pmatrix}$.
+\item{\bf Chaine-Rendu} : $\text{g}_\text{i} = 
+	\begin{pmatrix}
+	(\text{\bf r}_\text{i} - \text{\bf M}).{\text{\bf k}}_\text{M} + \text{hauteur} / 2 \\
+	(\text{\bf r}_\text{i} - \text{\bf M}).{\text{\bf j}}_\text{M} + \text{largeur} / 2
+	\end{pmatrix}$.
+\end{description}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

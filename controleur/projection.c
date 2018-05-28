@@ -1,8 +1,8 @@
 
 /*
-Copyright février 2018, Stephan Runigo
+Copyright mai 2018, Stephan Runigo
 runigo@free.fr
-SiGP 1.3.7  simulateur de gaz parfait
+SiGP 2.1  simulateur de gaz parfait
 Ce logiciel est un programme informatique servant à simuler un gaz parfait
 et à en donner une représentation graphique. Il permet d'observer une détente
 de Joule ainsi que des transferts thermiques avec des thermostats.
@@ -33,42 +33,205 @@ termes.
 
 #include "projection.h"
 
-
-void projectionSystemeGraphe(systemeT * system, grapheT * graphe)
+int projectionSystemeCommandes(systemeT * systeme, projectionT * projection, commandesT * commandes, int duree, int mode)
 	{
+		// Projette le système sur les commandes
+
+	(void)systeme;
+	(void)projection;
+	(void)commandes;
+	(void)duree;
+	(void)mode;
+
+/*
+	float theta;
+	float ratioRotatif = 0.9;
+
+				//	Projection sur les boutons rotatifs
+	 //	Couplage
+	theta = DEUXPI * (*projection).logCouplage * log( (*systeme).couplage / (COUPLAGE_MIN * (*systeme).nombre) );
+	(*commandes).rotatifPositionX[0]=(int)(-ratioRotatif*(*commandes).rotatifX*sin(theta));
+	(*commandes).rotatifPositionY[0]=(int)(ratioRotatif*(*commandes).rotatifY*cos(theta));
+
+	theta = DEUXPI * (*projection).logDissipation * log( (*systeme).dissipation/DISSIPATION_MIN );
+	(*commandes).rotatifPositionX[1]=(int)(-ratioRotatif*(*commandes).rotatifX*sin(theta));
+	(*commandes).rotatifPositionY[1]=(int)(ratioRotatif*(*commandes).rotatifY*cos(theta));
+
+	//	Amplitude du moteur josephson
+	theta = DEUXPI * (*projection).logJosephson * log( projectionAbsolue((*systeme).moteurs.courant/JOSEPHSON_MIN) );
+	(*commandes).rotatifPositionX[2]=(int)(-ratioRotatif*(*commandes).rotatifX*sin(theta));
+	(*commandes).rotatifPositionY[2]=(int)(ratioRotatif*(*commandes).rotatifY*cos(theta));
+
+	//	Amplitude du moteur périodique
+	theta = DEUXPI * (*projection).logAmplitude * log( (*systeme).moteurs.amplitude/AMPLITUDE_MIN );
+	(*commandes).rotatifPositionX[3]=(int)(-ratioRotatif*(*commandes).rotatifX*sin(theta));
+	(*commandes).rotatifPositionY[3]=(int)(ratioRotatif*(*commandes).rotatifY*cos(theta));
+
+	//	Fréquence du moteurs
+	theta = DEUXPI * (*projection).logFrequence * log( (*systeme).moteurs.frequence/FREQUENCE_MIN );
+	(*commandes).rotatifPositionX[4]=(int)(-ratioRotatif*(*commandes).rotatifX*sin(theta));
+	(*commandes).rotatifPositionY[4]=(int)(ratioRotatif*(*commandes).rotatifY*cos(theta));
+
+		//int rotatifPositionX[ROTATIF_COMMANDES]; // Position du bouton rotatif
+		//int rotatifPositionY[ROTATIF_COMMANDES];
+
+
+	int i;
+	for(i=0;i<BOUTON_COMMANDES;i++) (*commandes).boutonEtat[i]=0;
+
+		//int libreFixe;		//	0 : périodiques 1 : libres, 2 : fixes, 
+							//		3 libre-fixe, 4 fixe-libre
+	switch((*systeme).libreFixe)	//	
+		{
+		case 0:
+			(*commandes).boutonEtat[0]=1;break; // 32	Périodique
+		case 1:
+			(*commandes).boutonEtat[1]=1;break; // 62	Libre
+		case 2:
+			(*commandes).boutonEtat[2]=1;break; // 88 	Fixe
+		case 3:
+			(*commandes).boutonEtat[3]=1;break; // 115	Mixte
+		case 4:
+			(*commandes).boutonEtat[3]=1;break; // 115	Mixte
+		default:
+			;
+		}
+
+	//	int modeDissipation;	//	0 : nulle 1 : uniforme, 2 : extrémité absorbante.
+	switch((*systeme).modeDissipation)	//	
+		{
+		case 0:
+			(*commandes).boutonEtat[5]=1;break; // 198	Nulle
+		case 1:
+			(*commandes).boutonEtat[4]=1;break; // 167	Uniforme
+		case 2:
+			(*commandes).boutonEtat[6]=1;break; // 230	Extrémité
+		default:
+			;
+		}
+
+	//(*commandes).boutonEtat[4]=1;
+	//(*commandes).boutonEtat[5]=1;
+	//(*commandes).boutonEtat[6]=1;
+
+	if((*systeme).moteurs.josephson > 0.0)
+		{
+		(*commandes).boutonEtat[7]=1; // 284	Marche
+		(*commandes).boutonEtat[9]=1; // 339	Droite
+		}
+	else
+		{
+		if((*systeme).moteurs.josephson < 0.0)
+			{
+			(*commandes).boutonEtat[7]=1; // 284	Marche
+			(*commandes).boutonEtat[10]=1; // 367	Gauche
+			}
+		else
+			{
+			(*commandes).boutonEtat[8]=1; // 311	Arrêt
+			}
+		}
+
+	switch((*systeme).moteurs.generateur)	//	0:eteint, 1:sinus, 2:carre, 3:impulsion
+		{
+		case 0:
+			(*commandes).boutonEtat[11]=1;break; // 421	Arrêt
+		case 1:
+			(*commandes).boutonEtat[12]=1;break; // 449	Sinus
+		case 2:
+			(*commandes).boutonEtat[13]=1;break; // 481	Carré
+		case 3:
+			(*commandes).boutonEtat[14]=1;break; // 509	Impulsion
+		default:
+			;
+		}
+	//(*commandes).boutonEtat[15]=0; // 536	Fluxon
+	//(*commandes).boutonEtat[16]=0; // 563	Anti F.
+
+	for(i=0;i<TRIANGLE_COMMANDES;i++) (*commandes).triangleEtat[i]=0;
+
+	switch((*projection).rotation)	//	
+		{
+		case 3:
+			(*commandes).triangleEtat[0]=1;break; // 
+		case 1:
+			(*commandes).triangleEtat[1]=1;break; // 
+		case 0:
+			(*commandes).triangleEtat[2]=0;break; // 
+		case -1:
+			(*commandes).triangleEtat[3]=1;break; // 
+		case -3:
+			(*commandes).triangleEtat[4]=1;break; // 
+		default:
+			;
+		}
+	if(duree<100)
+		{
+			(*commandes).triangleEtat[5]=1;
+			(*commandes).triangleEtat[6]=1;
+		}
+	else
+		{
+		if(duree>100)
+			{
+			(*commandes).triangleEtat[9]=1;
+			(*commandes).triangleEtat[10]=1;
+			}
+		else
+			{
+			(*commandes).triangleEtat[8]=1;
+			}
+		}
+	if(mode<0)
+		{
+		(*commandes).triangleEtat[7]=2;
+		}
+*/
+	return 0;
+	}
+
+void projectionSystemeGraphe(systemeT * systeme, projectionT * projection, grapheT * graphe)
+	{
+	(void)projection;
+		//	Projection du système sur le graphe
 	int i;
 	int demiLargeur = LARGEUR/2;
 	int demiHauteur = HAUTEUR/2;
 
-	(*graphe).cloison = (*system).montage.paroiCentrale;
-	grapheChangeTrou(graphe, (*system).montage.trou);//(*graphe).trou = (*system).montage.trou;
-	(*graphe).rayon = (*system).diametre/2;
-	if((*graphe).rayon < 1) (*graphe).rayon = 1;
+	(*graphe).cloison = (*systeme).montage.paroiCentrale;
+
+	(*graphe).trou = (*systeme).montage.trou;
+
+	(*graphe).rayon = (*systeme).diametre/2;
+	if((*graphe).rayon < 1)
+		{(*graphe).rayon = 1;}
 
 	for(i=0;i<(NOMBRE);i++)
 		{
-				// Mémoire pour la trace
-		(*graphe).ancienAbscisse[i]=(*graphe).actuelAbscisse[i];
-		(*graphe).ancienOrdonnee[i]=(*graphe).actuelOrdonnee[i];
-		(*graphe).actuelAbscisse[i]=(*graphe).nouveauAbscisse[i];
-		(*graphe).actuelOrdonnee[i]=(*graphe).nouveauOrdonnee[i];
 
 				// Projection du système
-		(*graphe).nouveauAbscisse[i] = demiLargeur + (*system).mobile[i].nouveau.x;
+		(*graphe).abscisse[i] = demiLargeur + (*systeme).mobile[i].nouveau.x;
 
-		if((*graphe).nouveauAbscisse[i]>LARGEUR || (*graphe).nouveauAbscisse[i]<0)
+		if((*graphe).abscisse[i]>LARGEUR || (*graphe).abscisse[i]<0)
 			{
-			(*graphe).nouveauAbscisse[i] = LARGEUR/2;
+			(*graphe).abscisse[i] = LARGEUR/2;
 			}
 
-		(*graphe).nouveauOrdonnee[i] = demiHauteur + (*system).mobile[i].nouveau.y;
+		(*graphe).ordonnee[i] = demiHauteur + (*systeme).mobile[i].nouveau.y;
 
-		if((*graphe).nouveauOrdonnee[i]>HAUTEUR || (*graphe).nouveauOrdonnee[i]<0)
+		if((*graphe).ordonnee[i]>HAUTEUR || (*graphe).ordonnee[i]<0)
 			{
-			(*graphe).nouveauOrdonnee[i] = HAUTEUR/2;
+			(*graphe).ordonnee[i] = HAUTEUR/2;
 			}
 		}
 	return;
+	}
+
+int projectionInitialiseLongueurs(projectionT * projection, int hauteur, int largeur)
+	{		// Initialise les longueur de la projection
+	(*projection).hauteur = hauteur;
+	(*projection).largeur = largeur;
+	return 0;
 	}
 
 //////////////////////////////////////////////////////////////////////////////

@@ -1,8 +1,8 @@
 
 /*
-Copyright avril 2018, Stephan Runigo
+Copyright mai 2018, Stephan Runigo
 runigo@free.fr
-SiGP 2.0  simulateur de gaz parfait
+SiGP 2.1  simulateur de gaz parfait
 Ce logiciel est un programme informatique servant à simuler un gaz et à
 en donner une représentation graphique. Il permet d'observer une détente
 de Joule ainsi que des transferts thermiques avec des thermostats.
@@ -35,11 +35,11 @@ termes.
 #define _CONTROLEUR_
 
 #include "../controleur/options.h"		//	Options de la ligne de commande
-#include "../controleur/projection.h"	//	Projection du système sur le graphe.
+#include "../controleur/projection.h"		//	Projection du système sur le graphe.
 
 #include "../modele/observables.h"		//	Observables du système
 #include "../interface/graphique.h"		//	Librairie SDL et représentation graphique
-#include "../interface/horloge.h"		//	Librairie SDL et représentation graphique
+#include "../interface/horloge.h"		//	Horloge
 
 
 
@@ -51,7 +51,11 @@ typedef struct ControleurT controleurT;
 
 		systemeT systeme;	//	Modélisation physique du gaz
 
+		projectionT projection;	//	Paramètre de la projection
+
 		grapheT graphe;		//	Graphe de la chaîne
+
+		commandesT commandes;	//	Graphe des commandes
 
 		interfaceT interface;	//	Fenêtre SDL
 
@@ -62,17 +66,26 @@ typedef struct ControleurT controleurT;
 		//projectionT projection;	// Paramètre de la projection
 
 		int duree;	// nombre d'incrémentation du système par affichage
-		int mode;	// pause de l'évolution du système
+		int modePause;	// pause de l'évolution du système si = 1
 		int sortie;	// sortie de SiCP si > 0
 
 		int appui;	//	1 si le bouton de la souris est appuyé, 0 sinon.
 
+		int curseurX;	//	Position x de la souris.
+		int curseurY;	//	Position y de la souris.
+
+		int modeClavier;//	1 : commande de la chaîne, 2 : Graphisme, 3 : Sauvegarde
+
+		//int modeMenu;		// 0 : Menu, 1 SiCP, 2 SiGP
+
 		};
 
-int controleurSimulationGraphique(controleurT * control);
-void controleurSimule(systemeT * system, int duree);
-
+int controleurInitialise(controleurT * controleur);
 int controleurDestruction(controleurT * control);
+
+int controleurSimulationGraphique(controleurT * control);
+//void controleurSimule(systemeT * system, int duree);
+
 
 
 #endif

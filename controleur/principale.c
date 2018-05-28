@@ -35,20 +35,18 @@ termes.
 
 int main(int nb, char *opt[])
 	{
-	(void)nb;
-	(void)opt[0];
 	controleurT control;
 
 	fprintf(stderr, "\nDémarrage de SiGP\n");
 
 	fprintf(stderr, "Initialisations des options\n");
-	assert(donneesOptions(&control.options)==0);
+	assert(optionsInitialise(&control.options)==0);
 
 	fprintf(stderr, "Traitement des options de la ligne de commande\n");
 	assert(optionsTraitement(&control.options, nb, opt)==0);
 
 	fprintf(stderr, "Initialisations du système et du graphe \n");
-	assert(donneesControleur(&control)==0);
+	assert(controleurInitialise(&control)==0);
 
 	fprintf(stderr, "Simulation graphique du système, \n");
 	assert(controleurSimulationGraphique(&control)==0);

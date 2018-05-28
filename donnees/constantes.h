@@ -1,8 +1,8 @@
 
 /*
-Copyright avril 2018, Stephan Runigo
+Copyright mai 2018, Stephan Runigo
 runigo@free.fr
-SiGP 1.4  simulateur de gaz parfait
+SiGP 2.1  simulateur de gaz parfait
 Ce logiciel est un programme informatique servant à simuler un gaz parfait
 et à en donner une représentation graphique. Il permet d'observer une détente
 de Joule ainsi que des transferts thermiques avec des thermostats.
@@ -43,26 +43,63 @@ termes.
 #include <stdlib.h>
 #include <time.h>
 
-#define TEMPS_AFFICHAGE 70 // Durée entre les affichages en ms
-
-#define ALEA 77 // Taille du tableau de nombre aléatoire
-
-#define NOMBRE 149 // Nombre de particules
-#define TAILLE_MAX 19 // Taille maximale des particules
-#define TAILLE 5 // Taille des particules
-//#define IMPACT 1 // Influence des chocs avec les parois
 
 #define PI 3.14159265359
 #define DEUXPI 6.28318530718
 
-#define LARGEUR 790 // Largeur de la fenêtre
-#define HAUTEUR 395 // Hauteur de la fenêtre
+	//	PARAMÈTRES GRAPHIQUES
+
+
+#define TEMPS_AFFICHAGE 70 // Durée entre les affichages en ms
+
+//#define FENETRE_X 1158 // Largeur de la fenêtre
+//#define FENETRE_Y 714 // Hauteur de la fenêtre
+#define FENETRE_X 892 // Largeur de la fenêtre
+#define FENETRE_Y 550 // Hauteur de la fenêtre
+
+#define BOUTON_COMMANDES 17 // Nombres de petits boutons
+#define ROTATIF_COMMANDES 5 // Nombre de boutons rotatifs
+
+#define LINEAIRE_COMMANDES 3 // Nombres de commandes linéaires
+#define TRIANGLE_COMMANDES 21 // Nombres de commandes triangulaires
+
+#define ROTATION_PSI 0.00733 // Vitesse de la rotation du graphisme
+
+#define RATIO_H_L 0.436 // Ratio Hauteur sur Largeur de la chaîne
+//#define RATIO_C_X 0.491 // Ratio Centrage X Sans Menu
+//#define RATIO_C_Y 0.751 // Ratio Centrage Y Sans Menu
+#define RATIO_C_X 0.399 // Ratio Centrage X Avec Menu
+#define RATIO_C_Y 0.851 // Ratio Centrage Y Avec Menu
+#define RATIO_R_MIN 0.21 // Ratio Distance minimal
+#define RATIO_R_MAX 0.99 // Ratio Distance maximal
+
 #define MARGE 49 // Marge fenêtre-montage
 
-#define DEMItROU 7 // Trou dans la cloison, sur 2
+#define TAILLE_MASSE 8 // Diamètre des masses
+
+
+	//	PARAMÈTRES DU SYSTÈME
+
+#define ALEA 77 // Taille du tableau de nombre aléatoire
+
+#define LARGEUR 700 // Largeur du système
+#define HAUTEUR 350 // Hauteur du système
+
+#define NOMBRE 149 // Nombre de particules
+#define TAILLE 5 // Taille implicite des particules
+#define TAILLE_MAX 19 // Taille maximale des particules
+
+#define RAYON_TROU 7 // Rayon implicite du trou dans la cloison
 
 #define DUREE_MAX 99 // Nombre d'itération du système par affichage
+#define DUREE 1 // Nombre d'itération initial
+
 #define TEMPERATURE_MAX 19666.1 // Température maximale
-#define TEMPERATURE_MIN 0.0000003 // Température minimale
+#define TEMPERATURE_MIN 0.000003 // Température minimale
+
+#define TEMPERATURE 7.7;	// Température initiale
+#define TEMPERATURE_GAUCHE 0.03;	// Température thermostat gauche
+#define TEMPERATURE_DROIT 77;	// Température thermostat droit
 
 #endif
+/////////////////////////////////////////////////////////////

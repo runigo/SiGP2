@@ -34,6 +34,6 @@ termes.
 #ifndef _PRINCIPALE_
 #define _PRINCIPALE_
 
-#include "../donnees/donnees.h"
+#include "../controleur/controleur.h"
 
 #endif

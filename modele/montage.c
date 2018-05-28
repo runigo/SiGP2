@@ -42,7 +42,7 @@ void montageChangeParoiCentrale(montageT * montage, int mode)
 	if(mode==1)
 			(*montage).trou = 0;
 	if(mode==2 || mode==-1)
-			(*montage).trou = DEMItROU;
+			(*montage).trou = RAYON_TROU;
 	if(mode==-2)
 			(*montage).trou = (*montage).demiHauteur;
 		
@@ -59,7 +59,7 @@ void montageChangeTrou(montageT * montage, float facteur)
 	if(facteur<0)
 		{
 		if(facteur == -1)
-			(*montage).trou = DEMItROU;
+			(*montage).trou = RAYON_TROU;
 		else
 			(*montage).trou = (*montage).demiHauteur;
 		}
@@ -102,7 +102,7 @@ void montageInitialise(montageT * montage)
 	(*montage).demiLargeur = (LARGEUR-MARGE)/2; // Demi largeur
 	(*montage).demiHauteur = (HAUTEUR-MARGE)/2;// Demi hauteur
 
-	(*montage).trou = DEMItROU;// Taille du trou
+	(*montage).trou = RAYON_TROU;// Taille du trou
 	//(*montage).epaisseur = 3*TAILLE;// Epaisseur de la cloison
 
 	(*montage).paroiCentrale = 0;// 0 : pas de paroi centrale. 

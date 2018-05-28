@@ -1,8 +1,8 @@
 
 /*
-Copyright février 2018, Stephan Runigo
+Copyright mai 2018, Stephan Runigo
 runigo@free.fr
-SiGP 1.3.7  simulateur de gaz parfait
+SiGP 2.1  simulateur de gaz parfait
 Ce logiciel est un programme informatique servant à simuler un gaz parfait
 et à en donner une représentation graphique. Il permet d'observer une détente
 de Joule ainsi que des transferts thermiques avec des thermostats.
@@ -47,6 +47,26 @@ void optionsTrou(optionsT * options, char *opt);
 
 void optionsAide(void);
 
+int optionsInitialise(optionsT * options)
+	{
+		// Préréglage des valeurs optionnelles
+
+	//(*options).fond=240;		// couleur du fond de l'affichage
+	//(*options).pause=25;		// temps de pause SDL en ms
+	(*options).duree=DUREE;		// nombre d'incrémentation du système par affichage
+
+	(*options).temperature = TEMPERATURE;	// Température initiale
+	(*options).gauche = TEMPERATURE_GAUCHE;	// Température thermostat gauche
+	(*options).droite = TEMPERATURE_DROIT;	// Température thermostat droit
+
+	(*options).thermostat=0;	// 0 : système isolé, 1 : système thermostaté.
+	(*options).cloison = 1;		// 0 : pas de paroi centrale. 1 : détente de joule, 2 : cloison fermé,
+					//	 -1, -2 : démon de maxwell.
+	(*options).trou = RAYON_TROU;
+
+	return 0;
+	}
+
 int optionsTraitement(optionsT * options, int nb, char *opt[])
 	{
 	int i=0;	//fprintf(stderr, "\nNombre d'options : %d\n", nb);
@@ -55,8 +75,8 @@ int optionsTraitement(optionsT * options, int nb, char *opt[])
 
 		//if(strcmp(opt[i], "fond")==0 && opt[i+1]!=NULL)
 			//optionsFond(options, opt[i+1]);		// Couleur du fond de l'affichage
-		if(strcmp(opt[i], "pause")==0 && opt[i+1]!=NULL)
-			optionsPause(options, opt[i+1]);	// temps de pause en ms entre les affichages.
+		//if(strcmp(opt[i], "pause")==0 && opt[i+1]!=NULL)
+			//optionsPause(options, opt[i+1]);	// temps de pause en ms entre les affichages.
 		if(strcmp(opt[i], "duree")==0 && opt[i+1]!=NULL)
 			optionsDuree(options, opt[i+1]);	// Nombre d'évolution du système entre les affichages.
 
@@ -100,7 +120,7 @@ void optionsFond(optionsT * options, char *opt)
 		}
 	return;
 	}
-*/
+
 void optionsPause(optionsT * options, char *opt)
 	{    	// Temps de pause en ms après affichage graphique
 	int pause = atoi(opt);
@@ -116,7 +136,7 @@ void optionsPause(optionsT * options, char *opt)
 		}
 	return;
 	}
-
+*/
 void optionsDuree(optionsT * options, char *opt)
 	{    	// Nombre d'évolution du système entre les affichages
 	int duree = atoi(opt);
@@ -224,7 +244,7 @@ void optionsTrou(optionsT * options, char *opt)
 	else
 		{
 		printf("Option trou non valide, trou = %d\n", (*options).trou);
-		printf("Option trou : 0 <= trou < %d\n", DEMItROU);
+		printf("Option trou : 0 <= trou < %d\n", RAYON_TROU);
 		}
 	return;
 	}

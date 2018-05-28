@@ -1,10 +1,10 @@
 
 /*
-Copyright février 2018, Stephan Runigo
+Copyright mai 2018, Stephan Runigo
 runigo@free.fr
-SiGP 1.3.7  simulateur de gaz parfait
-Ce logiciel est un programme informatique servant à simuler un gaz parfait
-et à en donner une représentation graphique. Il permet d'observer une détente
+SiGP 2.1  simulateur de gaz parfait
+Ce logiciel est un programme informatique servant à simuler un gaz et à
+en donner une représentation graphique. Il permet d'observer une détente
 de Joule ainsi que des transferts thermiques avec des thermostats.
 Ce logiciel est régi par la licence CeCILL soumise au droit français et
 respectant les principes de diffusion des logiciels libres. Vous pouvez
@@ -41,12 +41,8 @@ typedef struct GrapheT grapheT;
 	struct GrapheT
 		{
 			// Particules
-		int ancienAbscisse[NOMBRE];
-		int actuelAbscisse[NOMBRE];
-		int nouveauAbscisse[NOMBRE];
-		int ancienOrdonnee[NOMBRE];
-		int actuelOrdonnee[NOMBRE];
-		int nouveauOrdonnee[NOMBRE];
+		int abscisse[NOMBRE];
+		int ordonnee[NOMBRE];
 
 		int rayon;
 
@@ -70,16 +66,12 @@ typedef struct GrapheT grapheT;
 
 		int cloison;	// O, 1, 2, -1, -2
 		int thermostat;	// O, 1, 2, -1, -2
-		//int trou;	// Trou dans la cloison
-
-		int rouge;
-		int vert;
-		int bleu;
-		int fond;
+		int trou;	// Rayon du trou dans la cloison
 
 		};
 
-int grapheInitialise(grapheT * graphe, int rouge, int bleu, int vert, int fond);
+int grapheInitialise(grapheT * graphe);
+
 int grapheChangeTrou(grapheT * graphe, int trou);
 
 #endif

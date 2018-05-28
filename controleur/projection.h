@@ -36,7 +36,32 @@ termes.
 
 #include "../modele/observables.h"
 #include "../interface/graphe.h"
+#include "../interface/commandes.h"
 
-void projectionSystemeGraphe(systemeT * systeme, grapheT * graph);
+typedef struct ProjectionT projectionT;
+	struct ProjectionT
+		{
+		float logCouplage;
+		float logDissipation;
+		float logJosephson;
+		float logAmplitude;
+		float logFrequence;
+
+		int hauteur;
+		int largeur;
+
+		float perspective;
+		};
+
+
+
+int projectionInitialise(projectionT * projection);
+
+int projectionInitialiseLongueurs(projectionT * projection, int hauteur, int largeur);
+
+int projectionSystemeCommandes(systemeT * systeme, projectionT * projection, commandesT * commandes, int duree, int mode);
+void projectionSystemeGraphe(systemeT * systeme, projectionT * projection, grapheT * graph);
+
+int projectionAffichePointDeVue(projectionT * projection);
 
 #endif

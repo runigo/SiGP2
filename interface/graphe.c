@@ -1,10 +1,10 @@
 
 /*
-Copyright février 2018, Stephan Runigo
+Copyright mai 2018, Stephan Runigo
 runigo@free.fr
-SiGP 1.3.7  simulateur de gaz parfait
-Ce logiciel est un programme informatique servant à simuler un gaz parfait
-et à en donner une représentation graphique. Il permet d'observer une détente
+SiGP 2.1  simulateur de gaz parfait
+Ce logiciel est un programme informatique servant à simuler un gaz et à
+en donner une représentation graphique. Il permet d'observer une détente
 de Joule ainsi que des transferts thermiques avec des thermostats.
 Ce logiciel est régi par la licence CeCILL soumise au droit français et
 respectant les principes de diffusion des logiciels libres. Vous pouvez
@@ -33,7 +33,7 @@ termes.
 
 #include "graphe.h"
 
-int grapheInitialise(grapheT * graphe, int rouge, int bleu, int vert, int fond)
+int grapheInitialise(grapheT * graphe)
 	{
 	int i;
 
@@ -42,18 +42,36 @@ int grapheInitialise(grapheT * graphe, int rouge, int bleu, int vert, int fond)
 
 	for(i=0;i<(NOMBRE);i++)
 		{
-		(*graphe).ancienAbscisse[i]=LARGEUR/2;
-		(*graphe).actuelAbscisse[i]=LARGEUR/2;
-		(*graphe).nouveauAbscisse[i]=LARGEUR/2;
-		(*graphe).ancienOrdonnee[i]=HAUTEUR/2;
-		(*graphe).actuelOrdonnee[i]=HAUTEUR/2;
-		(*graphe).nouveauOrdonnee[i]=HAUTEUR/2;
+		(*graphe).abscisse[i]=LARGEUR/2;
+		(*graphe).ordonnee[i]=HAUTEUR/2;
 		}
 
-	(*graphe).rouge=rouge;
-	(*graphe).bleu=bleu;
-	(*graphe).vert=vert;
-	(*graphe).fond=fond;
+		fprintf(stderr, " Initialisation du graphe\n");
+			// Points du montage
+		//	
+		//			ax	bx	cx
+		//
+		//		dy	-----------------
+		//			|	|	|
+		//		ey	|	-	|
+		//		fy	|	-	|
+		//			|	|	|
+		//		gy	-----------------
+
+		// Absisses
+	(*graphe).ax = MARGE/2;
+	(*graphe).bx = LARGEUR/2;
+	(*graphe).cx = LARGEUR - MARGE/2;
+
+		// Ordonnées
+	(*graphe).dy = MARGE/2;
+	(*graphe).ey = HAUTEUR/2 - RAYON_TROU;
+	(*graphe).fy = HAUTEUR/2 + RAYON_TROU;
+	(*graphe).gy = HAUTEUR - MARGE/2;
+
+	(*graphe).cloison = 0;	//
+	(*graphe).thermostat = 0;	// 
+	(*graphe).trou = RAYON_TROU;
 
 	return 0;
 	}
