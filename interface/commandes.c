@@ -1,7 +1,7 @@
 /*
-Copyright mai 2018, Stephan Runigo
+Copyright septembre 2018, Stephan Runigo
 runigo@free.fr
-SiGP 2.1  simulateur de gaz parfait
+SiGP 2.1.2  simulateur de gaz parfait
 Ce logiciel est un programme informatique servant à simuler un gaz et à
 en donner une représentation graphique. Il permet d'observer une détente
 de Joule ainsi que des transferts thermiques avec des thermostats.
@@ -54,7 +54,7 @@ int commandesInitialiseBoutons(commandesT * commandes, int largeur, int hauteur)
 	(*commandes).boutons=(int)(0.946459412781*largeur); // 1096 / 1158
 		// PETITS BOUTONS SUIVANT X
 	(*commandes).boutonX=(int)(0.0120898100173*largeur); // Rayon suivant X // 14 / 1158
-	(*commandes).boutonsCentre=(int)(0.96286701209*largeur); // 1115 // Positon X des petits boutons
+	(*commandes).boutonsCentre=(int)(0.964594127807*largeur); // 1117 // Positon X des petits boutons
 		// PETITS BOUTONS SUIVANT Y
 	(*commandes).boutonY=(int)(0.0168067226891*largeur); // Rayon suivant Y // 12 / 714
 	(*commandes).boutonCentre[0]=(int)(0.0574229691877*hauteur); // 41	Périodique
@@ -65,11 +65,11 @@ int commandesInitialiseBoutons(commandesT * commandes, int largeur, int hauteur)
 	(*commandes).boutonCentre[5]=(int)(0.3431372549*hauteur); // 245	Nulle
 	(*commandes).boutonCentre[6]=(int)(0.396358543417*hauteur); // 283	Extrémité
 	(*commandes).boutonCentre[7]=(int)(0.478991596639*hauteur); // 342	Marche
-	(*commandes).boutonCentre[8]=(int)(0.525210084034*hauteur); // 375	Arrêt
+	(*commandes).boutonCentre[8]=(int)(0.526610644258*hauteur); // 376	Arrêt
 	(*commandes).boutonCentre[9]=(int)(0.574229691877*hauteur); // 410	Droite
 	(*commandes).boutonCentre[10]=(int)(0.62324929972*hauteur); // 445	Gauche
-	(*commandes).boutonCentre[11]=(int)(0.700280112045*hauteur); // 500	Arrêt
-	(*commandes).boutonCentre[12]=(int)(0.750700280112*hauteur); // 536	Sinus
+	(*commandes).boutonCentre[11]=(int)(0.701680672269*hauteur); // 501	Arrêt
+	(*commandes).boutonCentre[12]=(int)(0.752100840336*hauteur); // 537	Sinus
 	(*commandes).boutonCentre[13]=(int)(0.801120448179*hauteur); // 572	Carré
 	(*commandes).boutonCentre[14]=(int)(0.851540616246*hauteur); // 608	Impulsion
 	(*commandes).boutonCentre[15]=(int)(0.908963585434*hauteur); // 649	Fluxon
@@ -83,12 +83,13 @@ int commandesInitialiseBoutons(commandesT * commandes, int largeur, int hauteur)
 
 		// BOUTONS LINEAIRES SUIVANT Y
 	(*commandes).lineaireY=(int)(0.0392156862745*hauteur); // 693-636/2 =  / 714 // Rayon suivant Y
-	(*commandes).lineairesCentre=(int)(0.930672268908*hauteur); // 693+636/2 =  / 714 // Position Y des boutons linéaires
+	(*commandes).lineairesCentre=(int)(0.958181818182*hauteur); // 693+636/2 =  / 714 // Position Y des boutons linéaires
 		// BOUTONS LINEAIRES SUIVANT X
 	(*commandes).lineaireX=(int)(0.0306563039724*largeur); // 332-261/2 / 1158	Rayon suivant X
-	(*commandes).lineaireCentre[0]=(int)(0.225388601036*largeur); // 261	Hauteur
-	(*commandes).lineaireCentre[1]=(int)(0.286701208981*largeur); // 332	Distance
-	(*commandes).lineaireCentre[2]=(int)(0.43609671848*largeur); // 414+596/2	Simulation	
+	(*commandes).lineaireCentre[0]=(int)(0.20067264574*largeur); // 261	Hauteur
+	(*commandes).lineaireCentre[1]=(int)(0.20067264574*largeur); // 332	Distance
+	(*commandes).lineaireCentre[2]=(int)(0.257847533632*largeur); // 414+596/2	Simulation < temps réèl
+	(*commandes).lineaireCentre[3]=(int)(0.406950672646*largeur); // 414+596/2	Simulation > temps réèl	
 
 		// BOUTONS TRIANGULAIRES SUIVANT Y
 	(*commandes).triangleY=(int)(0.0168067226891*hauteur); // Rayon suivant Y // 12 / 714
@@ -120,6 +121,17 @@ int commandesInitialiseBoutons(commandesT * commandes, int largeur, int hauteur)
 	(*commandes).triangleCentre[18]=(int)(0.7417962*largeur); // 	2
 	(*commandes).triangleCentre[19]=(int)(0.769430052*largeur); // 	3
 	(*commandes).triangleCentre[20]=(int)(0.799654577*largeur); // 	4
+
+		//	Vitesse de la simulation
+
+	(*commandes).a=(0.277*largeur-0.23*largeur)/(DUREE-2);
+	//(*commandes).a=(((*commandes).triangleCentre[6]-(*commandes).triangleCentre[5])/(DUREE-2)));
+	(*commandes).b=0.23*largeur-(*commandes).a;	//	Droite duree < DUREE
+	//(*commandes).b=((*commandes).triangleCentre[5]-(*commandes).a);	//	Droite duree < DUREE
+	(*commandes).A=(0.42*largeur-0.38*largeur)/(DUREE_MAX-DUREE-1);
+	//(*commandes).A=(((*commandes).triangleCentre[10]-(*commandes).triangleCentre[9])/(DUREE_MAX-DUREE-1));
+	(*commandes).B=0.38*largeur-(*commandes).A*(DUREE+1);	//	Droite duree > DUREE
+	//(*commandes).B=((*commandes).triangleCentre[9]-(*commandes).A*(DUREE+1));	//	Droite duree > DUREE
 
 	return 0;
 	}

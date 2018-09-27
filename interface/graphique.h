@@ -1,9 +1,9 @@
 /*
-Copyright mai 2018, Stephan Runigo
+Copyright septembre 2018, Stephan Runigo
 runigo@free.fr
-SiGP 2.1  simulateur de gaz parfait
-Ce logiciel est un programme informatique servant à simuler un gaz et à en
-donner une représentation graphique. Il permet d'observer une détente
+SiGP 2.1.2  simulateur de gaz parfait
+Ce logiciel est un programme informatique servant à simuler un gaz et à
+en donner une représentation graphique. Il permet d'observer une détente
 de Joule ainsi que des transferts thermiques avec des thermostats.
 Ce logiciel est régi par la licence CeCILL soumise au droit français et
 respectant les principes de diffusion des logiciels libres. Vous pouvez
@@ -34,6 +34,7 @@ termes.
 #define _GRAPHIQUE_
 
 #include "graphe.h"
+#include "commandes.h"
 #include "interface.h"
 
 
@@ -53,6 +54,8 @@ struct GraphiqueT {
 
 	SDL_Texture *lumiereVerte;
 	SDL_Texture *lumiereRouge;
+	SDL_Texture *lumiereOrange;
+	SDL_Texture *lumiereJaune;
 	SDL_Texture *SiGP;
 
 	int largeur;
@@ -67,6 +70,7 @@ int graphiqueCreation(graphiqueT * graphique, interfaceT * interface);
 int graphiqueNettoyage(graphiqueT * graphique);
 int graphiqueMiseAJour(graphiqueT * graphique);
 
+int graphiqueCommandes(graphiqueT * graphique, commandesT * commandes);
 void graphiqueDessineGraphe(graphiqueT * graphique, grapheT * graphe);
 
 #endif

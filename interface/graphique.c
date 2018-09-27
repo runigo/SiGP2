@@ -1,8 +1,8 @@
 
 /*
-Copyright mai 2018, Stephan Runigo
+Copyright septembre 2018, Stephan Runigo
 runigo@free.fr
-SiGP 2.1  simulateur de gaz parfait
+SiGP 2.1.2  simulateur de gaz parfait
 Ce logiciel est un programme informatique servant à simuler un gaz et à
 en donner une représentation graphique. Il permet d'observer une détente
 de Joule ainsi que des transferts thermiques avec des thermostats.
@@ -178,6 +178,78 @@ int graphiqueChangeCouleur(graphiqueT * graphique, SDL_Color couleur)
 	if(SDL_SetRenderDrawColor((*graphique).rendu, couleur.r, couleur.g, couleur.b, couleur.a) < 0)
 		{return -1;}
 	return 0;  
+	}
+
+int graphiqueCommandes(graphiqueT * graphique, commandesT * commandes)
+	{
+		// Dessine le fond et les commandes sélectionées
+	SDL_Rect coordonnee = {0, 0, (*graphique).largeur, (*graphique).hauteur};
+	SDL_RenderCopy((*graphique).rendu, (*graphique).SiGP, NULL, &coordonnee);
+	
+	int centrage = 5;
+	coordonnee.w=10;
+	coordonnee.h=10;
+	coordonnee.x = (*commandes).boutonsCentre - centrage;	// Positon X de la zone des petits boutons
+	int i;
+	int X, Y, x, y;
+			
+	for(i=0;i<BOUTON_COMMANDES;i++)
+		{
+		if((*commandes).boutonEtat[i]==1)
+			{
+			coordonnee.y = (*commandes).boutonCentre[i] - centrage; // Positon Y des petits boutons
+			//	Dessin des petits boutons
+			SDL_RenderCopy((*graphique).rendu, (*graphique).particule, NULL, &coordonnee);
+			}
+		}
+
+	graphiqueChangeCouleur(graphique, (*graphique).orange);
+	X=(*commandes).rotatifsCentre;
+	for(i=0;i<ROTATIF_COMMANDES;i++)
+		{
+		Y=(*commandes).rotatifCentre[i];
+		x=X+(*commandes).rotatifPositionX[i];
+		y=Y+(*commandes).rotatifPositionY[i];
+		SDL_RenderDrawLine((*graphique).rendu, X-1, Y, x-1, y);
+		SDL_RenderDrawLine((*graphique).rendu, X, Y-1, x, y-1);
+		SDL_RenderDrawLine((*graphique).rendu, X+1, Y, x+1, y);
+		SDL_RenderDrawLine((*graphique).rendu, X, Y+1, x, y+1);
+		}
+
+	centrage = 6;
+	coordonnee.w=12;
+	coordonnee.h=12;
+	coordonnee.y = (*commandes).trianglesLumiere - centrage;	// Positon Y de la zone du bas
+	for(i=0;i<TRIANGLE_COMMANDES;i++)
+		{
+		if((*commandes).triangleEtat[i]==1)
+			{
+			coordonnee.x = (*commandes).triangleCentre[i] - centrage; // Positon X des boutons triangulaire
+			SDL_RenderCopy((*graphique).rendu, (*graphique).lumiereVerte, NULL, &coordonnee);
+			}
+		else
+			{
+				if((*commandes).triangleEtat[i]==2)
+				{
+				coordonnee.x = (*commandes).triangleCentre[i] - centrage; // Positon X des boutons triangulaire
+				SDL_RenderCopy((*graphique).rendu, (*graphique).lumiereRouge, NULL, &coordonnee);
+				}
+				else
+					{
+					coordonnee.x=(*commandes).lineairePositionX;	//	Droite duree < DUREE
+					if((*commandes).triangleEtat[5]==-1 || (*commandes).triangleEtat[10]==-1)
+						{
+						SDL_RenderCopy((*graphique).rendu, (*graphique).lumiereOrange, NULL, &coordonnee);
+						}
+					if((*commandes).triangleEtat[6]==-1 || (*commandes).triangleEtat[9]==-1)
+						{
+						SDL_RenderCopy((*graphique).rendu, (*graphique).lumiereJaune, NULL, &coordonnee);
+						}
+					}
+			}
+		}
+
+	return 0;
 	}
 
 void graphiqueDessineGraphe(graphiqueT * graphique, grapheT * graphe)

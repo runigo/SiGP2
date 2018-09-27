@@ -1,8 +1,8 @@
 
 /*
-Copyright mai 2018, Stephan Runigo
+Copyright septembre 2018, Stephan Runigo
 runigo@free.fr
-SiGP 2.1  simulateur de gaz parfait
+SiGP 2.1.2  simulateur de gaz parfait
 Ce logiciel est un programme informatique servant à simuler un gaz et à
 en donner une représentation graphique. Il permet d'observer une détente
 de Joule ainsi que des transferts thermiques avec des thermostats.
@@ -110,6 +110,19 @@ int controleurInitialise(controleurT * controleur)
 	interfaceCreation(&(*controleur).interface);
 		//fprintf(stderr, " Création du rendu\n");
 	graphiqueCreation(&(*controleur).graphique, &(*controleur).interface);
+
+	int largeur;
+	int hauteur;
+	int x, y;
+		fprintf(stderr, " Initialisation des commmandes\n");
+	SDL_GetWindowSize((*controleur).interface.fenetre, &largeur, &hauteur);
+	(*controleur).graphique.largeur=largeur;
+	(*controleur).graphique.hauteur=hauteur;
+	commandesInitialiseBoutons(&(*controleur).commandes, largeur, hauteur);
+
+	SDL_PumpEvents();
+	SDL_GetMouseState(&x,&y);
+	commandesInitialiseSouris(&(*controleur).commandes, x, y);
 
 		fprintf(stderr, " Initialisation horloge SDL\n");
 	horlogeCreation(&(*controleur).horloge);
@@ -237,6 +250,9 @@ int controleurConstructionGraphique(controleurT * controleur)
 
 		//fprintf(stderr, "Nettoyage de l'affichage\n");
 	graphiqueNettoyage(&(*controleur).graphique);
+
+		//fprintf(stderr, "Dessin des Commandes\n");
+	graphiqueCommandes(&(*controleur).graphique, &(*controleur).commandes);
 
 		//fprintf(stderr, "Dessin des graphes\n");
 	graphiqueDessineGraphe(&(*controleur).graphique, &(*controleur).graphe);
