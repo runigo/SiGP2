@@ -33,6 +33,21 @@ termes.
 
 #include "projection.h"
 
+int projectionInitialise(projectionT * projection)
+	{
+	(*projection).logTrou = 1.0 / log( (HAUTEUR/2) );
+	(*projection).logParticule = 1.0 / log( TAILLE_MAX );
+	(*projection).logTemperature = 1.0 / log( TEMPERATURE_MAX/TEMPERATURE_MIN );
+	(*projection).logGauche = 1.0 / log( TEMPERATURE_MAX/TEMPERATURE_MIN );
+	(*projection).logDroite = 1.0 / log( TEMPERATURE_MAX/TEMPERATURE_MIN );
+	return 0;
+	}
+float projectionAbsolue(float valeur)
+	{
+	if(valeur<0) return -valeur;
+	return valeur;
+	}
+
 int projectionSystemeCommandes(systemeT * systeme, projectionT * projection, commandesT * commandes, int duree, int mode)
 	{
 		// Projette le système sur les commandes
@@ -43,33 +58,32 @@ int projectionSystemeCommandes(systemeT * systeme, projectionT * projection, com
 	(void)duree;
 	(void)mode;
 
-/*
-		MODELE SiCP
 	float theta;
 	float ratioRotatif = 0.9;
 
 				//	Projection sur les boutons rotatifs
-	 //	Couplage
-	theta = DEUXPI * (*projection).logCouplage * log( (*systeme).couplage / (COUPLAGE_MIN * (*systeme).nombre) );
+	 //	Rayon du trou
+	theta = DEUXPI * (*projection).logTrou * log( (*systeme).montage.trou );
 	(*commandes).rotatifPositionX[0]=(int)(-ratioRotatif*(*commandes).rotatifX*sin(theta));
 	(*commandes).rotatifPositionY[0]=(int)(ratioRotatif*(*commandes).rotatifY*cos(theta));
 
-	theta = DEUXPI * (*projection).logDissipation * log( (*systeme).dissipation/DISSIPATION_MIN );
+	 //	Taille des particules
+	theta = DEUXPI * (*projection).logParticule * log( (*systeme).diametre );
 	(*commandes).rotatifPositionX[1]=(int)(-ratioRotatif*(*commandes).rotatifX*sin(theta));
 	(*commandes).rotatifPositionY[1]=(int)(ratioRotatif*(*commandes).rotatifY*cos(theta));
 
-	//	Amplitude du moteur josephson
-	theta = DEUXPI * (*projection).logJosephson * log( projectionAbsolue((*systeme).moteurs.courant/JOSEPHSON_MIN) );
+	//	Température
+	theta = DEUXPI * (*projection).logTemperature * log( (*systeme).montage.thermostat.temperature / TEMPERATURE_MIN );
 	(*commandes).rotatifPositionX[2]=(int)(-ratioRotatif*(*commandes).rotatifX*sin(theta));
 	(*commandes).rotatifPositionY[2]=(int)(ratioRotatif*(*commandes).rotatifY*cos(theta));
 
-	//	Amplitude du moteur périodique
-	theta = DEUXPI * (*projection).logAmplitude * log( (*systeme).moteurs.amplitude/AMPLITUDE_MIN );
+	//	Température gauche
+	theta = DEUXPI * (*projection).logTemperature * log( (*systeme).montage.thermostat.gauche / TEMPERATURE_MIN );
 	(*commandes).rotatifPositionX[3]=(int)(-ratioRotatif*(*commandes).rotatifX*sin(theta));
 	(*commandes).rotatifPositionY[3]=(int)(ratioRotatif*(*commandes).rotatifY*cos(theta));
 
-	//	Fréquence du moteurs
-	theta = DEUXPI * (*projection).logFrequence * log( (*systeme).moteurs.frequence/FREQUENCE_MIN );
+	//	Température droite
+	theta = DEUXPI * (*projection).logTemperature * log( (*systeme).montage.thermostat.droite / TEMPERATURE_MIN );
 	(*commandes).rotatifPositionX[4]=(int)(-ratioRotatif*(*commandes).rotatifX*sin(theta));
 	(*commandes).rotatifPositionY[4]=(int)(ratioRotatif*(*commandes).rotatifY*cos(theta));
 
@@ -78,80 +92,55 @@ int projectionSystemeCommandes(systemeT * systeme, projectionT * projection, com
 
 
 	int i;
+
+		// Remise à zéro des boutons
 	for(i=0;i<BOUTON_COMMANDES;i++) (*commandes).boutonEtat[i]=0;
 
-		//int libreFixe;		//	0 : périodiques 1 : libres, 2 : fixes, 
-							//		3 libre-fixe, 4 fixe-libre
-	switch((*systeme).libreFixe)	//	
+		// Sélection des boutons activés
+	switch((*systeme).montage.paroiCentrale)	//	Cloison centrale
 		{
-		case 0:
-			(*commandes).boutonEtat[0]=1;break; // 32	Périodique
-		case 1:
-			(*commandes).boutonEtat[1]=1;break; // 62	Libre
 		case 2:
-			(*commandes).boutonEtat[2]=1;break; // 88 	Fixe
-		case 3:
-			(*commandes).boutonEtat[3]=1;break; // 115	Mixte
-		case 4:
-			(*commandes).boutonEtat[3]=1;break; // 115	Mixte
+			(*commandes).boutonEtat[0]=1;break; // 32	Cloison
+		case 1:
+			(*commandes).boutonEtat[1]=1;break; // 62	Trou
+		case 0:
+			(*commandes).boutonEtat[2]=1;break; // 88 	Max
+		case -1:
+			(*commandes).boutonEtat[3]=1;break; // 115	Démon
 		default:
 			;
 		}
 
-	//	int modeDissipation;	//	0 : nulle 1 : uniforme, 2 : extrémité absorbante.
-	switch((*systeme).modeDissipation)	//	
-		{
-		case 0:
-			(*commandes).boutonEtat[5]=1;break; // 198	Nulle
-		case 1:
-			(*commandes).boutonEtat[4]=1;break; // 167	Uniforme
-		case 2:
-			(*commandes).boutonEtat[6]=1;break; // 230	Extrémité
-		default:
-			;
-		}
+	(*commandes).boutonEtat[4]=1;
+	(*commandes).boutonEtat[5]=1;
+	(*commandes).boutonEtat[6]=1;
 
-	//(*commandes).boutonEtat[4]=1;
-	//(*commandes).boutonEtat[5]=1;
-	//(*commandes).boutonEtat[6]=1;
-
-	if((*systeme).moteurs.josephson > 0.0)
-		{
-		(*commandes).boutonEtat[7]=1; // 284	Marche
-		(*commandes).boutonEtat[9]=1; // 339	Droite
-		}
-	else
-		{
-		if((*systeme).moteurs.josephson < 0.0)
-			{
 			(*commandes).boutonEtat[7]=1; // 284	Marche
-			(*commandes).boutonEtat[10]=1; // 367	Gauche
-			}
-		else
-			{
 			(*commandes).boutonEtat[8]=1; // 311	Arrêt
-			}
-		}
+			(*commandes).boutonEtat[9]=1; // 339	Droite
+			(*commandes).boutonEtat[10]=1; // 367	Gauche
 
-	switch((*systeme).moteurs.generateur)	//	0:eteint, 1:sinus, 2:carre, 3:impulsion
+	switch((*systeme).montage.thermostat.actif)	//	0:système isolé, 1:température uniforme, 2:températures gauche-droite
 		{
 		case 0:
-			(*commandes).boutonEtat[11]=1;break; // 421	Arrêt
+			(*commandes).boutonEtat[11]=1;break; // système isolé
 		case 1:
-			(*commandes).boutonEtat[12]=1;break; // 449	Sinus
+			(*commandes).boutonEtat[12]=1;break; // température uniforme
 		case 2:
-			(*commandes).boutonEtat[13]=1;break; // 481	Carré
+			(*commandes).boutonEtat[13]=1;break; // températures gauche-droite
 		case 3:
-			(*commandes).boutonEtat[14]=1;break; // 509	Impulsion
+			(*commandes).boutonEtat[14]=1;break; // 
 		default:
 			;
 		}
 	//(*commandes).boutonEtat[15]=0; // 536	Fluxon
 	//(*commandes).boutonEtat[16]=0; // 563	Anti F.
 
+		// Remise à zéro des boutons
 	for(i=0;i<TRIANGLE_COMMANDES;i++) (*commandes).triangleEtat[i]=0;
 
-	switch((*projection).rotation)	//	
+		// Sélection des boutons activés
+	/*switch((*projection).rotation)	//	
 		{
 		case 3:
 			(*commandes).triangleEtat[0]=1;break; // 
@@ -165,7 +154,7 @@ int projectionSystemeCommandes(systemeT * systeme, projectionT * projection, com
 			(*commandes).triangleEtat[4]=1;break; // 
 		default:
 			;
-		}
+		}*/
 	if(duree<100)
 		{
 			(*commandes).triangleEtat[5]=1;
@@ -187,7 +176,7 @@ int projectionSystemeCommandes(systemeT * systeme, projectionT * projection, com
 		{
 		(*commandes).triangleEtat[7]=2;
 		}
-*/
+
 	return 0;
 	}
 

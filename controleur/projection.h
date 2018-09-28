@@ -41,11 +41,11 @@ termes.
 typedef struct ProjectionT projectionT;
 	struct ProjectionT
 		{
-		float logCouplage;
-		float logDissipation;
-		float logJosephson;
-		float logAmplitude;
-		float logFrequence;
+		float logTrou;
+		float logParticule;
+		float logTemperature;
+		float logGauche;
+		float logDroite;
 
 		int hauteur;
 		int largeur;
@@ -61,7 +61,5 @@ int projectionInitialiseLongueurs(projectionT * projection, int hauteur, int lar
 
 int projectionSystemeCommandes(systemeT * systeme, projectionT * projection, commandesT * commandes, int duree, int mode);
 void projectionSystemeGraphe(systemeT * systeme, projectionT * projection, grapheT * graph);
-
-int projectionAffichePointDeVue(projectionT * projection);
 
 #endif
