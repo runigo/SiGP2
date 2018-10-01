@@ -1,6 +1,6 @@
 
 /*
-Copyright septembre 2018, Stephan Runigo
+Copyright octobre 2018, Stephan Runigo
 runigo@free.fr
 SiGP 2.1.2  simulateur de gaz parfait
 Ce logiciel est un programme informatique servant à simuler un gaz et à
@@ -36,12 +36,23 @@ termes.
 int projectionInitialise(projectionT * projection)
 	{
 	(*projection).logTrou = 1.0 / log( (HAUTEUR/2) );
-	(*projection).logParticule = 1.0 / log( TAILLE_MAX );
+	(*projection).logParticule = 1.0 / log( TAILLE_MAX/TAILLE_MIN );
 	(*projection).logTemperature = 1.0 / log( TEMPERATURE_MAX/TEMPERATURE_MIN );
 	(*projection).logGauche = 1.0 / log( TEMPERATURE_MAX/TEMPERATURE_MIN );
 	(*projection).logDroite = 1.0 / log( TEMPERATURE_MAX/TEMPERATURE_MIN );
 	return 0;
 	}
+
+int projectionAffiche(projectionT * projection)
+	{
+	fprintf(stderr, "  (*projection).logTrou   = %f\n",(*projection).logTrou);
+	fprintf(stderr, "   (*projection).logParticule  = %f\n",(*projection).logParticule);
+	fprintf(stderr, "  (*projection).logTemperature   = %f\n",(*projection).logTemperature);
+	fprintf(stderr, "  (*projection).logGauche   = %f\n",(*projection).logGauche);
+	fprintf(stderr, "  (*projection).logDroite   = %f\n",(*projection).logDroite);
+	return 0;
+	}
+
 float projectionAbsolue(float valeur)
 	{
 	if(valeur<0) return -valeur;
@@ -52,23 +63,23 @@ int projectionSystemeCommandes(systemeT * systeme, projectionT * projection, com
 	{
 		// Projette le système sur les commandes
 
-	(void)systeme;
-	(void)projection;
-	(void)commandes;
-	(void)duree;
-	(void)mode;
+	//(void)systeme;
+	//(void)projection;
+	//(void)commandes;
+	//(void)duree;
+	//(void)mode;
 
 	float theta;
 	float ratioRotatif = 0.9;
 
 				//	Projection sur les boutons rotatifs
 	 //	Rayon du trou
-	theta = DEUXPI * (*projection).logTrou * log( (*systeme).montage.trou );
+	theta = DEUXPI * (*projection).logTrou * log( (*systeme).montage.trou +1);
 	(*commandes).rotatifPositionX[0]=(int)(-ratioRotatif*(*commandes).rotatifX*sin(theta));
 	(*commandes).rotatifPositionY[0]=(int)(ratioRotatif*(*commandes).rotatifY*cos(theta));
 
 	 //	Taille des particules
-	theta = DEUXPI * (*projection).logParticule * log( (*systeme).diametre );
+	theta = DEUXPI * (*projection).logParticule * log( (*systeme).diametre / TAILLE_MIN );
 	(*commandes).rotatifPositionX[1]=(int)(-ratioRotatif*(*commandes).rotatifX*sin(theta));
 	(*commandes).rotatifPositionY[1]=(int)(ratioRotatif*(*commandes).rotatifY*cos(theta));
 
@@ -192,9 +203,9 @@ void projectionSystemeGraphe(systemeT * systeme, projectionT * projection, graph
 
 	(*graphe).trou = (*systeme).montage.trou;
 
-	(*graphe).rayon = (*systeme).diametre/2;
-	if((*graphe).rayon < 1)
-		{(*graphe).rayon = 1;}
+	(*graphe).taille = (*systeme).diametre;
+	if((*graphe).taille < 1)
+		{(*graphe).taille = 1;}
 
 	for(i=0;i<(NOMBRE);i++)
 		{

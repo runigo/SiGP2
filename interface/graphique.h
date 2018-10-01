@@ -1,5 +1,5 @@
 /*
-Copyright septembre 2018, Stephan Runigo
+Copyright octobre 2018, Stephan Runigo
 runigo@free.fr
 SiGP 2.1.2  simulateur de gaz parfait
 Ce logiciel est un programme informatique servant à simuler un gaz et à
@@ -50,7 +50,6 @@ struct GraphiqueT {
 	SDL_Color vert;
   
 	SDL_Texture *particule;
-	int taille;
 
 	SDL_Texture *lumiereVerte;
 	SDL_Texture *lumiereRouge;

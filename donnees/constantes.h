@@ -1,6 +1,6 @@
 
 /*
-Copyright septembre 2018, Stephan Runigo
+Copyright octobre 2018, Stephan Runigo
 runigo@free.fr
 SiGP 2.1.2  simulateur de gaz parfait
 Ce logiciel est un programme informatique servant à simuler un gaz et à
@@ -63,20 +63,7 @@ termes.
 #define LINEAIRE_COMMANDES 3 // Nombres de commandes linéaires
 #define TRIANGLE_COMMANDES 21 // Nombres de commandes triangulaires
 
-#define ROTATION_PSI 0.00733 // Vitesse de la rotation du graphisme
-
-#define RATIO_H_L 0.436 // Ratio Hauteur sur Largeur de la chaîne
-//#define RATIO_C_X 0.491 // Ratio Centrage X Sans Menu
-//#define RATIO_C_Y 0.751 // Ratio Centrage Y Sans Menu
-#define RATIO_C_X 0.399 // Ratio Centrage X Avec Menu
-#define RATIO_C_Y 0.851 // Ratio Centrage Y Avec Menu
-#define RATIO_R_MIN 0.21 // Ratio Distance minimal
-#define RATIO_R_MAX 0.99 // Ratio Distance maximal
-
 #define MARGE 49 // Marge fenêtre-montage
-
-#define TAILLE_MASSE 8 // Diamètre des masses
-
 
 	//	PARAMÈTRES DU SYSTÈME
 
@@ -85,21 +72,22 @@ termes.
 #define LARGEUR 700 // Largeur du système
 #define HAUTEUR 350 // Hauteur du système
 
-#define NOMBRE 249 // Nombre de particules
-#define TAILLE 5 // Taille implicite des particules
-#define TAILLE_MAX 19 // Taille maximale des particules
+#define NOMBRE 149 // Nombre de particules
+#define TAILLE 8 // Taille implicite des particules
+#define TAILLE_MIN 2 // Taille minimale des particules
+#define TAILLE_MAX 29 // Taille maximale des particules
 
 #define RAYON_TROU 7 // Rayon implicite du trou dans la cloison
 
-#define DUREE_MAX 99 // Nombre d'itération du système par affichage
+#define DUREE_MAX 99 // Nombre maximal d'itération du système par affichage
 #define DUREE 1 // Nombre d'itération initial
 
 #define TEMPERATURE_MAX 19666.1 // Température maximale
 #define TEMPERATURE_MIN 0.000003 // Température minimale
 
-#define TEMPERATURE 7.7;	// Température initiale
-#define TEMPERATURE_GAUCHE 0.03;	// Température thermostat gauche
-#define TEMPERATURE_DROIT 77;	// Température thermostat droit
+#define TEMPERATURE 7.7;	// Température implicite
+#define TEMPERATURE_GAUCHE 0.03;	// Température implicite thermostat gauche
+#define TEMPERATURE_DROIT 77;	// Température implicite thermostat droit
 
 #endif
 /////////////////////////////////////////////////////////////

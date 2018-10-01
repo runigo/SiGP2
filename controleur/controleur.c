@@ -1,6 +1,6 @@
 
 /*
-Copyright septembre 2018, Stephan Runigo
+Copyright octobre 2018, Stephan Runigo
 runigo@free.fr
 SiGP 2.1.2  simulateur de gaz parfait
 Ce logiciel est un programme informatique servant à simuler un gaz et à
@@ -76,6 +76,9 @@ int controleurInitialise(controleurT * controleur)
 	(*controleur).modePause = -1;	// Évolution du système si < 0
 	(*controleur).sortie = 0;	// Sortie de SiCP si > 0
 	(*controleur).appui = 0;	// Appuie sur la souris
+
+		fprintf(stderr, " Initialisation de la projection\n");
+	projectionInitialise(&(*controleur).projection);
 
 		fprintf(stderr, " Initialisation du système\n");
 		// Initialisation géométrique de l'enceinte
@@ -227,7 +230,7 @@ int controleurProjection(controleurT * controleur)
 	commandesInitialiseSouris(&(*controleur).commandes, x, y);
 
 		//fprintf(stderr, "projectionInitialiseLongueurs\n");
-	projectionInitialiseLongueurs(&(*controleur).projection, hauteur*RATIO_H_L, largeur);
+	projectionInitialiseLongueurs(&(*controleur).projection, hauteur*0.5, largeur);
 
 		// Projection du système sur le graphique
 	projectionSystemeGraphe(&(*controleur).systeme, &(*controleur).projection, &(*controleur).graphe);
@@ -249,10 +252,10 @@ int controleurConstructionGraphique(controleurT * controleur)
 	{
 
 		//fprintf(stderr, "Nettoyage de l'affichage\n");
-	graphiqueNettoyage(&(*controleur).graphique);
+	//graphiqueNettoyage(&(*controleur).graphique);
 
 		//fprintf(stderr, "Dessin des Commandes\n");
-	//graphiqueCommandes(&(*controleur).graphique, &(*controleur).commandes);
+	graphiqueCommandes(&(*controleur).graphique, &(*controleur).commandes);
 
 		//fprintf(stderr, "Dessin des graphes\n");
 	graphiqueDessineGraphe(&(*controleur).graphique, &(*controleur).graphe);
@@ -471,6 +474,9 @@ int controleurClavier(controleurT * controleur)
 			break;
 		case SDLK_F6:	//	
 			thermostatAfficheThermostat(&(*controleur).systeme.montage.thermostat);
+			break;
+		case SDLK_F7:	//	
+			projectionAffiche(&(*controleur).projection);
 			break;
 
 		default:
@@ -775,7 +781,7 @@ int controleurCommandes(controleurT * controleur, int zone)
 		{
 		commande = commandeBoutons(&(*controleur).commandes);
 		switch(commande)	//	
-			{// 0 : Pas de cloison, 1 : Cloison fermée, 2 : Cloison percée, 3 : Maxwell
+			{// 0 : Pas de cloison, 1 : Cloison fermée, 2 : Cloison percée, -1 : Maxwell
 			case 0: // Cloison
 				systemeChangeCloison(&(*controleur).systeme, 1);break;
 			case 1: // Trou
@@ -783,7 +789,7 @@ int controleurCommandes(controleurT * controleur, int zone)
 			case 2: // Max.
 				systemeChangeCloison(&(*controleur).systeme, 0);break;
 			case 3: // Démon
-				systemeChangeCloison(&(*controleur).systeme, 3);break;
+				systemeChangeCloison(&(*controleur).systeme, -1);break;
 			case 4: // Particule
 				;break;
 			case 5: // Particule

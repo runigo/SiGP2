@@ -1,6 +1,6 @@
 
 /*
-Copyright septembre 2018, Stephan Runigo
+Copyright octobre 2018, Stephan Runigo
 runigo@free.fr
 SiGP 2.1.2  simulateur de gaz parfait
 Ce logiciel est un programme informatique servant à simuler un gaz et à
@@ -48,8 +48,6 @@ int graphiqueCreation(graphiqueT * graphique, interfaceT * interface)
 	(*graphique).largeur=largeur;
 	(*graphique).hauteur=hauteur;
 
-	(*graphique).taille=TAILLE;
-
 		// Création du rendu
 	(*graphique).rendu = SDL_CreateRenderer((*interface).fenetre, -1 , 
 					SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
@@ -59,7 +57,7 @@ int graphiqueCreation(graphiqueT * graphique, interfaceT * interface)
 		return EXIT_FAILURE;
 		}
 
-	int fond = 10;
+	int fond = 255;
 	//SDL_Color orange = {255, 127, 40, 255};
 	(*graphique).fond.r = fond;
 	(*graphique).fond.g = fond;
@@ -257,8 +255,8 @@ void graphiqueDessineGraphe(graphiqueT * graphique, grapheT * graphe)
 	int i, x, y;
 	//int rayon = (*graphe).rayon;
 	int centrage = 4;
-	//SDL_Rect coordonnee = {0, 0, (*graphique).taille, (*graphique).taille};
-	SDL_Rect coordonnee = {0, 0, 8, 8};
+	SDL_Rect coordonnee = {0, 0, (*graphe).taille, (*graphe).taille};
+	//SDL_Rect coordonnee = {0, 0, 8, 8};
 
 	  //fprintf(stderr, "Particules\n");
 	for(i=0;i<NOMBRE;i++)
