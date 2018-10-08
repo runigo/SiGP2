@@ -49,6 +49,8 @@ typedef struct ThermostatT thermostatT;
 void thermostatInitialise(thermostatT * thermostat);
 void thermostatChangeEtat(thermostatT * thermostat, int uniforme);
 void thermostatChangeTemperature(thermostatT * thermostat, float facteur);
+void thermostatChangeGauche(thermostatT * thermostat, int etat);
+void thermostatChangeDroit(thermostatT * thermostat, int etat);
 void thermostatChangeTemperatureGauche(thermostatT * thermostat, float facteur);
 void thermostatChangeTemperatureDroite(thermostatT * thermostat, float facteur);
 void thermostatInverseTemperature(thermostatT * thermostat);

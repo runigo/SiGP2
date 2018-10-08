@@ -63,12 +63,6 @@ int projectionSystemeCommandes(systemeT * systeme, projectionT * projection, com
 	{
 		// Projette le système sur les commandes
 
-	//(void)systeme;
-	//(void)projection;
-	//(void)commandes;
-	//(void)duree;
-	//(void)mode;
-
 	float theta;
 	float ratioRotatif = 0.9;
 
@@ -122,30 +116,45 @@ int projectionSystemeCommandes(systemeT * systeme, projectionT * projection, com
 			;
 		}
 
-	(*commandes).boutonEtat[4]=1;
-	(*commandes).boutonEtat[5]=1;
-	(*commandes).boutonEtat[6]=1;
-
-			(*commandes).boutonEtat[7]=1; // 284	Marche
-			(*commandes).boutonEtat[8]=1; // 311	Arrêt
-			(*commandes).boutonEtat[9]=1; // 339	Droite
-			(*commandes).boutonEtat[10]=1; // 367	Gauche
+	//(*commandes).boutonEtat[4]=1;
+	//(*commandes).boutonEtat[5]=1;
+	//(*commandes).boutonEtat[6]=1;
 
 	switch((*systeme).montage.thermostat.actif)	//	0:système isolé, 1:température uniforme, 2:températures gauche-droite
 		{
 		case 0:
-			(*commandes).boutonEtat[11]=1;break; // système isolé
+			(*commandes).boutonEtat[4]=1;break; // système isolé
 		case 1:
-			(*commandes).boutonEtat[12]=1;break; // température uniforme
+			(*commandes).boutonEtat[5]=1;break; // température uniforme
 		case 2:
-			(*commandes).boutonEtat[13]=1;break; // températures gauche-droite
-		case 3:
-			(*commandes).boutonEtat[14]=1;break; // 
+			(*commandes).boutonEtat[6]=1;break; // températures gauche-droite
 		default:
 			;
 		}
-	//(*commandes).boutonEtat[15]=0; // 536	Fluxon
-	//(*commandes).boutonEtat[16]=0; // 563	Anti F.
+
+	//(*commandes).boutonEtat[7]=1; //	Marche
+	//(*commandes).boutonEtat[8]=1; //	Arrêt
+	switch((*systeme).montage.thermostat.actif)	//	Température gauche
+		{
+		case 0:
+			(*commandes).boutonEtat[7]=1;break; //	Marche
+		case 1:
+			(*commandes).boutonEtat[8]=1;break; //	Arrêt
+		default:
+			;
+		}
+
+	//(*commandes).boutonEtat[9]=1; //	Marche
+	//(*commandes).boutonEtat[10]=1; //	Arrêt
+	switch((*systeme).montage.thermostat.actif)	//	Température droite
+		{
+		case 0:
+			(*commandes).boutonEtat[9]=1;break; //	Marche
+		case 1:
+			(*commandes).boutonEtat[10]=1;break; //	Arrêt
+		default:
+			;
+		}
 
 		// Remise à zéro des boutons
 	for(i=0;i<TRIANGLE_COMMANDES;i++) (*commandes).triangleEtat[i]=0;

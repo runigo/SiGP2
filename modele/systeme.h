@@ -50,7 +50,7 @@ typedef struct SystemeT systemeT;
 		float vitesseInitiale;
 		float temperature;
 		};
-void systemeInitialisePosition(systemeT * systeme);
+void systemeInitialisePosition(systemeT * systeme, int forme);
 void systemeInitialise(systemeT * systeme, int taille, float vitesse);
 void systemeEvolue(systemeT * systeme, int duree); // Passage de l'ancien système au nouveau, appelée dans le main.
 

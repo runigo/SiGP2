@@ -74,6 +74,18 @@ void thermostatChangeEtat(thermostatT * thermostat, int mode)
 	return;
 	}
 
+void thermostatChangeGauche(thermostatT * thermostat, int etat)
+	{
+	(void)thermostat;
+	(void)etat;
+	return;
+	}
+void thermostatChangeDroit(thermostatT * thermostat, int etat)
+	{
+	(void)thermostat;
+	(void)etat;
+	return;
+	}
 void thermostatChangeTemperature(thermostatT * thermostat, float facteur)
 
 			//	Change température moyenne

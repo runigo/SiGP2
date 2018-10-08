@@ -47,25 +47,28 @@ termes.
 #define PI 3.14159265359
 #define DEUXPI 6.28318530718
 
+
 	//	PARAMÈTRES GRAPHIQUES
 
 
-#define TEMPS_AFFICHAGE 90 // Durée entre les affichages en ms
+#define TEMPS_AFFICHAGE 210 // Durée entre les affichages en ms
 
-//#define FENETRE_X 1158 // Largeur de la fenêtre
-//#define FENETRE_Y 714 // Hauteur de la fenêtre
-#define FENETRE_X 892 // Largeur de la fenêtre
-#define FENETRE_Y 550 // Hauteur de la fenêtre
+#define FENETRE_X 1159 // Largeur de la fenêtre
+#define FENETRE_Y 667 // Hauteur de la fenêtre
+//#define FENETRE_X 892 // Largeur de la fenêtre
+//#define FENETRE_Y 550 // Hauteur de la fenêtre
 
-#define BOUTON_COMMANDES 17 // Nombres de petits boutons
+#define BOUTON_COMMANDES 11 // Nombres de petits boutons
 #define ROTATIF_COMMANDES 5 // Nombre de boutons rotatifs
 
 #define LINEAIRE_COMMANDES 3 // Nombres de commandes linéaires
-#define TRIANGLE_COMMANDES 21 // Nombres de commandes triangulaires
+#define TRIANGLE_COMMANDES 12 // Nombres de commandes triangulaires
 
 #define MARGE 49 // Marge fenêtre-montage
 
+
 	//	PARAMÈTRES DU SYSTÈME
+
 
 #define ALEA 77 // Taille du tableau de nombre aléatoire
 

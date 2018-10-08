@@ -40,8 +40,9 @@ void systemeParoi(systemeT * systeme);
 void systemeInertie(systemeT * systeme);
 void systemeChocsParticules(systemeT * systeme);
 
-void systemeInitialisePosition(systemeT * systeme)
+void systemeInitialisePosition(systemeT * systeme, int forme)
 	{
+	(void)forme;
 		// Initialisation des mobiles
 	int i;
 	for(i=0;i<NOMBRE;i++)
@@ -68,7 +69,7 @@ void systemeInitialise(systemeT * systeme, int taille, float vitesse)
 	(*systeme).vitesseInitiale = vitesse;
 
 		// Initialisation des mobiles
-	systemeInitialisePosition(systeme);
+	systemeInitialisePosition(systeme, 1);
 
 	return;
 	}

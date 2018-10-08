@@ -209,11 +209,9 @@ void controleurEvolution(controleurT * controleur)
 int controleurProjection(controleurT * controleur)
 	{
 		//fprintf(stderr, "Projection du système sur la représentation graphique\n");
+
 	int largeur;
 	int hauteur;
-	int x, y;
-
-		//void SDL_GetWindowSize(SDL_Window* window, int* w, int* h)
 	SDL_GetWindowSize((*controleur).interface.fenetre, &largeur, &hauteur);
 
 		// Réinitialisation des commandes si la fenêtre change de taille
@@ -225,6 +223,7 @@ int controleurProjection(controleurT * controleur)
 		}
 
 		// Réinitialisation des commandes de la souris
+	int x, y;
 	SDL_PumpEvents();
 	SDL_GetMouseState(&x,&y);
 	commandesInitialiseSouris(&(*controleur).commandes, x, y);
@@ -464,11 +463,14 @@ int controleurClavier(controleurT * controleur)
   // Initialiser le système
 
 		case SDLK_F1:
-			systemeInitialisePosition(&(*controleur).systeme);
+			systemeInitialisePosition(&(*controleur).systeme, 1);
 			break;
 
   // Afficher les informations
 
+		case SDLK_F4: // Corde asymétrique
+			controleurAfficheSouris(controleur);
+			break;
 		case SDLK_F5:	//	
 			observablesAfficheEnergie(&(*controleur).systeme);
 			break;
@@ -507,7 +509,7 @@ int controleurClavierMaj(controleurT * controleur)
 		// Lecture des fichier
 		case SDLK_a:
 			fprintf(stderr, "Réinitialisation du système\n");
-			systemeInitialisePosition(&(*controleur).systeme);break;
+			systemeInitialisePosition(&(*controleur).systeme, 1);break;
 	/*	case SDLK_z:
 			fprintf(stderr, "Réinitialisation du système\n");
 			fichierLecture(&(*controleur).systeme, 1);break;
@@ -790,30 +792,32 @@ int controleurCommandes(controleurT * controleur, int zone)
 				systemeChangeCloison(&(*controleur).systeme, 0);break;
 			case 3: // Démon
 				systemeChangeCloison(&(*controleur).systeme, -1);break;
-			case 4: // Particule
-				;break;
-			case 5: // Particule
-				;break;
-			case 6: // Particule
-				;break;
-			case 7: // Marche
+
+			case 4:
+				thermostatChangeEtat(&(*controleur).systeme.montage.thermostat, 0);break;
+			case 5:
 				thermostatChangeEtat(&(*controleur).systeme.montage.thermostat, 1);break;
-			case 8: // Arrêt
-				thermostatChangeEtat(&(*controleur).systeme.montage.thermostat, 0);break;
-			case 9: // 
-				;break;
-			case 10: // thermostatChangeEtat(&(*controleur).systeme.montage.thermostat, )
-				;break;
-			case 11: // Marche Gauche
+			case 6:
 				thermostatChangeEtat(&(*controleur).systeme.montage.thermostat, 2);break;
-			case 12: // Arrêt
-				thermostatChangeEtat(&(*controleur).systeme.montage.thermostat, 0);break;
+
+			case 7: // Marche
+				thermostatChangeGauche(&(*controleur).systeme.montage.thermostat, 1);break;
+			case 8: // Arrêt
+				thermostatChangeGauche(&(*controleur).systeme.montage.thermostat, 0);break;
+			case 9: // Marche
+				thermostatChangeDroit(&(*controleur).systeme.montage.thermostat, 1);break;
+			case 10: // Arrêt
+				thermostatChangeDroit(&(*controleur).systeme.montage.thermostat, 0);break;
+			case 11:
+				;break;
+			case 12: // 
+				;break;
 			case 13: // 
 				;break;
-			case 14: // Marche Droite
-				thermostatChangeEtat(&(*controleur).systeme.montage.thermostat, 2);break;
-			case 15: // Arrêt
-				thermostatChangeEtat(&(*controleur).systeme.montage.thermostat, 0);break;
+			case 14: // 
+				;break;
+			case 15: // 
+				;break;
 			case 16: // 
 				;break;
 			default:
@@ -826,30 +830,30 @@ int controleurCommandes(controleurT * controleur, int zone)
 		switch(commande)	//	
 			{
 			case 0:
-				;break;
+				systemeInitialisePosition(&(*controleur).systeme, 0);break;
 			case 1:
-				;break;
+				systemeInitialisePosition(&(*controleur).systeme, 1);break;
 			case 2:
-				;break;
+				systemeInitialisePosition(&(*controleur).systeme, 2);break;
 			case 3:
-				;break;
+				controleurInitialiseParametres(controleur, 0);break;
 			case 4:
-				;break;
+				controleurInitialiseParametres(controleur, 1);break;
 			case 5:
-				controleurChangeVitesse(controleur, 0.32);break;
+				controleurInitialiseParametres(controleur, 2);break;
 			case 6:
-				controleurChangeVitesse(controleur, 0.91);break;
+				controleurInitialiseParametres(controleur, 3);break;
 			case 7:
 				controleurChangeMode(controleur);break;
 			case 8:
 				controleurChangeVitesse(controleur, -1.0);break;
 			case 9:
-				controleurChangeVitesse(controleur, 1.1);break;
+				controleurChangeVitesse(controleur, 0.91);break;
 			case 10:
-				controleurChangeVitesse(controleur, 3.1);break;
-		/*	case 11:
-				systemeInitialisePosition(&(*controleur).systeme, 0);break;
-			case 12:
+				controleurChangeVitesse(controleur, 1.1);break;
+			case 11:
+				controleurChangeVitesse(controleur, -10);break;
+		/*	case 12:
 				systemeInitialisePosition(&(*controleur).systeme, 1);break;
 			case 13:
 				systemeInitialisePosition(&(*controleur).systeme, 2);break;
@@ -873,32 +877,30 @@ int controleurCommandes(controleurT * controleur, int zone)
 		}
 	return 0;
 	}
-/*
+
 int controleurInitialiseParametres(controleurT * controleur, int forme)
 	{
-	(*controleur).systeme.premier->pendule.dephasage = 0; // Supprime les fluxons
-	changeConditionsLimites(&(*controleur).systeme, 1); // Libre
-	moteursChangeEtatJosephson(&(*controleur).systeme.moteurs,0); // Josephson
+
+	(void)controleur;
 
 	switch(forme)
 		{
 		case 0:
-			changeCouplage(&(*controleur).systeme, 1.1);
-			changeConditionsLimites(&(*controleur).systeme, 1);break;
+			;break;
 		case 1:
-			changeDissipation(&(*controleur).systeme, 1.1);break;
+			;break;
 		case 2:
-			moteursChangeEtatJosephson(&(*controleur).systeme.moteurs,1);break;
+			;break;
 		case 3:
-			changeConditionsLimites(&(*controleur).systeme, 0);break;
+			;break;
 		case 4:
-			changeConditionsLimites(&(*controleur).systeme, 0);break;
+			;break;
 		default:
 			;
 		}
 	return 0;
 	}
-*/
+
 
 int controleurDefile(controleurT * controleur)
 	{
