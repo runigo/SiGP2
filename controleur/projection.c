@@ -1,8 +1,7 @@
-
 /*
 Copyright octobre 2018, Stephan Runigo
 runigo@free.fr
-SiGP 2.1.2  simulateur de gaz parfait
+SiGP 2.1.3  simulateur de gaz parfait
 Ce logiciel est un programme informatique servant à simuler un gaz et à
 en donner une représentation graphique. Il permet d'observer une détente
 de Joule ainsi que des transferts thermiques avec des thermostats.
@@ -92,8 +91,12 @@ int projectionSystemeCommandes(systemeT * systeme, projectionT * projection, com
 	(*commandes).rotatifPositionX[4]=(int)(-ratioRotatif*(*commandes).rotatifX*sin(theta));
 	(*commandes).rotatifPositionY[4]=(int)(ratioRotatif*(*commandes).rotatifY*cos(theta));
 
-		//int rotatifPositionX[ROTATIF_COMMANDES]; // Position du bouton rotatif
-		//int rotatifPositionY[ROTATIF_COMMANDES];
+	//	Nombre
+	theta = PI;
+	(*commandes).rotatifPositionX[5]=(int)(-ratioRotatif*(*commandes).rotatifX*sin(theta));
+	(*commandes).rotatifPositionY[5]=(int)(ratioRotatif*(*commandes).rotatifY*cos(theta));
+	(*commandes).rotatifPositionX[5]=0;
+	(*commandes).rotatifPositionY[5]=0;
 
 
 	int i;
@@ -110,15 +113,12 @@ int projectionSystemeCommandes(systemeT * systeme, projectionT * projection, com
 			(*commandes).boutonEtat[1]=1;break; // 62	Trou
 		case 0:
 			(*commandes).boutonEtat[2]=1;break; // 88 	Max
-		case -1:
-			(*commandes).boutonEtat[3]=1;break; // 115	Démon
 		default:
 			;
 		}
 
-	//(*commandes).boutonEtat[4]=1;
-	//(*commandes).boutonEtat[5]=1;
-	//(*commandes).boutonEtat[6]=1;
+	if((*systeme).montage.demonMaxwel==1)
+			(*commandes).boutonEtat[3]=1; // 	Démon
 
 	switch((*systeme).montage.thermostat.actif)	//	0:système isolé, 1:température uniforme, 2:températures gauche-droite
 		{
@@ -132,8 +132,6 @@ int projectionSystemeCommandes(systemeT * systeme, projectionT * projection, com
 			;
 		}
 
-	//(*commandes).boutonEtat[7]=1; //	Marche
-	//(*commandes).boutonEtat[8]=1; //	Arrêt
 	switch((*systeme).montage.thermostat.actif)	//	Température gauche
 		{
 		case 0:
@@ -144,8 +142,6 @@ int projectionSystemeCommandes(systemeT * systeme, projectionT * projection, com
 			;
 		}
 
-	//(*commandes).boutonEtat[9]=1; //	Marche
-	//(*commandes).boutonEtat[10]=1; //	Arrêt
 	switch((*systeme).montage.thermostat.actif)	//	Température droite
 		{
 		case 0:
@@ -156,45 +152,49 @@ int projectionSystemeCommandes(systemeT * systeme, projectionT * projection, com
 			;
 		}
 
-		// Remise à zéro des boutons
+		// Remise à zéro des boutons triangulaire
 	for(i=0;i<TRIANGLE_COMMANDES;i++) (*commandes).triangleEtat[i]=0;
 
 		// Sélection des boutons activés
-	/*switch((*projection).rotation)	//	
+	/*switch((*projection).initialisation)	//	
 		{
 		case 3:
-			(*commandes).triangleEtat[0]=1;break; // 
+			(*commandes).triangleEtat[0]=1;break; // 1
 		case 1:
-			(*commandes).triangleEtat[1]=1;break; // 
+			(*commandes).triangleEtat[1]=1;break; // 2
 		case 0:
-			(*commandes).triangleEtat[2]=0;break; // 
+			(*commandes).triangleEtat[2]=1;break; // 3
 		case -1:
-			(*commandes).triangleEtat[3]=1;break; // 
+			(*commandes).triangleEtat[3]=1;break; // 1
 		case -3:
-			(*commandes).triangleEtat[4]=1;break; // 
+			(*commandes).triangleEtat[4]=1;break; // 2
+		case 0:
+			(*commandes).triangleEtat[5]=1;break; // 3
+		case -1:
+			(*commandes).triangleEtat[6]=1;break; // 4
 		default:
 			;
 		}*/
-	if(duree<100)
-		{
-			(*commandes).triangleEtat[5]=1;
-			(*commandes).triangleEtat[6]=1;
-		}
-	else
-		{
-		if(duree>100)
-			{
-			(*commandes).triangleEtat[9]=1;
-			(*commandes).triangleEtat[10]=1;
-			}
-		else
-			{
-			(*commandes).triangleEtat[8]=1;
-			}
-		}
 	if(mode<0)
 		{
 		(*commandes).triangleEtat[7]=2;
+		}
+
+	if(duree==1)
+		{
+		(*commandes).triangleEtat[8]=1;
+		}
+	else
+		{
+		if(duree==DUREE_MAX)
+			{
+			 (*commandes).triangleEtat[11]=2;
+			}
+		else
+			{
+			(*commandes).triangleEtat[9]=-1;
+			(*commandes).lineairePositionX=(int)((*commandes).a * duree + (*commandes).b);
+			}
 		}
 
 	return 0;

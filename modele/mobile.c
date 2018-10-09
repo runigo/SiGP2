@@ -1,10 +1,9 @@
-
 /*
-Copyright septembre 2017, Stephan Runigo
+Copyright octobre 2018, Stephan Runigo
 runigo@free.fr
-SiGP 1.3.3  simulateur de gaz parfait
-Ce logiciel est un programme informatique servant à simuler un gaz parfait
-et à en donner une représentation graphique. Il permet d'observer une détente
+SiGP 2.1.3  simulateur de gaz parfait
+Ce logiciel est un programme informatique servant à simuler un gaz et à
+en donner une représentation graphique. Il permet d'observer une détente
 de Joule ainsi que des transferts thermiques avec des thermostats.
 Ce logiciel est régi par la licence CeCILL soumise au droit français et
 respectant les principes de diffusion des logiciels libres. Vous pouvez
@@ -155,8 +154,9 @@ void mobileParoi(mobileT * mobile, montageT * montage)
 
 			// Chocs avec la paroi centrale
 
-	if((*montage).paroiCentrale == 0){}
-	else
+	if((*montage).paroiCentrale == 0)	{// Pas de paroi
+										}
+	else	// Paroi
 		{			// 	Rebond sur la cloison
 		if( (*mobile).nouveau.y >= (*montage).trou || (*mobile).nouveau.y <= - (*montage).trou )
 			{
@@ -176,10 +176,14 @@ void mobileParoi(mobileT * mobile, montageT * montage)
 				// Arrivé de gauche
 			if( (*mobile).nouveau.x > 0 && (*mobile).droite == 0)
 				{
-				if((*montage).paroiCentrale > 0)
-					(*mobile).droite = 1;
-				else	// Démon de maxwell
+				if((*montage).demonMaxwel==1)	// Démon de maxwell
+					{
 					mobileInverseVx(mobile, 0);
+					}
+				else
+					{
+					(*mobile).droite = 1;
+					}
 				}
 				// Arrivé de droite
 			if( (*mobile).nouveau.x < 0 && (*mobile).droite == 1)

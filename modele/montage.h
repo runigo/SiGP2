@@ -1,10 +1,9 @@
-
 /*
-Copyright septembre 2017, Stephan Runigo
+Copyright octobre 2018, Stephan Runigo
 runigo@free.fr
-SiGP 1.3.3  simulateur de gaz parfait
-Ce logiciel est un programme informatique servant à simuler un gaz parfait
-et à en donner une représentation graphique. Il permet d'observer une détente
+SiGP 2.1.3  simulateur de gaz parfait
+Ce logiciel est un programme informatique servant à simuler un gaz et à
+en donner une représentation graphique. Il permet d'observer une détente
 de Joule ainsi que des transferts thermiques avec des thermostats.
 Ce logiciel est régi par la licence CeCILL soumise au droit français et
 respectant les principes de diffusion des logiciels libres. Vous pouvez
@@ -51,7 +50,9 @@ typedef struct MontageT montageT;
 		int trou ; // Taille du trou = TROU
 		//int epaisseur; // Epaisseur de la cloison
 
-		int paroiCentrale; // 0 : pas de paroi centrale, 1 : Cloison, 2 : Maxwell. 
+		int paroiCentrale; // 0 : pas de paroi centrale, 1 : Cloison fermée, 2 : Trou implicite.
+
+		int demonMaxwel; // 0 : pas de démon, 1 : Démon de Maxwell. 
 /*
 		int pDROITE; //2*LARGEUR Paroi droite
 		int pINFERIEUR;//2*HAUTEUR Paroi inférieur
@@ -70,6 +71,7 @@ typedef struct MontageT montageT;
 //void montageInitialise(montageT * montage);
 
 void montageChangeTrou(montageT * montage, float facteur);
-void montageChangeParoiCentrale(montageT * montage, int centrale);
+void montageChangeParoiCentrale(montageT * montage, int centrale); // 0 : pas de paroi centrale, 1 : Cloison fermée, 2 : Trou implicite.
+void montageChangeDemonMaxwel(montageT * montage);
 
 #endif

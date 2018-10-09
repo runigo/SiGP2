@@ -1,10 +1,9 @@
-
 /*
-Copyright novembre 2017, Stephan Runigo
+Copyright octobre 2018, Stephan Runigo
 runigo@free.fr
-SiGP 1.3.4  simulateur de gaz parfait
-Ce logiciel est un programme informatique servant à simuler un gaz parfait
-et à en donner une représentation graphique. Il permet d'observer une détente
+SiGP 2.1.3  simulateur de gaz parfait
+Ce logiciel est un programme informatique servant à simuler un gaz et à
+en donner une représentation graphique. Il permet d'observer une détente
 de Joule ainsi que des transferts thermiques avec des thermostats.
 Ce logiciel est régi par la licence CeCILL soumise au droit français et
 respectant les principes de diffusion des logiciels libres. Vous pouvez
@@ -34,7 +33,7 @@ termes.
 #include "montage.h"
 
 void montageChangeParoiCentrale(montageT * montage, int mode)
-		// 0 : Pas de cloison, 1 : Cloison fermée, 2 : Cloison percée, 3 : Maxwell
+		// 0 : Pas de cloison, 1 : Cloison fermée, 2 : Cloison percée
 	{
 	(*montage).paroiCentrale = mode;
 
@@ -51,6 +50,22 @@ void montageChangeParoiCentrale(montageT * montage, int mode)
 	fprintf(stderr, "trou = %d\n", (*montage).trou);
 	if(mode<0)fprintf(stderr, "Démon de Maxwell activé\n");
 
+	return;
+	}
+
+void montageChangeDemonMaxwel(montageT * montage)
+		// Change l'état du démon de Maxwell
+	{
+	if((*montage).demonMaxwel==1)
+		{
+		(*montage).demonMaxwel = 0;
+		fprintf(stderr, "Démon de Maxwell désactivé\n");
+		}
+	else
+		{
+		(*montage).demonMaxwel = 1;
+		fprintf(stderr, "Démon de Maxwell activé\n");
+		}
 	return;
 	}
 

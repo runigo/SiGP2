@@ -155,6 +155,38 @@ int graphiqueCreation(graphiqueT * graphique, interfaceT * interface)
 		retour = 8;
 		}
 
+	SDL_Surface *lumiereJaune = 0;
+
+	lumiereJaune = SDL_LoadBMP("./interface/lumiereJaune.bmp");
+	if (!lumiereJaune)
+		{
+		fprintf(stderr,"ERREUR chargement image, lumiereJaune.bmp : %s\n",SDL_GetError());
+		retour = 9;
+		}
+	(*graphique).lumiereVerte = SDL_CreateTextureFromSurface((*graphique).rendu, lumiereJaune);
+	SDL_FreeSurface(lumiereJaune);
+	if ((*graphique).lumiereJaune == 0)
+		{
+		fprintf(stderr,"ERREUR grapheInitialisation : Erreur creation texture : %s\n",SDL_GetError());
+		retour = 10;
+		}
+
+	SDL_Surface *lumiereOrange = 0;
+
+	lumiereOrange = SDL_LoadBMP("./interface/lumiereOrange.bmp");
+	if (!lumiereOrange)
+		{
+		fprintf(stderr,"ERREUR chargement image, lumiereOrange.bmp : %s\n",SDL_GetError());
+		retour = 11;
+		}
+	(*graphique).lumiereOrange = SDL_CreateTextureFromSurface((*graphique).rendu, lumiereOrange);
+	SDL_FreeSurface(lumiereOrange);
+	if ((*graphique).lumiereOrange == 0)
+		{
+		fprintf(stderr,"ERREUR grapheInitialisation : Erreur creation texture : %s\n",SDL_GetError());
+		retour = 12;
+		}
+
 
 	return retour;
 }
@@ -220,30 +252,27 @@ int graphiqueCommandes(graphiqueT * graphique, commandesT * commandes)
 	coordonnee.y = (*commandes).trianglesLumiere - centrage;	// Positon Y de la zone du bas
 	for(i=0;i<TRIANGLE_COMMANDES;i++)
 		{
-		if((*commandes).triangleEtat[i]==1)
+		if((*commandes).triangleEtat[i]==1)			//	1 VERT
 			{
 			coordonnee.x = (*commandes).triangleCentre[i] - centrage; // Positon X des boutons triangulaire
 			SDL_RenderCopy((*graphique).rendu, (*graphique).lumiereVerte, NULL, &coordonnee);
 			}
 		else
 			{
-				if((*commandes).triangleEtat[i]==2)
+			if((*commandes).triangleEtat[i]==2)	//	2 ROUGE
 				{
 				coordonnee.x = (*commandes).triangleCentre[i] - centrage; // Positon X des boutons triangulaire
 				SDL_RenderCopy((*graphique).rendu, (*graphique).lumiereRouge, NULL, &coordonnee);
 				}
-				else
+			else
+				{
+				//coordonnee.x=(*commandes).lineairePositionX;	//	JAUNE ORANGE
+				coordonnee.x=(*commandes).triangleCentre[i];	//	JAUNE ORANGE
+				if((*commandes).triangleEtat[i]==-1)
 					{
-					coordonnee.x=(*commandes).lineairePositionX;	//	Droite duree < DUREE
-					if((*commandes).triangleEtat[5]==-1 || (*commandes).triangleEtat[10]==-1)
-						{
-						SDL_RenderCopy((*graphique).rendu, (*graphique).lumiereOrange, NULL, &coordonnee);
-						}
-					if((*commandes).triangleEtat[6]==-1 || (*commandes).triangleEtat[9]==-1)
-						{
-						SDL_RenderCopy((*graphique).rendu, (*graphique).lumiereJaune, NULL, &coordonnee);
-						}
+					SDL_RenderCopy((*graphique).rendu, (*graphique).lumiereOrange, NULL, &coordonnee);
 					}
+				}
 			}
 		}
 

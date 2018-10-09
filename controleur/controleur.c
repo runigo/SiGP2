@@ -1,8 +1,7 @@
-
 /*
 Copyright octobre 2018, Stephan Runigo
 runigo@free.fr
-SiGP 2.1.2  simulateur de gaz parfait
+SiGP 2.1.3  simulateur de gaz parfait
 Ce logiciel est un programme informatique servant à simuler un gaz et à
 en donner une représentation graphique. Il permet d'observer une détente
 de Joule ainsi que des transferts thermiques avec des thermostats.
@@ -89,6 +88,7 @@ int controleurInitialise(controleurT * controleur)
 	(*controleur).systeme.montage.demiHauteur = (HAUTEUR-MARGE)/2;// Demi hauteur
 
 	(*controleur).systeme.montage.paroiCentrale = (*controleur).options.cloison;// 0 : pas de paroi centrale. 
+	(*controleur).systeme.montage.demonMaxwel = 0;// 0 : pas de démon de Maxwell
 	(*controleur).systeme.montage.trou = (*controleur).options.trou;// Taille du trou, sur 2
 
 		// Initialisation du thermostat
@@ -325,7 +325,7 @@ void controleurChangeVitesse(controleurT * controleur, float facteur)
 	{
 	if(facteur > 0.0)
 		{
-		if( (*controleur).duree > DUREE_MAX && facteur > 1 )
+		if( (*controleur).duree >= DUREE_MAX && facteur > 1 )
 			{
 			printf("Duree maximale atteinte. ");
 			}
@@ -366,6 +366,10 @@ void controleurChangeVitesse(controleurT * controleur, float facteur)
 			(*controleur).duree=DUREE_MAX;
 			}
 		}
+	if( (*controleur).duree > DUREE_MAX)
+			{
+			(*controleur).duree=DUREE_MAX;
+			}
 	printf("Duree = %d\n", (*controleur).duree);
 	return;
 	}
@@ -791,7 +795,7 @@ int controleurCommandes(controleurT * controleur, int zone)
 			case 2: // Max.
 				systemeChangeCloison(&(*controleur).systeme, 0);break;
 			case 3: // Démon
-				systemeChangeCloison(&(*controleur).systeme, -1);break;
+				montageChangeDemonMaxwel(&(*controleur).systeme.montage);break;
 
 			case 4:
 				thermostatChangeEtat(&(*controleur).systeme.montage.thermostat, 0);break;
