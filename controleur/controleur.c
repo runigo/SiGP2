@@ -88,7 +88,7 @@ int controleurInitialise(controleurT * controleur)
 	(*controleur).systeme.montage.demiHauteur = (HAUTEUR-MARGE)/2;// Demi hauteur
 
 	(*controleur).systeme.montage.paroiCentrale = (*controleur).options.cloison;// 0 : pas de paroi centrale. 
-	(*controleur).systeme.montage.demonMaxwel = 0;// 0 : pas de démon de Maxwell
+	(*controleur).systeme.montage.demonMaxwell = 0;// 0 : pas de démon de Maxwell
 	(*controleur).systeme.montage.trou = (*controleur).options.trou;// Taille du trou, sur 2
 
 		// Initialisation du thermostat
