@@ -1,8 +1,7 @@
-
 /*
-Copyright mai 2018, Stephan Runigo
+Copyright octobre 2018, Stephan Runigo
 runigo@free.fr
-SiGP 2.1  simulateur de gaz parfait
+SiGP 2.1.4  simulateur de gaz parfait
 Ce logiciel est un programme informatique servant à simuler un gaz parfait
 et à en donner une représentation graphique. Il permet d'observer une détente
 de Joule ainsi que des transferts thermiques avec des thermostats.
@@ -60,7 +59,7 @@ int optionsInitialise(optionsT * options)
 	(*options).droite = TEMPERATURE_DROIT;	// Température thermostat droit
 
 	(*options).thermostat=0;	// 0 : système isolé, 1 : système thermostaté.
-	(*options).cloison = 1;		// 0 : pas de paroi centrale. 1 : détente de joule, 2 : cloison fermé,
+	(*options).cloison = 2;		// 0 : pas de paroi centrale. 1 : cloison fermé, 2 : détente de joule,
 					//	 -1, -2 : démon de maxwell.
 	(*options).trou = RAYON_TROU;
 

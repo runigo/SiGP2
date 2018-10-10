@@ -1,7 +1,7 @@
 /*
 Copyright octobre 2018, Stephan Runigo
 runigo@free.fr
-SiGP 2.1.3  simulateur de gaz parfait
+SiGP 2.1.4  simulateur de gaz parfait
 Ce logiciel est un programme informatique servant à simuler un gaz et à
 en donner une représentation graphique. Il permet d'observer une détente
 de Joule ainsi que des transferts thermiques avec des thermostats.
@@ -88,6 +88,7 @@ int controleurInitialise(controleurT * controleur)
 	(*controleur).systeme.montage.demiHauteur = (HAUTEUR-MARGE)/2;// Demi hauteur
 
 	(*controleur).systeme.montage.paroiCentrale = (*controleur).options.cloison;// 0 : pas de paroi centrale. 
+		fprintf(stderr, " (*controleur).systeme.montage.paroiCentrale = %d\n",(*controleur).systeme.montage.paroiCentrale);
 	(*controleur).systeme.montage.demonMaxwell = 0;// 0 : pas de démon de Maxwell
 	(*controleur).systeme.montage.trou = (*controleur).options.trou;// Taille du trou, sur 2
 
@@ -112,7 +113,8 @@ int controleurInitialise(controleurT * controleur)
 		//fprintf(stderr, " Création de l'interface SDL\n");
 	interfaceCreation(&(*controleur).interface);
 		//fprintf(stderr, " Création du rendu\n");
-	graphiqueCreation(&(*controleur).graphique, &(*controleur).interface);
+	//graphiqueCreation(&(*controleur).graphique, &(*controleur).interface);
+	fprintf(stderr, " graphiqueCreation = %d\n",graphiqueCreation(&(*controleur).graphique, &(*controleur).interface));
 
 	int largeur;
 	int hauteur;
@@ -234,7 +236,7 @@ int controleurProjection(controleurT * controleur)
 		// Projection du système sur le graphique
 	projectionSystemeGraphe(&(*controleur).systeme, &(*controleur).projection, &(*controleur).graphe);
 
-	projectionSystemeCommandes(&(*controleur).systeme, &(*controleur).projection, &(*controleur).commandes, (*controleur).options.duree, (*controleur).modePause);
+	projectionSystemeCommandes(&(*controleur).systeme, &(*controleur).projection, &(*controleur).commandes, (*controleur).duree, (*controleur).modePause);
 
 	return (*controleur).sortie;
 	}

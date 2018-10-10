@@ -1,8 +1,7 @@
-
 /*
 Copyright octobre 2018, Stephan Runigo
 runigo@free.fr
-SiGP 2.1.2  simulateur de gaz parfait
+SiGP 2.1.4  simulateur de gaz parfait
 Ce logiciel est un programme informatique servant à simuler un gaz et à
 en donner une représentation graphique. Il permet d'observer une détente
 de Joule ainsi que des transferts thermiques avec des thermostats.
@@ -163,7 +162,7 @@ int graphiqueCreation(graphiqueT * graphique, interfaceT * interface)
 		fprintf(stderr,"ERREUR chargement image, lumiereJaune.bmp : %s\n",SDL_GetError());
 		retour = 9;
 		}
-	(*graphique).lumiereVerte = SDL_CreateTextureFromSurface((*graphique).rendu, lumiereJaune);
+	(*graphique).lumiereJaune = SDL_CreateTextureFromSurface((*graphique).rendu, lumiereJaune);
 	SDL_FreeSurface(lumiereJaune);
 	if ((*graphique).lumiereJaune == 0)
 		{
@@ -266,16 +265,11 @@ int graphiqueCommandes(graphiqueT * graphique, commandesT * commandes)
 				}
 			else
 				{
-				//coordonnee.x=(*commandes).lineairePositionX;	//	JAUNE ORANGE
-				coordonnee.x=(*commandes).triangleCentre[i];	//	JAUNE ORANGE
-				if((*commandes).triangleEtat[i]==-1)
+				coordonnee.x=(*commandes).lineairePositionX;	//	JAUNE ORANGE
+				//coordonnee.x=(*commandes).triangleCentre[i];	//	JAUNE ORANGE
+				if((*commandes).triangleEtat[9]==-1)
 					{
 					SDL_RenderCopy((*graphique).rendu, (*graphique).lumiereOrange, NULL, &coordonnee);
-					}
-				else	// ERREUR
-					{
-					coordonnee.x=(*commandes).triangleCentre[i];	//	 ERREUR
-					SDL_RenderCopy((*graphique).rendu, (*graphique).particule, NULL, &coordonnee);
 					}
 				}
 			}

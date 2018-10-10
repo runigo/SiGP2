@@ -1,7 +1,7 @@
 /*
 Copyright octobre 2018, Stephan Runigo
 runigo@free.fr
-SiGP 2.1.3  simulateur de gaz parfait
+SiGP 2.1.4  simulateur de gaz parfait
 Ce logiciel est un programme informatique servant à simuler un gaz et à
 en donner une représentation graphique. Il permet d'observer une détente
 de Joule ainsi que des transferts thermiques avec des thermostats.
@@ -93,8 +93,8 @@ int projectionSystemeCommandes(systemeT * systeme, projectionT * projection, com
 
 	//	Nombre
 	theta = PI;
-	(*commandes).rotatifPositionX[5]=(int)(-ratioRotatif*(*commandes).rotatifX*sin(theta));
-	(*commandes).rotatifPositionY[5]=(int)(ratioRotatif*(*commandes).rotatifY*cos(theta));
+	//(*commandes).rotatifPositionX[5]=(int)(-ratioRotatif*(*commandes).rotatifX*sin(theta));
+	//(*commandes).rotatifPositionY[5]=(int)(ratioRotatif*(*commandes).rotatifY*cos(theta));
 	(*commandes).rotatifPositionX[5]=0;
 	(*commandes).rotatifPositionY[5]=0;
 
@@ -175,7 +175,7 @@ int projectionSystemeCommandes(systemeT * systeme, projectionT * projection, com
 		default:
 			;
 		}*/
-
+/*
 			(*commandes).triangleEtat[0]=0; // 1
 			(*commandes).triangleEtat[1]=1; // 2
 			(*commandes).triangleEtat[2]=2; // 3
@@ -184,6 +184,7 @@ int projectionSystemeCommandes(systemeT * systeme, projectionT * projection, com
 			(*commandes).triangleEtat[4]=-1; // 2
 			(*commandes).triangleEtat[5]=-2; // 3
 			(*commandes).triangleEtat[6]=-3; // 4
+*/
 	if(mode>0)
 		{
 		(*commandes).triangleEtat[7]=2;
@@ -203,6 +204,7 @@ int projectionSystemeCommandes(systemeT * systeme, projectionT * projection, com
 			{
 			(*commandes).triangleEtat[9]=-1;
 			(*commandes).lineairePositionX=(int)((*commandes).a * duree + (*commandes).b);
+			//fprintf(stderr, "  (*commandes).lineairePositionX = %d\n",(*commandes).lineairePositionX);
 			}
 		}
 
