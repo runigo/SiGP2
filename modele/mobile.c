@@ -1,7 +1,7 @@
 /*
 Copyright octobre 2018, Stephan Runigo
 runigo@free.fr
-SiGP 2.1.3  simulateur de gaz parfait
+SiGP 2.1.4  simulateur de gaz parfait
 Ce logiciel est un programme informatique servant à simuler un gaz et à
 en donner une représentation graphique. Il permet d'observer une détente
 de Joule ainsi que des transferts thermiques avec des thermostats.
@@ -132,9 +132,13 @@ void mobileParoi(mobileT * mobile, montageT * montage)
 			case 1:
 				mobileInverseVxThermique(mobile, (*montage).largeur, (*montage).thermostat.temperature);break;
 			case 2:
-				mobileInverseVxThermique(mobile, (*montage).largeur, (*montage).thermostat.droite);break;
+				if((*montage).thermostat.etatDroite==1)
+				mobileInverseVxThermique(mobile, (*montage).largeur, (*montage).thermostat.droite);
+				else
+				mobileInverseVx(mobile, (*montage).largeur);
+				break;
 			default:
-				fprintf(stderr, "Err : mobileParoi, (*montage).thermostat.actif = %d \n", (*montage).thermostat.actif);
+				;
 			}
 		}
 	if ( (*mobile).nouveau.x < - (*montage).demiLargeur )	// Gauche
@@ -146,9 +150,13 @@ void mobileParoi(mobileT * mobile, montageT * montage)
 			case 1:
 				mobileInverseVxThermique(mobile, - (*montage).largeur, (*montage).thermostat.temperature);break;
 			case 2:
-				mobileInverseVxThermique(mobile, - (*montage).largeur, (*montage).thermostat.gauche);break;
+				if((*montage).thermostat.etatGauche==1)
+				mobileInverseVxThermique(mobile, - (*montage).largeur, (*montage).thermostat.gauche);
+				else
+				mobileInverseVx(mobile, - (*montage).largeur);
+				break;
 			default:
-				fprintf(stderr, "Err : mobileParoi, (*montage).thermostat.actif = %d \n", (*montage).thermostat.actif);
+				;
 			}
 		}
 
@@ -176,7 +184,7 @@ void mobileParoi(mobileT * mobile, montageT * montage)
 				// Arrivé de gauche
 			if( (*mobile).nouveau.x > 0 && (*mobile).droite == 0)
 				{
-				if((*montage).demonMaxwel==1)	// Démon de maxwell
+				if((*montage).demonMaxwell==1)	// Démon de maxwell
 					{
 					mobileInverseVx(mobile, 0);
 					}
@@ -200,7 +208,6 @@ void mobileCollision(mobileT * m1, mobileT * m2)
 	int distance;
 	double distCarre;
 
-		//fprintf(stderr, "mobileCollision, test transparence\n");
 	if( (*m1).droite == (*m2).droite ) // m1 et m2 sont du même coté
 	if( (*m1).collision==0 && (*m2).collision==0 ) // Supprime les collisions à trois particules
 	if( (*m2).dernier != (*m1).nom && (*m1).dernier != (*m2).nom ) // Supprime les "accrochages"

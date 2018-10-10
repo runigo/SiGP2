@@ -1,10 +1,9 @@
-
 /*
-Copyright février 2018, Stephan Runigo
+Copyright octobre 2018, Stephan Runigo
 runigo@free.fr
-SiGP 1.3.7  simulateur de gaz parfait
-Ce logiciel est un programme informatique servant à simuler un gaz parfait
-et à en donner une représentation graphique. Il permet d'observer une détente
+SiGP 2.1.4  simulateur de gaz parfait
+Ce logiciel est un programme informatique servant à simuler un gaz et à
+en donner une représentation graphique. Il permet d'observer une détente
 de Joule ainsi que des transferts thermiques avec des thermostats.
 Ce logiciel est régi par la licence CeCILL soumise au droit français et
 respectant les principes de diffusion des logiciels libres. Vous pouvez
@@ -33,11 +32,8 @@ termes.
 
 #include "thermostat.h"
 
-void thermostatChangeTemperatureMoyenne(thermostatT * thermostat, float facteur);
-void thermostatChangeSymetrie(thermostatT * thermostat, int uniforme);
-void thermostatChangeTemperatureMoyenne(thermostatT * thermostat, float facteur);
-void thermostatChangeTemperatureGauche(thermostatT * thermostat, float facteur);
-void thermostatChangeTemperatureDroite(thermostatT * thermostat, float facteur);
+void thermostatInverseEtatGauche(thermostatT * thermostat);
+void thermostatInverseEtatDroite(thermostatT * thermostat);
 
 void thermostatAfficheTemperature(thermostatT * thermostat);
 
@@ -50,6 +46,8 @@ void thermostatInitialise(thermostatT * thermostat)
 	(*thermostat).gauche = 0.0071;	//	Température gauche
 	(*thermostat).droite = 1111.0;	//	Température droite
 	(*thermostat).actif = 0;	//	0 : Système isolé, 1:température uniforme, 2:active gauche-droite
+	(*thermostat).etatDroite = 0;		//	0: isolé à droite, 1:températures droite
+	(*thermostat).etatGauche = 0;		//	0: isolé à gauche, 1:température gauche
 	return;
 	}
 
@@ -68,24 +66,73 @@ void thermostatChangeEtat(thermostatT * thermostat, int mode)
 		case 2:
 			printf("(*thermostat).actif = %d : thermostats gauche-droite\n", (*thermostat).actif);break;
 		default:
-			(*thermostat).actif = 0;
-			fprintf(stderr, "Err : thermostatChangeSymetrie, (*thermostat).actif = %d \n", (*thermostat).actif);break;
+			;
 		}
 	return;
 	}
 
-void thermostatChangeGauche(thermostatT * thermostat, int etat)
+void thermostatChangeEtatGauche(thermostatT * thermostat, int etat)
+		// Change l'état du thermostat gauche
 	{
-	(void)thermostat;
-	(void)etat;
+	switch(etat)
+		{
+		case 0:
+			(*thermostat).etatGauche = 0;
+			fprintf(stderr, "Thermostat gauche éteint\n");
+			break;
+		case 1:
+			(*thermostat).etatGauche = 1;
+			fprintf(stderr, "Thermostat gauche allumé\n");
+			break;
+		case -1:
+			if((*thermostat).etatGauche==1)
+			{
+			(*thermostat).etatGauche = 0;
+			fprintf(stderr, "Thermostat gauche éteint\n");
+			}
+			else
+			{
+			(*thermostat).etatGauche = 1;
+			fprintf(stderr, "Thermostat gauche allumé\n");
+			}
+		default:
+			;
+		}
 	return;
 	}
-void thermostatChangeDroit(thermostatT * thermostat, int etat)
+
+void thermostatChangeEtatDroite(thermostatT * thermostat, int etat)
+		// Change l'état du thermostat droit
 	{
-	(void)thermostat;
-	(void)etat;
+	switch(etat)
+		{
+		case 0:
+			(*thermostat).etatDroite = 0;
+			fprintf(stderr, "Thermostat droit éteint\n");
+			break;
+		case 1:
+			(*thermostat).etatDroite = 1;
+			fprintf(stderr, "Thermostat droit allumé\n");
+			break;
+		case -1:
+			if((*thermostat).etatDroite==1)
+			{
+			(*thermostat).etatDroite = 0;
+			fprintf(stderr, "Thermostat droit éteint\n");
+			}
+			else
+			{
+			(*thermostat).etatDroite = 1;
+			fprintf(stderr, "Thermostat droit allumé\n");
+			}
+		default:
+			(*thermostat).etatDroite = 0;
+			fprintf(stderr, "ERREUR : Thermostat gauche éteint\n");
+			;
+		}
 	return;
 	}
+
 void thermostatChangeTemperature(thermostatT * thermostat, float facteur)
 
 			//	Change température moyenne

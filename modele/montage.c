@@ -48,22 +48,21 @@ void montageChangeParoiCentrale(montageT * montage, int mode)
 
 	fprintf(stderr, "Paroi centrale = %d, ", (*montage).paroiCentrale);
 	fprintf(stderr, "trou = %d\n", (*montage).trou);
-	if(mode<0)fprintf(stderr, "Démon de Maxwell activé\n");
 
 	return;
 	}
 
-void montageChangeDemonMaxwel(montageT * montage)
+void montageChangeDemonMaxwell(montageT * montage)
 		// Change l'état du démon de Maxwell
 	{
-	if((*montage).demonMaxwel==1)
+	if((*montage).demonMaxwell==1)
 		{
-		(*montage).demonMaxwel = 0;
+		(*montage).demonMaxwell = 0;
 		fprintf(stderr, "Démon de Maxwell désactivé\n");
 		}
 	else
 		{
-		(*montage).demonMaxwel = 1;
+		(*montage).demonMaxwell = 1;
 		fprintf(stderr, "Démon de Maxwell activé\n");
 		}
 	return;

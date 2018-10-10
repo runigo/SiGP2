@@ -432,7 +432,7 @@ int controleurClavier(controleurT * controleur)
 		case SDLK_c:	//	Cloison percée
 			systemeChangeCloison(&(*controleur).systeme, 2);break;
 		case SDLK_v:	//	cloison percée et démon de Maxwell
-			systemeChangeCloison(&(*controleur).systeme, -1);break;
+			montageChangeDemonMaxwell(&(*controleur).systeme.montage);break;
 		case SDLK_b:	//	Démon de Maxwell
 			systemeChangeCloison(&(*controleur).systeme, -1);break;
 		case SDLK_n:	//	Trou max et démon de Maxwell
@@ -462,6 +462,11 @@ int controleurClavier(controleurT * controleur)
 			thermostatChangeTemperatureGauche(&(*controleur).systeme.montage.thermostat,1.9);break;
 		case SDLK_h:	//	Température à gauche
 			thermostatChangeTemperatureGauche(&(*controleur).systeme.montage.thermostat,0.51);break;
+
+		case SDLK_t:	//	Thermostat à droite
+			thermostatChangeEtatDroite(&(*controleur).systeme.montage.thermostat, -1);break;
+		case SDLK_g:	//	Thermostat à gauche
+			thermostatChangeEtatGauche(&(*controleur).systeme.montage.thermostat, -1);break;
 
 
   // Initialiser le système
@@ -795,7 +800,7 @@ int controleurCommandes(controleurT * controleur, int zone)
 			case 2: // Max.
 				systemeChangeCloison(&(*controleur).systeme, 0);break;
 			case 3: // Démon
-				montageChangeDemonMaxwel(&(*controleur).systeme.montage);break;
+				montageChangeDemonMaxwell(&(*controleur).systeme.montage);break;
 
 			case 4:
 				thermostatChangeEtat(&(*controleur).systeme.montage.thermostat, 0);break;
@@ -805,13 +810,13 @@ int controleurCommandes(controleurT * controleur, int zone)
 				thermostatChangeEtat(&(*controleur).systeme.montage.thermostat, 2);break;
 
 			case 7: // Marche
-				thermostatChangeGauche(&(*controleur).systeme.montage.thermostat, 1);break;
+				thermostatChangeEtatGauche(&(*controleur).systeme.montage.thermostat, 1);break;
 			case 8: // Arrêt
-				thermostatChangeGauche(&(*controleur).systeme.montage.thermostat, 0);break;
+				thermostatChangeEtatGauche(&(*controleur).systeme.montage.thermostat, 0);break;
 			case 9: // Marche
-				thermostatChangeDroit(&(*controleur).systeme.montage.thermostat, 1);break;
+				thermostatChangeEtatDroite(&(*controleur).systeme.montage.thermostat, 1);break;
 			case 10: // Arrêt
-				thermostatChangeDroit(&(*controleur).systeme.montage.thermostat, 0);break;
+				thermostatChangeEtatDroite(&(*controleur).systeme.montage.thermostat, 0);break;
 			case 11:
 				;break;
 			case 12: // 

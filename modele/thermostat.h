@@ -1,10 +1,9 @@
-
 /*
-Copyright novembre 2017, Stephan Runigo
+Copyright octobre 2018, Stephan Runigo
 runigo@free.fr
-SiGP 1.3.4  simulateur de gaz parfait
-Ce logiciel est un programme informatique servant à simuler un gaz parfait
-et à en donner une représentation graphique. Il permet d'observer une détente
+SiGP 2.1.4  simulateur de gaz parfait
+Ce logiciel est un programme informatique servant à simuler un gaz et à
+en donner une représentation graphique. Il permet d'observer une détente
 de Joule ainsi que des transferts thermiques avec des thermostats.
 Ce logiciel est régi par la licence CeCILL soumise au droit français et
 respectant les principes de diffusion des logiciels libres. Vous pouvez
@@ -44,15 +43,21 @@ typedef struct ThermostatT thermostatT;
 		float droite;		//	Température droite
 
 		int actif;		//	0:système isolé, 1:température uniforme, 2:températures gauche-droite
+		int etatDroite;		//	0: isolé à droite, 1:températures droite
+		int etatGauche;		//	0: isolé à gauche, 1:température gauche
 		};
 
 void thermostatInitialise(thermostatT * thermostat);
+
 void thermostatChangeEtat(thermostatT * thermostat, int uniforme);
+
 void thermostatChangeTemperature(thermostatT * thermostat, float facteur);
-void thermostatChangeGauche(thermostatT * thermostat, int etat);
-void thermostatChangeDroit(thermostatT * thermostat, int etat);
+
+void thermostatChangeEtatGauche(thermostatT * thermostat, int etat);
+void thermostatChangeEtatDroite(thermostatT * thermostat, int etat);
 void thermostatChangeTemperatureGauche(thermostatT * thermostat, float facteur);
 void thermostatChangeTemperatureDroite(thermostatT * thermostat, float facteur);
+
 void thermostatInverseTemperature(thermostatT * thermostat);
 
 void thermostatAfficheTemperature(thermostatT * thermostat);

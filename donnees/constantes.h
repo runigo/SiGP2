@@ -52,8 +52,8 @@ termes.
 
 #define TEMPS_AFFICHAGE 210 // Durée entre les affichages en ms
 
-#define FENETRE_X 1112 // Largeur de la fenêtre
-#define FENETRE_Y 685 // Hauteur de la fenêtre
+#define FENETRE_X 903 // Largeur de la fenêtre
+#define FENETRE_Y 557 // Hauteur de la fenêtre
 //#define FENETRE_X 892 // Largeur de la fenêtre
 //#define FENETRE_Y 550 // Hauteur de la fenêtre
 

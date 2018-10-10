@@ -107,9 +107,9 @@ int projectionSystemeCommandes(systemeT * systeme, projectionT * projection, com
 		// Sélection des boutons activés
 	switch((*systeme).montage.paroiCentrale)	//	Cloison centrale
 		{
-		case 2:
-			(*commandes).boutonEtat[0]=1;break; // 32	Cloison
 		case 1:
+			(*commandes).boutonEtat[0]=1;break; // 32	Cloison
+		case 2:
 			(*commandes).boutonEtat[1]=1;break; // 62	Trou
 		case 0:
 			(*commandes).boutonEtat[2]=1;break; // 88 	Max
@@ -117,7 +117,7 @@ int projectionSystemeCommandes(systemeT * systeme, projectionT * projection, com
 			;
 		}
 
-	if((*systeme).montage.demonMaxwel==1)
+	if((*systeme).montage.demonMaxwell==1)
 			(*commandes).boutonEtat[3]=1; // 	Démon
 
 	switch((*systeme).montage.thermostat.actif)	//	0:système isolé, 1:température uniforme, 2:températures gauche-droite
@@ -132,21 +132,21 @@ int projectionSystemeCommandes(systemeT * systeme, projectionT * projection, com
 			;
 		}
 
-	switch((*systeme).montage.thermostat.actif)	//	Température gauche
+	switch((*systeme).montage.thermostat.etatGauche)	//	Température gauche
 		{
-		case 0:
-			(*commandes).boutonEtat[7]=1;break; //	Marche
 		case 1:
+			(*commandes).boutonEtat[7]=1;break; //	Marche
+		case 0:
 			(*commandes).boutonEtat[8]=1;break; //	Arrêt
 		default:
 			;
 		}
 
-	switch((*systeme).montage.thermostat.actif)	//	Température droite
+	switch((*systeme).montage.thermostat.etatDroite)	//	Température droite
 		{
-		case 0:
-			(*commandes).boutonEtat[9]=1;break; //	Marche
 		case 1:
+			(*commandes).boutonEtat[9]=1;break; //	Marche
+		case 0:
 			(*commandes).boutonEtat[10]=1;break; //	Arrêt
 		default:
 			;
@@ -175,7 +175,16 @@ int projectionSystemeCommandes(systemeT * systeme, projectionT * projection, com
 		default:
 			;
 		}*/
-	if(mode<0)
+
+			(*commandes).triangleEtat[0]=0; // 1
+			(*commandes).triangleEtat[1]=1; // 2
+			(*commandes).triangleEtat[2]=2; // 3
+
+			(*commandes).triangleEtat[3]=3; // 1
+			(*commandes).triangleEtat[4]=-1; // 2
+			(*commandes).triangleEtat[5]=-2; // 3
+			(*commandes).triangleEtat[6]=-3; // 4
+	if(mode>0)
 		{
 		(*commandes).triangleEtat[7]=2;
 		}
@@ -188,7 +197,7 @@ int projectionSystemeCommandes(systemeT * systeme, projectionT * projection, com
 		{
 		if(duree==DUREE_MAX)
 			{
-			 (*commandes).triangleEtat[11]=2;
+			(*commandes).triangleEtat[11]=2;
 			}
 		else
 			{

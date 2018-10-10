@@ -119,7 +119,7 @@ int graphiqueCreation(graphiqueT * graphique, interfaceT * interface)
 	SDL_FreeSurface(panneau);
 	if ((*graphique).SiGP == 0)
 		{
-		fprintf(stderr,"ERREUR grapheInitialisation : Erreur creation texture : %s\n",SDL_GetError());
+		fprintf(stderr,"ERREUR grapheInitialisation : Erreur creation texture sigp.bmp ; %s\n",SDL_GetError());
 		retour = 2;
 		}
 
@@ -135,7 +135,7 @@ int graphiqueCreation(graphiqueT * graphique, interfaceT * interface)
 	SDL_FreeSurface(lumiereVerte);
 	if ((*graphique).lumiereVerte == 0)
 		{
-		fprintf(stderr,"ERREUR grapheInitialisation : Erreur creation texture : %s\n",SDL_GetError());
+		fprintf(stderr,"ERREUR grapheInitialisation : Erreur creation texture lumiereVerte.bmp ; %s\n",SDL_GetError());
 		retour = 6;
 		}
 
@@ -151,7 +151,7 @@ int graphiqueCreation(graphiqueT * graphique, interfaceT * interface)
 	SDL_FreeSurface(lumiereRouge);
 	if ((*graphique).lumiereRouge == 0)
 		{
-		fprintf(stderr,"ERREUR grapheInitialisation : Erreur creation texture : %s\n",SDL_GetError());
+		fprintf(stderr,"ERREUR grapheInitialisation : Erreur creation texture lumiereRouge.bmp ; %s\n",SDL_GetError());
 		retour = 8;
 		}
 
@@ -167,7 +167,7 @@ int graphiqueCreation(graphiqueT * graphique, interfaceT * interface)
 	SDL_FreeSurface(lumiereJaune);
 	if ((*graphique).lumiereJaune == 0)
 		{
-		fprintf(stderr,"ERREUR grapheInitialisation : Erreur creation texture : %s\n",SDL_GetError());
+		fprintf(stderr,"ERREUR grapheInitialisation : Erreur creation texture lumiereJaune.bmp ; %s\n",SDL_GetError());
 		retour = 10;
 		}
 
@@ -183,7 +183,7 @@ int graphiqueCreation(graphiqueT * graphique, interfaceT * interface)
 	SDL_FreeSurface(lumiereOrange);
 	if ((*graphique).lumiereOrange == 0)
 		{
-		fprintf(stderr,"ERREUR grapheInitialisation : Erreur creation texture : %s\n",SDL_GetError());
+		fprintf(stderr,"ERREUR grapheInitialisation : Erreur creation texture lumiereOrange.bmp ; %s\n",SDL_GetError());
 		retour = 12;
 		}
 
@@ -271,6 +271,11 @@ int graphiqueCommandes(graphiqueT * graphique, commandesT * commandes)
 				if((*commandes).triangleEtat[i]==-1)
 					{
 					SDL_RenderCopy((*graphique).rendu, (*graphique).lumiereOrange, NULL, &coordonnee);
+					}
+				else	// ERREUR
+					{
+					coordonnee.x=(*commandes).triangleCentre[i];	//	 ERREUR
+					SDL_RenderCopy((*graphique).rendu, (*graphique).particule, NULL, &coordonnee);
 					}
 				}
 			}

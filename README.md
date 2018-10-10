@@ -5,11 +5,13 @@ SiGP2 est un programme écrit en C et utilisant la librairie graphique SDL2.
 
 Il permet de simuler une détente de Joule ainsi que des transferts thermique et d'en donner une représentation graphique.
 
+Ce programme dispose d'une interface graphique permettant une interaction à l'aide de la souris.
+
 INSTALLATION SUR DEBIAN
 
 Pour installer ce programme sur votre ordinateur, vous devez avoir
-installé la librairie graphique SDL ainsi que les outils permettant
-la compilation : 
+installé la version 2 de la librairie graphique SDL ainsi que les 
+outils permettant la compilation : 
 Dans un terminal avec les droits de l'administrateur :
 
 	# apt-get install gcc make libsdl2-dev
@@ -88,9 +90,9 @@ La touche entrée change le mode de l'évolution.
 
 LICENCE
 
-Copyright novembre 2017, Stephan Runigo
+Copyright octobre 2018, Stephan Runigo
 runigo@free.fr
-SiGP 1.3.4  simulateur de gaz parfait
+SiGP 2.1.3  simulateur de gaz parfait
 Ce logiciel est un programme informatique servant à simuler un gaz parfait
 et à en donner une représentation graphique. Il permet d'observer une détente
 de Joule ainsi que des transferts thermiques avec des thermostats.
