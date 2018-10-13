@@ -1,7 +1,7 @@
 /*
 Copyright octobre 2018, Stephan Runigo
 runigo@free.fr
-SiGP 2.1.4  simulateur de gaz parfait
+SiGP 2.1.5  simulateur de gaz parfait
 Ce logiciel est un programme informatique servant à simuler un gaz et à
 en donner une représentation graphique. Il permet d'observer une détente
 de Joule ainsi que des transferts thermiques avec des thermostats.
@@ -281,12 +281,10 @@ int graphiqueCommandes(graphiqueT * graphique, commandesT * commandes)
 void graphiqueDessineGraphe(graphiqueT * graphique, grapheT * graphe)
 	{
 	int i, x, y;
-	//int rayon = (*graphe).rayon;
-	int centrage = 4;
+	int centrage = (*graphe).taille/2; // rayon des particules
 	SDL_Rect coordonnee = {0, 0, (*graphe).taille, (*graphe).taille};
-	//SDL_Rect coordonnee = {0, 0, 8, 8};
 
-	  //fprintf(stderr, "Particules\n");
+		//fprintf(stderr, "Dessin des particules\n");
 	for(i=0;i<NOMBRE;i++)
 		{
 		x=(*graphe).abscisse[i];
@@ -296,31 +294,29 @@ void graphiqueDessineGraphe(graphiqueT * graphique, grapheT * graphe)
 		SDL_RenderCopy((*graphique).rendu, (*graphique).particule, NULL, &coordonnee);
 		}
 
+		//fprintf(stderr, "Dessin du montage\n");
 	graphiqueChangeCouleur(graphique, (*graphique).contraste);
 
-		// Parois horizontales
-
-	SDL_RenderDrawLine((*graphique).rendu, (*graphe).ax, (*graphe).dy, (*graphe).cx, (*graphe).dy);
-	SDL_RenderDrawLine((*graphique).rendu, (*graphe).ax, (*graphe).gy, (*graphe).cx, (*graphe).gy);
-	SDL_RenderDrawLine((*graphique).rendu, (*graphe).ax, (*graphe).dy-1, (*graphe).cx, (*graphe).dy-1);
-	SDL_RenderDrawLine((*graphique).rendu, (*graphe).ax, (*graphe).gy+1, (*graphe).cx, (*graphe).gy+1);
-
-		// Parois verticales
-
-	SDL_RenderDrawLine((*graphique).rendu, (*graphe).ax, (*graphe).dy, (*graphe).ax, (*graphe).gy);
-	SDL_RenderDrawLine((*graphique).rendu, (*graphe).cx, (*graphe).dy, (*graphe).cx, (*graphe).gy);
-	SDL_RenderDrawLine((*graphique).rendu, (*graphe).ax-1, (*graphe).dy, (*graphe).ax-1, (*graphe).gy);
-	SDL_RenderDrawLine((*graphique).rendu, (*graphe).cx+1, (*graphe).dy, (*graphe).cx+1, (*graphe).gy);
-
-		// Paroi centrale
-	if((*graphe).cloison != 0)
+	for(i=0;i<TRAIT_ENCEINTE;i++)
 		{
-		SDL_RenderDrawLine((*graphique).rendu, (*graphe).bx, (*graphe).dy, (*graphe).bx, (*graphe).ey);
-		SDL_RenderDrawLine((*graphique).rendu, (*graphe).bx, (*graphe).fy, (*graphe).bx, (*graphe).gy);
-		SDL_RenderDrawLine((*graphique).rendu, (*graphe).bx-1, (*graphe).dy, (*graphe).bx-1, (*graphe).ey);
-		SDL_RenderDrawLine((*graphique).rendu, (*graphe).bx-1, (*graphe).fy, (*graphe).bx-1, (*graphe).gy);
+			// Parois horizontales
+		SDL_RenderDrawLine((*graphique).rendu, (*graphe).ax-i, (*graphe).dy-i, (*graphe).cx+i, (*graphe).dy-i);
+		SDL_RenderDrawLine((*graphique).rendu, (*graphe).ax-i, (*graphe).gy+i, (*graphe).cx+i, (*graphe).gy+i);
+
+			// Parois verticales
+		SDL_RenderDrawLine((*graphique).rendu, (*graphe).ax-i, (*graphe).dy-i, (*graphe).ax-i, (*graphe).gy+i);
+		SDL_RenderDrawLine((*graphique).rendu, (*graphe).cx+i, (*graphe).dy-i, (*graphe).cx+i, (*graphe).gy+i);
 		}
 
+			// Paroi centrale
+	for(i=(-TRAIT_CLOISON/2);i<TRAIT_CLOISON;i++)
+		{
+		if((*graphe).cloison != 0)
+			{
+			SDL_RenderDrawLine((*graphique).rendu, (*graphe).bx+i, (*graphe).dy, (*graphe).bx+i, (*graphe).ey);
+			SDL_RenderDrawLine((*graphique).rendu, (*graphe).bx+i, (*graphe).fy, (*graphe).bx+i, (*graphe).gy);
+			}
+		}
 	return;
 	}
 

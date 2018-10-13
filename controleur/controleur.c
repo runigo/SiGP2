@@ -1,7 +1,7 @@
 /*
 Copyright octobre 2018, Stephan Runigo
 runigo@free.fr
-SiGP 2.1.4  simulateur de gaz parfait
+SiGP 2.1.5  simulateur de gaz parfait
 Ce logiciel est un programme informatique servant à simuler un gaz et à
 en donner une représentation graphique. Il permet d'observer une détente
 de Joule ainsi que des transferts thermiques avec des thermostats.
@@ -82,15 +82,15 @@ int controleurInitialise(controleurT * controleur)
 		fprintf(stderr, " Initialisation du système\n");
 		// Initialisation géométrique de l'enceinte
 
-	(*controleur).systeme.montage.largeur = (LARGEUR-MARGE); // Largeur
-	(*controleur).systeme.montage.hauteur = (HAUTEUR-MARGE);// Hauteur
-	(*controleur).systeme.montage.demiLargeur = (LARGEUR-MARGE)/2; // Demi largeur
-	(*controleur).systeme.montage.demiHauteur = (HAUTEUR-MARGE)/2;// Demi hauteur
+	(*controleur).systeme.montage.largeur = LARGEUR; // Largeur
+	(*controleur).systeme.montage.hauteur = HAUTEUR;// Hauteur
+	(*controleur).systeme.montage.demiLargeur = LARGEUR/2; // Demi largeur
+	(*controleur).systeme.montage.demiHauteur = HAUTEUR/2;// Demi hauteur
 
-	(*controleur).systeme.montage.paroiCentrale = (*controleur).options.cloison;// 0 : pas de paroi centrale. 
+	(*controleur).systeme.montage.paroiCentrale = (*controleur).options.cloison; 
 		fprintf(stderr, " (*controleur).systeme.montage.paroiCentrale = %d\n",(*controleur).systeme.montage.paroiCentrale);
 	(*controleur).systeme.montage.demonMaxwell = 0;// 0 : pas de démon de Maxwell
-	(*controleur).systeme.montage.trou = (*controleur).options.trou;// Taille du trou, sur 2
+	(*controleur).systeme.montage.trou = (*controleur).options.trou;// Rayon du trou, sur 2
 
 		// Initialisation du thermostat
 
@@ -116,15 +116,21 @@ int controleurInitialise(controleurT * controleur)
 	//graphiqueCreation(&(*controleur).graphique, &(*controleur).interface);
 	fprintf(stderr, " graphiqueCreation = %d\n",graphiqueCreation(&(*controleur).graphique, &(*controleur).interface));
 
+		//fprintf(stderr, " Initialisation des longueurs\n");
 	int largeur;
 	int hauteur;
-	int x, y;
-		fprintf(stderr, " Initialisation des commmandes\n");
 	SDL_GetWindowSize((*controleur).interface.fenetre, &largeur, &hauteur);
 	(*controleur).graphique.largeur=largeur;
 	(*controleur).graphique.hauteur=hauteur;
+
 	commandesInitialiseBoutons(&(*controleur).commandes, largeur, hauteur);
 
+	grapheMiseAJourLongueur(&(*controleur).graphe, largeur, hauteur);
+
+	//projectionInitialiseLongueurs(&(*controleur).projection, largeur, hauteur);
+
+		// Initialisation des commandes de la souris
+	int x, y;
 	SDL_PumpEvents();
 	SDL_GetMouseState(&x,&y);
 	commandesInitialiseSouris(&(*controleur).commandes, x, y);
@@ -212,17 +218,18 @@ int controleurProjection(controleurT * controleur)
 	{
 		//fprintf(stderr, "Projection du système sur la représentation graphique\n");
 
+
+		// Réinitialisation des longueurs
 	int largeur;
 	int hauteur;
 	SDL_GetWindowSize((*controleur).interface.fenetre, &largeur, &hauteur);
-
-		// Réinitialisation des commandes si la fenêtre change de taille
 	if((*controleur).graphique.largeur!=largeur || (*controleur).graphique.hauteur!=hauteur)
-		{
+		{	// Réinitialisation des longueurs si la fenêtre change de taille
 		(*controleur).graphique.largeur=largeur;
 		(*controleur).graphique.hauteur=hauteur;
 		commandesInitialiseBoutons(&(*controleur).commandes, largeur, hauteur);
 		}
+	grapheMiseAJourLongueur(&(*controleur).graphe, (*controleur).graphique.largeur, (*controleur).graphique.hauteur);
 
 		// Réinitialisation des commandes de la souris
 	int x, y;
@@ -230,8 +237,6 @@ int controleurProjection(controleurT * controleur)
 	SDL_GetMouseState(&x,&y);
 	commandesInitialiseSouris(&(*controleur).commandes, x, y);
 
-		//fprintf(stderr, "projectionInitialiseLongueurs\n");
-	projectionInitialiseLongueurs(&(*controleur).projection, hauteur*0.5, largeur);
 
 		// Projection du système sur le graphique
 	projectionSystemeGraphe(&(*controleur).systeme, &(*controleur).projection, &(*controleur).graphe);

@@ -1,8 +1,7 @@
-
 /*
 Copyright octobre 2018, Stephan Runigo
 runigo@free.fr
-SiGP 2.1.2  simulateur de gaz parfait
+SiGP 2.1.5  simulateur de gaz parfait
 Ce logiciel est un programme informatique servant à simuler un gaz et à
 en donner une représentation graphique. Il permet d'observer une détente
 de Joule ainsi que des transferts thermiques avec des thermostats.
@@ -32,17 +31,56 @@ termes.
 */
 
 #include "graphe.h"
+int grapheMiseAJourLongueur(grapheT * graphe, int largeur, int hauteur)
+	{
+			// Points du montage
+		//	
+		//			ax	bx	cx
+		//
+		//		dy	-----------------
+		//			|	|	|
+		//		ey	|	-	|
+		//		fy	|	-	|
+		//			|	|	|
+		//		gy	-----------------
+
+	(*graphe).zoneX=0.8394*largeur;
+	(*graphe).zoneY=0.8546*hauteur;
+	float longueur=2*(*graphe).zoneY;
+
+	if((*graphe).zoneX<longueur) longueur=(*graphe).zoneX;
+
+	float X = longueur/2 - MARGE - 3 - 1.5*(*graphe).taille;
+
+	(*graphe).facteur=X/HAUTEUR;
+
+		// Absisses
+	(*graphe).ax = MARGE+3;
+	(*graphe).bx = longueur/2;
+	(*graphe).cx = longueur-MARGE-3;
+
+		// Ordonnées
+	(*graphe).dy = MARGE+3;
+	(*graphe).gy = MARGE+3+X+(*graphe).taille;
+
+	(*graphe).ey = 0.5*((*graphe).dy+(*graphe).gy) - (*graphe).trou;
+	(*graphe).fy = 0.5*((*graphe).dy+(*graphe).gy) + (*graphe).trou;
+
+	return 0;
+	}
 
 int grapheInitialise(grapheT * graphe)
 	{
 	int i;
 
 	(*graphe).taille = TAILLE;
+	(*graphe).facteur=(0.8394*FENETRE_X/2 - MARGE -3-1.5*(*graphe).taille)/HAUTEUR;
 
 	for(i=0;i<(NOMBRE);i++)
 		{
 		(*graphe).abscisse[i]=LARGEUR/2;
 		(*graphe).ordonnee[i]=HAUTEUR/2;
+		(*graphe).droite[i]=1;
 		}
 
 		fprintf(stderr, " Initialisation du graphe\n");
@@ -68,17 +106,23 @@ int grapheInitialise(grapheT * graphe)
 	(*graphe).fy = HAUTEUR/2 + RAYON_TROU;
 	(*graphe).gy = HAUTEUR - MARGE/2;
 
+
+	(*graphe).zoneX=0.8394*FENETRE_X;
+	(*graphe).zoneY=0.8546*FENETRE_Y;
+
+	(*graphe).taille = TAILLE*(*graphe).facteur;
 	(*graphe).cloison = 0;	//
 	(*graphe).thermostat = 0;	// 
 	(*graphe).trou = RAYON_TROU;
+	(*graphe).demon = 0;	// O ou 1
 
 	return 0;
 	}
 
-int grapheChangeTrou(grapheT * graphe, int trou)
+int grapheMiseAJourTrou(grapheT * graphe)
 	{
-	(*graphe).ey = HAUTEUR/2 - trou;
-	(*graphe).fy = HAUTEUR/2 + trou;
+	(*graphe).ey = 0.5*((*graphe).dy+(*graphe).gy) - (*graphe).trou;
+	(*graphe).fy = 0.5*((*graphe).dy+(*graphe).gy) + (*graphe).trou;
 	return 0;
 	}
 

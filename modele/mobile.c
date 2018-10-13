@@ -1,7 +1,7 @@
 /*
 Copyright octobre 2018, Stephan Runigo
 runigo@free.fr
-SiGP 2.1.4  simulateur de gaz parfait
+SiGP 2.1.5  simulateur de gaz parfait
 Ce logiciel est un programme informatique servant à simuler un gaz et à
 en donner une représentation graphique. Il permet d'observer une détente
 de Joule ainsi que des transferts thermiques avec des thermostats.
@@ -196,7 +196,14 @@ void mobileParoi(mobileT * mobile, montageT * montage)
 				// Arrivé de droite
 			if( (*mobile).nouveau.x < 0 && (*mobile).droite == 1)
 				{
-				(*mobile).droite = 0;
+				if((*montage).demonMaxwell==2)	// Démon de maxwell
+					{
+					mobileInverseVx(mobile, 0);
+					}
+				else
+					{
+					(*mobile).droite = 0;
+					}
 				}
 			}
 		}
@@ -208,9 +215,9 @@ void mobileCollision(mobileT * m1, mobileT * m2)
 	int distance;
 	double distCarre;
 
-	if( (*m1).droite == (*m2).droite ) // m1 et m2 sont du même coté
-	if( (*m1).collision==0 && (*m2).collision==0 ) // Supprime les collisions à trois particules
-	if( (*m2).dernier != (*m1).nom && (*m1).dernier != (*m2).nom ) // Supprime les "accrochages"
+	if( (*m1).droite == (*m2).droite ) // m1 et m2 sont du même coté.
+	if( (*m1).collision==0 && (*m2).collision==0 ) // Supprime les collisions à trois particules.
+	if( (*m2).dernier != (*m1).nom && (*m1).dernier != (*m2).nom ) // Intrication des particules.
 		{
 		//fprintf(stderr, "Distance géométrique < diametre\n");
 		distance=(mobileDistanceGeom(m1, m2));

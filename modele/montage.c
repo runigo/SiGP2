@@ -1,7 +1,7 @@
 /*
 Copyright octobre 2018, Stephan Runigo
 runigo@free.fr
-SiGP 2.1.3  simulateur de gaz parfait
+SiGP 2.1.5  simulateur de gaz parfait
 Ce logiciel est un programme informatique servant à simuler un gaz et à
 en donner une représentation graphique. Il permet d'observer une détente
 de Joule ainsi que des transferts thermiques avec des thermostats.
@@ -34,17 +34,19 @@ termes.
 
 void montageChangeParoiCentrale(montageT * montage, int mode)
 		// 0 : Pas de cloison, 1 : Cloison fermée, 2 : Cloison percée
+		// 0 : pas de paroi centrale, 1 : Cloison fermée, 2 : Trou.
 	{
 	(*montage).paroiCentrale = mode;
 
-	//if(mode==1 || mode==-1 )
-	if(mode==1)
-			(*montage).trou = 0;
-	if(mode==2 || mode==-1)
-			(*montage).trou = RAYON_TROU;
-	if(mode==-2)
-			(*montage).trou = (*montage).demiHauteur;
-		
+	switch((*montage).paroiCentrale)	//	Température gauche
+		{
+		case 1:
+			(*montage).trou = 0;break; //	Marche
+		case 2:
+			(*montage).trou = RAYON_TROU;break; //	Marche
+		default:
+			;
+		}
 
 	fprintf(stderr, "Paroi centrale = %d, ", (*montage).paroiCentrale);
 	fprintf(stderr, "trou = %d\n", (*montage).trou);
@@ -100,41 +102,12 @@ void montageChangeTrou(montageT * montage, float facteur)
 			}
 		}
 
+	if( (*montage).trou > (*montage).demiHauteur) (*montage).trou = (*montage).demiHauteur;
+
 	fprintf(stderr, "trou = %d\n", (*montage).trou);
 
 	return;
 	}
 
-/////////////////////////////////////////////////////
-/*
-void montageInitialise(montageT * montage)
-	{
-	thermostatInitialise(&(*montage).thermostat);
-
-	(*montage).largeur = (LARGEUR-MARGE); // Largeur
-	(*montage).hauteur = (HAUTEUR-MARGE);// Hauteur
-	(*montage).demiLargeur = (LARGEUR-MARGE)/2; // Demi largeur
-	(*montage).demiHauteur = (HAUTEUR-MARGE)/2;// Demi hauteur
-
-	(*montage).trou = RAYON_TROU;// Taille du trou
-	//(*montage).epaisseur = 3*TAILLE;// Epaisseur de la cloison
-
-	(*montage).paroiCentrale = 0;// 0 : pas de paroi centrale. 
-	(*montage).pDROITE = 2*LARGEUR; // Paroi droite
-	(*montage).pINFERIEUR = 2*HAUTEUR;// Paroi inférieur
-
-	(*montage).pCENTRE = LARGEUR/2 ;//Paroi centrale
-	(*montage).pCENTREdroit = LARGEUR/2 + TAILLE ;//Paroi centrale droite
-	(*montage).pCENTREgauche = LARGEUR/2 - TAILLE ;//Paroi centrale gauche
-	(*montage).pCENTREdroitDouble = 2*(*montage).pCENTREdroit ;//Paroi centrale droit
-	(*montage).pCENTREgaucheDouble = 2*(*montage).pCENTREgauche ;//Paroi centrale gauche
-
-	(*montage).pTROUplus = (HAUTEUR+TROU)/2;// Parti bas
-	(*montage).pTROUmoins = (HAUTEUR-TROU)/2;// Parti haut
-
-
-
-	return;
-	}
-
-*/
+/////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////

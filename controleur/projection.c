@@ -1,7 +1,7 @@
 /*
 Copyright octobre 2018, Stephan Runigo
 runigo@free.fr
-SiGP 2.1.4  simulateur de gaz parfait
+SiGP 2.1.5  simulateur de gaz parfait
 Ce logiciel est un programme informatique servant à simuler un gaz et à
 en donner une représentation graphique. Il permet d'observer une détente
 de Joule ainsi que des transferts thermiques avec des thermostats.
@@ -31,7 +31,14 @@ termes.
 */
 
 #include "projection.h"
-
+/*
+int projectionInitialiseLongueurs(projectionT * projection, int largeur, int hauteur)
+	{		// Initialise les longueur de la projection
+	(*projection).hauteur = hauteur;
+	(*projection).largeur = largeur;
+	return 0;
+	}
+*/
 int projectionInitialise(projectionT * projection)
 	{
 	(*projection).logTrou = 1.0 / log( (HAUTEUR/2) );
@@ -215,44 +222,35 @@ void projectionSystemeGraphe(systemeT * systeme, projectionT * projection, graph
 	{
 	(void)projection;
 		//	Projection du système sur le graphe
-	int i;
-	int demiLargeur = LARGEUR/2;
-	int demiHauteur = HAUTEUR/2;
-
 	(*graphe).cloison = (*systeme).montage.paroiCentrale;
+	(*graphe).trou = (*graphe).facteur*(*systeme).montage.trou;
+	(*graphe).demon = (*systeme).montage.demonMaxwell;	// O ou 1
+	(*graphe).thermostat = (*systeme).montage.thermostat.actif;	// O, 1 ou 2.
 
-	(*graphe).trou = (*systeme).montage.trou;
-
-	(*graphe).taille = (*systeme).diametre;
+	(*graphe).taille = (*graphe).facteur*(*systeme).diametre; // Diametre des particules
 	if((*graphe).taille < 1)
 		{(*graphe).taille = 1;}
 
+				// Projection des particules
+	int i;
 	for(i=0;i<(NOMBRE);i++)
 		{
 
-				// Projection du système
-		(*graphe).abscisse[i] = demiLargeur + (*systeme).mobile[i].nouveau.x;
+		(*graphe).abscisse[i] = (*graphe).bx + (0.5*(*systeme).mobile[i].droite-0.25)*(*graphe).taille + (*graphe).facteur*(*systeme).mobile[i].nouveau.x;
 
-		if((*graphe).abscisse[i]>LARGEUR || (*graphe).abscisse[i]<0)
+		if((*graphe).abscisse[i]>(*graphe).zoneX || (*graphe).abscisse[i]<0)
 			{
-			(*graphe).abscisse[i] = LARGEUR/2;
+			(*graphe).abscisse[i] = (*graphe).zoneX/2;
 			}
 
-		(*graphe).ordonnee[i] = demiHauteur + (*systeme).mobile[i].nouveau.y;
+		(*graphe).ordonnee[i] = 0.5*((*graphe).dy+(*graphe).gy) + (*graphe).facteur*(*systeme).mobile[i].nouveau.y;
 
-		if((*graphe).ordonnee[i]>HAUTEUR || (*graphe).ordonnee[i]<0)
+		if((*graphe).ordonnee[i]>(*graphe).zoneY || (*graphe).ordonnee[i]<0)
 			{
-			(*graphe).ordonnee[i] = HAUTEUR/2;
+			(*graphe).ordonnee[i] = (*graphe).zoneY/2;
 			}
 		}
 	return;
-	}
-
-int projectionInitialiseLongueurs(projectionT * projection, int hauteur, int largeur)
-	{		// Initialise les longueur de la projection
-	(*projection).hauteur = hauteur;
-	(*projection).largeur = largeur;
-	return 0;
 	}
 
 //////////////////////////////////////////////////////////////////////////////
