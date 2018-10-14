@@ -50,18 +50,26 @@ int grapheMiseAJourLongueur(grapheT * graphe, int largeur, int hauteur)
 
 	if((*graphe).zoneX<longueur) longueur=(*graphe).zoneX;
 
-	float X = longueur/2 - MARGE - 3 - 1.5*(*graphe).taille;
+	float X = longueur/2 - MARGE - (*graphe).taille - TRAIT_ENCEINTE - TRAIT_CLOISON/2;
 
 	(*graphe).facteur=X/HAUTEUR;
 
 		// Absisses
-	(*graphe).ax = MARGE+3;
 	(*graphe).bx = longueur/2;
-	(*graphe).cx = longueur-MARGE-3;
+		if((*graphe).cloison==0)
+			{
+			(*graphe).ax = (*graphe).bx - X -(*graphe).taille/4;
+			(*graphe).cx = (*graphe).bx + X + TRAIT_CLOISON/2 +(*graphe).taille/4;
+			}
+		else
+			{
+			(*graphe).ax = (*graphe).bx - X - TRAIT_CLOISON/2 -(*graphe).taille/2;
+			(*graphe).cx = (*graphe).bx + X + TRAIT_CLOISON/2 +(*graphe).taille/2;
+			}
 
 		// Ordonnées
-	(*graphe).dy = MARGE+3;
-	(*graphe).gy = MARGE+3+X+(*graphe).taille;
+	(*graphe).dy = MARGE+TRAIT_ENCEINTE;
+	(*graphe).gy = MARGE+TRAIT_ENCEINTE+X+(*graphe).taille/2;
 
 	(*graphe).ey = 0.5*((*graphe).dy+(*graphe).gy) - (*graphe).trou;
 	(*graphe).fy = 0.5*((*graphe).dy+(*graphe).gy) + (*graphe).trou;

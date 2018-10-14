@@ -309,12 +309,20 @@ void graphiqueDessineGraphe(graphiqueT * graphique, grapheT * graphe)
 		}
 
 			// Paroi centrale
-	for(i=(-TRAIT_CLOISON/2);i<TRAIT_CLOISON;i++)
+	if((*graphe).cloison != 0)
 		{
-		if((*graphe).cloison != 0)
+		for(i=(-TRAIT_CLOISON/2);i<TRAIT_CLOISON;i++)
 			{
 			SDL_RenderDrawLine((*graphique).rendu, (*graphe).bx+i, (*graphe).dy, (*graphe).bx+i, (*graphe).ey);
 			SDL_RenderDrawLine((*graphique).rendu, (*graphe).bx+i, (*graphe).fy, (*graphe).bx+i, (*graphe).gy);
+			}
+		if((*graphe).demon != 0)
+			graphiqueChangeCouleur(graphique, (*graphique).orange);
+		else
+			graphiqueChangeCouleur(graphique, (*graphique).gris);
+		for(i=(-TRAIT_CLOISON/2);i<TRAIT_CLOISON;i++)
+			{
+			SDL_RenderDrawLine((*graphique).rendu, (*graphe).bx+i, (*graphe).ey, (*graphe).bx+i, (*graphe).fy);
 			}
 		}
 	return;

@@ -50,10 +50,14 @@ termes.
 	//	PARAMÈTRES GRAPHIQUES
 
 
-#define TEMPS_AFFICHAGE 310 // Durée entre les affichages en ms
+#define TEMPS_AFFICHAGE 110 // Durée entre les affichages en ms
+
+//#define FENETRE_X 1158 // Largeur de la fenêtre
+//#define FENETRE_Y 714 // Hauteur de la fenêtre
 
 #define FENETRE_X 903 // Largeur de la fenêtre
 #define FENETRE_Y 557 // Hauteur de la fenêtre
+
 //#define FENETRE_X 892 // Largeur de la fenêtre
 //#define FENETRE_Y 550 // Hauteur de la fenêtre
 
@@ -66,7 +70,7 @@ termes.
 #define MARGE 17 // Marge fenêtre-montage
 
 #define TRAIT_CLOISON 4
-#define TRAIT_ENCEINTE 4
+#define TRAIT_ENCEINTE 8
 	//	PARAMÈTRES DU SYSTÈME
 
 
@@ -75,7 +79,7 @@ termes.
 #define LARGEUR 600 // Largeur du système
 #define HAUTEUR 300 // Hauteur du système
 
-#define NOMBRE 249 // Nombre de particules
+#define NOMBRE 149 // Nombre de particules
 #define TAILLE 8 // Taille implicite des particules
 #define TAILLE_MIN 2 // Taille minimale des particules
 #define TAILLE_MAX 29 // Taille maximale des particules

@@ -804,10 +804,10 @@ int controleurCommandes(controleurT * controleur, int zone)
 				systemeChangeCloison(&(*controleur).systeme, 1);break;
 			case 1: // Trou
 				systemeChangeCloison(&(*controleur).systeme, 2);break;
-			case 2: // Max.
-				systemeChangeCloison(&(*controleur).systeme, 0);break;
-			case 3: // Démon
+			case 2: // Démon
 				montageChangeDemonMaxwell(&(*controleur).systeme.montage);break;
+			case 3: // Supprim.
+				systemeChangeCloison(&(*controleur).systeme, 0);break;
 
 			case 4:
 				thermostatChangeEtat(&(*controleur).systeme.montage.thermostat, 0);break;

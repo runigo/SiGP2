@@ -107,9 +107,9 @@
 %
   \begin{scope}[xshift=1.5 cm,yshift=1.1cm]
    % \fill[red,draw=yellow!40!red!60!,thick] (0.0,0.8) circle (0.3cm);
-    \node[scale=\scl] at (13.7,3.5) { \textbf{Modele}};
-    \node[scale=\scl] at (15.3,3.5) { \textbf{Vue}};
-    \node[scale=\scl] at (17,3.5) { \textbf{Controle}};
+  %  \node[scale=\scl] at (13.7,3.5) { \textbf{Modele}};
+  %  \node[scale=\scl] at (15.3,3.5) { \textbf{Vue}};
+  %  \node[scale=\scl] at (17,3.5) { \textbf{Controle}};
 
    % \draw[draw=black!20!brown!80!,very thick] (2.0,0.8)-- (4.1,0.8);
 
@@ -146,14 +146,14 @@
 %
   \fill[panneaucontroles] (20.1,21.8) rectangle (27.6,30.4);
   \begin{scope}[xshift=22.7 cm,yshift=26.4cm]
-    \fill[petitbouton] (3.5,-2.05) circle (0.3cm);
-    \node[scale=\scl] at (3.5,-1.35) {\Large{Démon}};
-    \fill[petitbouton] (3.5,-0.55) circle (0.3cm);
-    \node[scale=\scl] at (3.5,0.05) {\Large{Max.}};
-    \fill[petitbouton] (3.5,0.95) circle (0.3cm);
-    \node[scale=\scl] at (3.5,1.55) {\Large{Trou}};
-    \fill[petitbouton] (3.5,2.35) circle (0.3cm);
-    \node[scale=\scl] at (3.5,2.95) {\Large{Cloison}};
+    \fill[petitbouton] (3.5,-3.05) circle (0.3cm);
+    \node[scale=\scl] at (3.5,-2.25) {\Large \textbf{Supprim.}};
+    \fill[petitbouton] (3.5,-1.35) circle (0.3cm);
+    \node[scale=\scl] at (3.5,-0.55) {\Large{Démon}};
+    \fill[petitbouton] (3.5,0.45) circle (0.3cm);
+    \node[scale=\scl] at (3.5,1.25) {\Large{Trou}};
+    \fill[petitbouton] (3.5,2.15) circle (0.3cm);
+    \node[scale=\scl] at (3.5,2.95) {\Large \textbf{Cloison}};
   \end{scope}
 
   \begin{scope}[xshift=22.7 cm,yshift=27.5cm,scale=0.75]
@@ -190,7 +190,7 @@
     \node[scale=\scl] at (3.5,-1.35) {\Large{2 T.}};
     \fill[petitbouton] (3.5,-0.55) circle (0.3cm);
     \node[scale=\scl] at (3.5,0.05) {\Large{1 T.}};
-    \fill[petitbouton] (3.5,0.95) circle (0.3cm);
+    \fill[petitbouton] (3.5,0.85) circle (0.3cm);
     \node[scale=\scl] at (3.5,1.55) {\Large{Arrêt}};
   %  \fill[petitbouton] (3.5,2.35) circle (0.3cm);
   %  \node[scale=\scl] at (3.5,2.95) {\Large{Marche}};
@@ -211,16 +211,15 @@
 %      PANNEAU  DROITE GAUCHE
 %
   \begin{scope}[xshift=26.2 cm,yshift=6.0cm]
-   % \fill[petitbouton] (0,-0.1) circle (0.3cm);
-   % \node[scale=\scl] at (0,0.5) {\Large{.}};
-    \fill[petitbouton] (0,1.1) circle (0.3cm);
-    \node[scale=\scl] at (0,1.7) {\Large{Arrêt 1}};
-    \fill[petitbouton] (0,2.6) circle (0.3cm);
-    \node[scale=\scl] at (0,3.2) {\Large{Marche 1}};
-
-    \fill[petitbouton] (0,6.2) circle (0.3cm);
-    \node[scale=\scl] at (0,6.8) {\Large{Arrêt}};
-    \fill[petitbouton] (0,7.7) circle (0.3cm);
+   % Droite
+    \fill[petitbouton] (0,0.9) circle (0.3cm);
+    \node[scale=\scl] at (0,1.6) {\Large{Arrêt}};
+    \fill[petitbouton] (0,2.5) circle (0.3cm);
+    \node[scale=\scl] at (0,3.2) {\Large{Marche}};
+	% Gauche
+    \fill[petitbouton] (0,6.0) circle (0.3cm);
+    \node[scale=\scl] at (0,6.7) {\Large{Arrêt}};
+    \fill[petitbouton] (0,7.6) circle (0.3cm);
     \node[scale=\scl] at (0,8.3) {\Large{Marche}};
   \end{scope}
   \begin{scope}[xshift=22.7 cm,yshift=12.9cm,scale=0.85]

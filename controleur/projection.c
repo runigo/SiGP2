@@ -119,13 +119,13 @@ int projectionSystemeCommandes(systemeT * systeme, projectionT * projection, com
 		case 2:
 			(*commandes).boutonEtat[1]=1;break; // 62	Trou
 		case 0:
-			(*commandes).boutonEtat[2]=1;break; // 88 	Max
+			(*commandes).boutonEtat[3]=1;break; // 88 	Supprim.
 		default:
 			;
 		}
 
 	if((*systeme).montage.demonMaxwell==1)
-			(*commandes).boutonEtat[3]=1; // 	Démon
+			(*commandes).boutonEtat[2]=1; // 	Démon
 
 	switch((*systeme).montage.thermostat.actif)	//	0:système isolé, 1:température uniforme, 2:températures gauche-droite
 		{
@@ -227,7 +227,7 @@ void projectionSystemeGraphe(systemeT * systeme, projectionT * projection, graph
 	(*graphe).demon = (*systeme).montage.demonMaxwell;	// O ou 1
 	(*graphe).thermostat = (*systeme).montage.thermostat.actif;	// O, 1 ou 2.
 
-	(*graphe).taille = (*graphe).facteur*(*systeme).diametre; // Diametre des particules
+	(*graphe).taille = (*systeme).diametre; // Diametre des particules(*graphe).facteur*
 	if((*graphe).taille < 1)
 		{(*graphe).taille = 1;}
 
@@ -236,7 +236,8 @@ void projectionSystemeGraphe(systemeT * systeme, projectionT * projection, graph
 	for(i=0;i<(NOMBRE);i++)
 		{
 
-		(*graphe).abscisse[i] = (*graphe).bx + (0.5*(*systeme).mobile[i].droite-0.25)*(*graphe).taille + (*graphe).facteur*(*systeme).mobile[i].nouveau.x;
+		(*graphe).abscisse[i] = (*graphe).bx + (0.5*(*systeme).mobile[i].droite-0.25) * (TRAIT_CLOISON + (*graphe).taille) + (*graphe).facteur*(*systeme).mobile[i].nouveau.x;
+		//(*graphe).abscisse[i] = (*graphe).bx + (0.5*(*systeme).mobile[i].droite-0.25) * (*graphe).taille + (*graphe).facteur*(*systeme).mobile[i].nouveau.x;
 
 		if((*graphe).abscisse[i]>(*graphe).zoneX || (*graphe).abscisse[i]<0)
 			{
