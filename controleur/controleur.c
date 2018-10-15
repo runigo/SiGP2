@@ -88,7 +88,7 @@ int controleurInitialise(controleurT * controleur)
 	(*controleur).systeme.montage.demiHauteur = HAUTEUR/2;// Demi hauteur
 
 	(*controleur).systeme.montage.paroiCentrale = (*controleur).options.cloison; 
-		fprintf(stderr, " (*controleur).systeme.montage.paroiCentrale = %d\n",(*controleur).systeme.montage.paroiCentrale);
+		//fprintf(stderr, " (*controleur).systeme.montage.paroiCentrale = %d\n",(*controleur).systeme.montage.paroiCentrale);
 	(*controleur).systeme.montage.demonMaxwell = 0;// 0 : pas de démon de Maxwell
 	(*controleur).systeme.montage.trou = (*controleur).options.trou;// Rayon du trou, sur 2
 
