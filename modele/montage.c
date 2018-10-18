@@ -54,6 +54,14 @@ void montageChangeParoiCentrale(montageT * montage, int mode)
 	return;
 	}
 
+void montageSupprimeDemon(montageT * montage)
+		// Supprime démon de Maxwell
+	{
+	(*montage).demonMaxwell = 0;
+	fprintf(stderr, "Démon de Maxwell désactivé\n");
+	return;
+	}
+
 void montageChangeDemonMaxwell(montageT * montage)
 		// Change l'état du démon de Maxwell
 	{

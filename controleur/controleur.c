@@ -50,6 +50,8 @@ int controleurClavierCtrl(controleurT * controleur);
 
 int controleurCommandes(controleurT * controleur, int zone);
 int controleurInitialiseParametres(controleurT * controleur, int forme);
+int controleurInitialiseParametresCloison(controleurT * controleur);
+int controleurInitialiseParametresTemperature(controleurT * controleur);
 
 int controleurSouris(controleurT * controleur);
 int controleurDefile(controleurT * controleur);
@@ -894,23 +896,48 @@ int controleurCommandes(controleurT * controleur, int zone)
 	return 0;
 	}
 
-int controleurInitialiseParametres(controleurT * controleur, int forme)
+int controleurInitialiseParametresCloison(controleurT * controleur)
+	{
+	systemeChangeCloison(&(*controleur).systeme, 0);
+	montageSupprimeDemon(&(*controleur).systeme.montage);
+	(*controleur).systeme.montage.trou = RAYON_TROU; // Rayon implicite du trou dans la cloison
+
+	return 0;
+	}
+
+int controleurInitialiseParametresTemperature(controleurT * controleur)
 	{
 
-	(void)controleur;
+	(*controleur).systeme.montage.thermostat.temperature = sqrt(TEMPERATURE_MAX * TEMPERATURE_MIN ); //	Température moyenne du thermostat
+	(*controleur).systeme.montage.thermostat.gauche = 2*TEMPERATURE_MIN;	//	Température gauche
+	(*controleur).systeme.montage.thermostat.droite = sqrt(TEMPERATURE_MAX * TEMPERATURE_MIN );	//	Température droite
+	(*controleur).systeme.montage.thermostat.actif = 0;	//	0 : Système isolé, 1:température uniforme, 2:active gauche-droite
+	(*controleur).systeme.montage.thermostat.etatDroite = 0;		//	0: isolé à droite, 1:températures droite
+	(*controleur).systeme.montage.thermostat.etatGauche = 0;		//	0: isolé à gauche, 1:température gauche
 
+	return 0;
+	}
+
+int controleurInitialiseParametres(controleurT * controleur, int forme)
+	{
 	switch(forme)
 		{
 		case 0:
-			;break;
+			controleurInitialiseParametresCloison(controleur);break;
 		case 1:
-			;break;
+			controleurInitialiseParametresCloison(controleur);
+			systemeChangeCloison(&(*controleur).systeme, 2);
+			montageChangeDemonMaxwell(&(*controleur).systeme.montage);break;
 		case 2:
-			;break;
+			controleurInitialiseParametresTemperature(controleur);
+			thermostatChangeEtat(&(*controleur).systeme.montage.thermostat, 1);
+			break;
 		case 3:
-			;break;
-		case 4:
-			;break;
+			controleurInitialiseParametresTemperature(controleur);
+			thermostatChangeEtat(&(*controleur).systeme.montage.thermostat, 2);
+			thermostatChangeEtatGauche(&(*controleur).systeme.montage.thermostat, 1);
+			thermostatChangeEtatDroite(&(*controleur).systeme.montage.thermostat, 1);
+			break;
 		default:
 			;
 		}

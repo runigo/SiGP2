@@ -58,5 +58,6 @@ typedef struct MontageT montageT;
 void montageChangeTrou(montageT * montage, float facteur);
 void montageChangeParoiCentrale(montageT * montage, int centrale); // 0 : pas de paroi centrale, 1 : Cloison fermée, 2 : Trou implicite.
 void montageChangeDemonMaxwell(montageT * montage);
+void montageSupprimeDemon(montageT * montage);
 
 #endif
