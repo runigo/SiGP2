@@ -52,7 +52,7 @@ int optionsInitialise(optionsT * options)
 
 	//(*options).fond=240;		// couleur du fond de l'affichage
 	//(*options).pause=25;		// temps de pause SDL en ms
-	(*options).duree=DUREE;		// nombre d'incrémentation du système par affichage
+	(*options).duree=DUREE_MIN;		// nombre d'incrémentation du système par affichage
 
 	(*options).temperature = TEMPERATURE;	// Température initiale
 	(*options).gauche = TEMPERATURE_GAUCHE;	// Température thermostat gauche

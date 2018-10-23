@@ -35,6 +35,7 @@ termes.
 
 #include "graphe.h"
 #include "commandes.h"
+#include "capteurs.h"
 #include "interface.h"
 
 
@@ -70,6 +71,7 @@ int graphiqueNettoyage(graphiqueT * graphique);
 int graphiqueMiseAJour(graphiqueT * graphique);
 
 int graphiqueCommandes(graphiqueT * graphique, commandesT * commandes);
+int graphiqueCapteurs(graphiqueT * graphique, capteursT * capteurs);
 void graphiqueDessineGraphe(graphiqueT * graphique, grapheT * graphe);
 
 #endif

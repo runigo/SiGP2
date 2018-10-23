@@ -57,6 +57,8 @@ typedef struct ControleurT controleurT;
 
 		commandesT commandes;	//	Graphe des commandes
 
+		capteursT capteurs;	//	Graphe des capteur
+
 		interfaceT interface;	//	Fenêtre SDL
 
 		graphiqueT graphique;	//	Rendu SDL et graphisme

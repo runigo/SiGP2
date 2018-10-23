@@ -58,7 +58,7 @@ int grapheMiseAJourLongueur(grapheT * graphe, int largeur, int hauteur)
 	(*graphe).bx = longueur/2;
 		if((*graphe).cloison==0)
 			{
-			(*graphe).ax = (*graphe).bx - X -(*graphe).taille/4;
+			(*graphe).ax = (*graphe).bx - X;// -(*graphe).taille/4
 			(*graphe).cx = (*graphe).bx + X + TRAIT_CLOISON/2 +(*graphe).taille/4;
 			}
 		else

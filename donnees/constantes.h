@@ -67,6 +67,9 @@ termes.
 #define LINEAIRE_COMMANDES 3 // Nombres de commandes linéaires
 #define TRIANGLE_COMMANDES 12 // Nombres de commandes triangulaires
 
+#define CAPTEURS 6 // Nombres de capteurs
+#define DUREE_CAPTEURS 100 // Nombre de points en mémoire
+
 #define MARGE 17 // Marge fenêtre-montage
 
 #define TRAIT_CLOISON 4
@@ -87,7 +90,7 @@ termes.
 #define RAYON_TROU 7 // Rayon implicite du trou dans la cloison
 
 #define DUREE_MAX 99 // Nombre maximal d'itération du système par affichage
-#define DUREE 1 // Nombre d'itération initial
+#define DUREE_MIN 1 // Nombre d'itération initial
 
 #define TEMPERATURE_MAX 19666.1 // Température maximale
 #define TEMPERATURE_MIN 0.000003 // Température minimale
