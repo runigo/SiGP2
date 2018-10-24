@@ -1,7 +1,7 @@
 /*
 Copyright octobre 2018, Stephan Runigo
 runigo@free.fr
-SiGP 2.1.5  simulateur de gaz parfait
+SiGP 2.2  simulateur de gaz parfait
 Ce logiciel est un programme informatique servant à simuler un gaz et à
 en donner une représentation graphique. Il permet d'observer une détente
 de Joule ainsi que des transferts thermiques avec des thermostats.
@@ -31,14 +31,7 @@ termes.
 */
 
 #include "projection.h"
-/*
-int projectionInitialiseLongueurs(projectionT * projection, int largeur, int hauteur)
-	{		// Initialise les longueur de la projection
-	(*projection).hauteur = hauteur;
-	(*projection).largeur = largeur;
-	return 0;
-	}
-*/
+
 int projectionInitialise(projectionT * projection)
 	{
 	(*projection).logTrou = 1.0 / log( (HAUTEUR/2) );
@@ -162,36 +155,6 @@ int projectionSystemeCommandes(systemeT * systeme, projectionT * projection, com
 		// Remise à zéro des boutons triangulaire
 	for(i=0;i<TRIANGLE_COMMANDES;i++) (*commandes).triangleEtat[i]=0;
 
-		// Sélection des boutons activés
-	/*switch((*projection).initialisation)	//	
-		{
-		case 3:
-			(*commandes).triangleEtat[0]=1;break; // 1
-		case 1:
-			(*commandes).triangleEtat[1]=1;break; // 2
-		case 0:
-			(*commandes).triangleEtat[2]=1;break; // 3
-		case -1:
-			(*commandes).triangleEtat[3]=1;break; // 1
-		case -3:
-			(*commandes).triangleEtat[4]=1;break; // 2
-		case 0:
-			(*commandes).triangleEtat[5]=1;break; // 3
-		case -1:
-			(*commandes).triangleEtat[6]=1;break; // 4
-		default:
-			;
-		}*/
-/*
-			(*commandes).triangleEtat[0]=0; // 1
-			(*commandes).triangleEtat[1]=1; // 2
-			(*commandes).triangleEtat[2]=2; // 3
-
-			(*commandes).triangleEtat[3]=3; // 1
-			(*commandes).triangleEtat[4]=-1; // 2
-			(*commandes).triangleEtat[5]=-2; // 3
-			(*commandes).triangleEtat[6]=-3; // 4
-*/
 	if(mode>0)
 		{
 		(*commandes).triangleEtat[7]=2;
@@ -211,10 +174,54 @@ int projectionSystemeCommandes(systemeT * systeme, projectionT * projection, com
 			{
 			(*commandes).triangleEtat[9]=-1;
 			(*commandes).lineairePositionX=(int)((*commandes).a * duree + (*commandes).b);
-			//fprintf(stderr, "  (*commandes).lineairePositionX = %d\n",(*commandes).lineairePositionX);
 			}
 		}
 
+	return 0;
+	}
+
+int projectionSystemeCapteurs(systemeT * systeme, projectionT * projection, capteursT * capteurs)
+	{
+	(void)projection;
+	(void)systeme;
+	(void)capteurs;
+		//	Projection du système sur le graphe
+/*
+	(*graphe).cloison = (*systeme).montage.paroiCentrale;
+	(*graphe).trou = (*graphe).facteur*(*systeme).montage.trou;
+	(*graphe).demon = (*systeme).montage.demonMaxwell;	// O ou 1
+	(*graphe).thermostat = (*systeme).montage.thermostat.actif;	// O, 1 ou 2.
+*/
+	int i, j;
+	for(i=0;i<CAPTEURS;i++)
+		{
+		(*capteurs).yZero[i]=0; // Positon de l'origine
+		(*capteurs).xZero[i]=0; // Positon de l'origine
+		for(j=0;j<DUREE_CAPTEURS;j++)
+			{
+			(*capteurs).capteur[j][i].x=600+35*i+5*j;
+			(*capteurs).capteur[j][i].y=200+33*i+3*j;
+			}
+		}
+/*
+	graphiqueChangeCouleur(graphique, (*graphique).orange);
+	SDL_RenderDrawLines((*graphique).rendu, (*capteurs).capteur[0], DUREE_CAPTEURS);
+
+	graphiqueChangeCouleur(graphique, (*graphique).gris);
+	SDL_RenderDrawLines((*graphique).rendu, (*capteurs).capteur[1], DUREE_CAPTEURS);
+
+	graphiqueChangeCouleur(graphique, (*graphique).cyan);
+	SDL_RenderDrawLines((*graphique).rendu, (*capteurs).capteur[2], DUREE_CAPTEURS);
+
+	graphiqueChangeCouleur(graphique, (*graphique).contraste);
+	SDL_RenderDrawLines((*graphique).rendu, (*capteurs).capteur[3], DUREE_CAPTEURS);
+
+	graphiqueChangeCouleur(graphique, (*graphique).vert);
+	SDL_RenderDrawLines((*graphique).rendu, (*capteurs).capteur[4], DUREE_CAPTEURS);
+
+	graphiqueChangeCouleur(graphique, (*graphique).contraste);
+	SDL_RenderDrawLines((*graphique).rendu, (*capteurs).capteur[5], DUREE_CAPTEURS);
+*/
 	return 0;
 	}
 

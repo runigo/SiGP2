@@ -1,7 +1,7 @@
 /*
 Copyright octobre 2018, Stephan Runigo
 runigo@free.fr
-SiGP 2.1.5  simulateur de gaz parfait
+SiGP 2.2  simulateur de gaz parfait
 Ce logiciel est un programme informatique servant à simuler un gaz et à
 en donner une représentation graphique. Il permet d'observer une détente
 de Joule ainsi que des transferts thermiques avec des thermostats.
@@ -207,6 +207,52 @@ int graphiqueChangeCouleur(graphiqueT * graphique, SDL_Color couleur)
 	if(SDL_SetRenderDrawColor((*graphique).rendu, couleur.r, couleur.g, couleur.b, couleur.a) < 0)
 		{return -1;}
 	return 0;  
+	}
+
+int graphiqueCapteurs(graphiqueT * graphique, capteursT * capteurs)
+	{
+/*
+	static SDL_Point point[2048] = {{0}};
+	static int       i = 0;
+
+	point[i].x = p.coord2.x;
+	point[i].y = p.coord2.y;
+
+	if(++i > 2048)
+		i = 0;
+*/
+
+	graphiqueChangeCouleur(graphique, (*graphique).orange);
+	SDL_RenderDrawLines((*graphique).rendu, (*capteurs).capteur[0], DUREE_CAPTEURS);
+
+	graphiqueChangeCouleur(graphique, (*graphique).gris);
+	SDL_RenderDrawLines((*graphique).rendu, (*capteurs).capteur[1], DUREE_CAPTEURS);
+
+	graphiqueChangeCouleur(graphique, (*graphique).cyan);
+	SDL_RenderDrawLines((*graphique).rendu, (*capteurs).capteur[2], DUREE_CAPTEURS);
+
+	graphiqueChangeCouleur(graphique, (*graphique).contraste);
+	SDL_RenderDrawLines((*graphique).rendu, (*capteurs).capteur[3], DUREE_CAPTEURS);
+
+	graphiqueChangeCouleur(graphique, (*graphique).vert);
+	SDL_RenderDrawLines((*graphique).rendu, (*capteurs).capteur[4], DUREE_CAPTEURS);
+
+	graphiqueChangeCouleur(graphique, (*graphique).contraste);
+	SDL_RenderDrawLines((*graphique).rendu, (*capteurs).capteur[5], DUREE_CAPTEURS);
+
+/*
+	int i, j;
+	for(i=0;i<CAPTEURS;i++)
+		{
+		(*capteurs).yZero[i]=0; // Positon de l'origine
+		(*capteurs).xZero[i]=0; // Positon de l'origine
+		for(j=0;j<DUREE_CAPTEURS;j++)
+			{
+			(*capteurs).capteur[j][i].x=0;
+			}
+		}
+*/
+	return 0;
 	}
 
 int graphiqueCommandes(graphiqueT * graphique, commandesT * commandes)

@@ -54,10 +54,11 @@ typedef struct CapteursT capteursT;
     SDL_Point coord1;
     SDL_Point coord2;
 */
-		SDL_Point *capteur[DUREE_CAPTEURS][CAPTEURS];
+		SDL_Point capteur[DUREE_CAPTEURS][CAPTEURS];
 		int yZero[CAPTEURS]; // Positon de l'origine
 		int xZero[CAPTEURS]; // Positon de l'origine
 		};
+
 int capteursInitialise(capteursT * capteurs);
 
 int capteursMiseAJour(capteursT * capteurs, int numero);

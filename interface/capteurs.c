@@ -32,11 +32,22 @@ termes.
 
 #include "capteurs.h"
 
-int capteursInitialiseBoutons(capteursT * capteurs, int largeur, int hauteur)
+int capteursInitialise(capteursT * capteurs)
 	{
 	(void) capteurs;
-	(void) largeur;
-	(void) hauteur;
+	//(void) largeur;, int largeur, int hauteur
+	//(void) hauteur;
+	int i, j;
+	for(i=0;i<CAPTEURS;i++)
+		{
+		(*capteurs).yZero[i]=0; // Positon de l'origine
+		(*capteurs).xZero[i]=0; // Positon de l'origine
+		for(j=0;j<DUREE_CAPTEURS;j++)
+			{
+			//(*capteurs).capteur[j][i].x=14*i+14*j;
+			//(*capteurs).capteur[j][i].y=3*i+3*j;
+			}
+		}
 	return 0;
 	}
 
