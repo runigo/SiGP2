@@ -39,6 +39,7 @@ void systemeMoteur(systemeT * systeme); // Calcule le nouvel état du système e
 void systemeParoi(systemeT * systeme);
 void systemeInertie(systemeT * systeme);
 void systemeChocsParticules(systemeT * systeme);
+void systemeIncrementeLibreParcoursMoyen(systemeT * systeme);
 
 void systemeInitialisePosition(systemeT * systeme, int forme)
 	{
@@ -103,6 +104,9 @@ void systemeMoteur(systemeT * systeme)
 		//fprintf(stderr, "systemeParoi, Chocs avec les parois\n");
 	systemeParoi(systeme); // Corrige les coordonnées
 
+		// Incrémentation du libre parcours moyen
+	systemeIncrementeLibreParcoursMoyen(systeme);
+
 	return;
 	}
 
@@ -160,6 +164,16 @@ void systemeChocsParticules(systemeT * systeme)
 	return;
 	}
 
+void systemeIncrementeLibreParcoursMoyen(systemeT * systeme)
+	{
+	int i;
+	for(i=0;i<NOMBRE;i++)
+		{
+		mobileIncrementeLibreParcoursMoyen(&(*systeme).mobile[i]);
+		}
+	return;
+	}
+
 void systemeIncremente(systemeT * systeme)
 	//	L'ancien état reçoit l'état actuel,
 	//	l'état actuel reçoit le nouvel état.
@@ -171,8 +185,6 @@ void systemeIncremente(systemeT * systeme)
 		}
 	return;
 	}
-/*
-*/
 
 void systemeChangeCloison(systemeT * systeme, int mode)
 /*

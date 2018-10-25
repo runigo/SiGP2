@@ -50,6 +50,8 @@ typedef struct ControleurT controleurT;
 
 		systemeT systeme;	//	Modélisation physique du gaz
 
+		observablesT observables;	//	Capteurs sur le système
+
 		projectionT projection;	//	Paramètre de la projection
 
 		grapheT graphe;		//	Graphe de la chaîne

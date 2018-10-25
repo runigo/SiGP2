@@ -1,9 +1,9 @@
 /*
 Copyright octobre 2018, Stephan Runigo
 runigo@free.fr
-SiGP 2.1.5  simulateur de gaz parfait
-Ce logiciel est un programme informatique servant à simuler un gaz et à
-en donner une représentation graphique. Il permet d'observer une détente
+SiGP 2.2  simulateur de gaz parfait
+Ce logiciel est un programme informatique servant à simuler un gaz parfait
+et à en donner une représentation graphique. Il permet d'observer une détente
 de Joule ainsi que des transferts thermiques avec des thermostats.
 Ce logiciel est régi par la licence CeCILL soumise au droit français et
 respectant les principes de diffusion des logiciels libres. Vous pouvez
@@ -32,23 +32,23 @@ termes.
 
 #include "mobile.h"
 
-void mobileCollisionElastique(mobileT * m1, mobileT * m2);
+int mobileCollisionElastique(mobileT * m1, mobileT * m2);
 
-double mobileDistanceCarre(mobileT * m1, mobileT * m2);
-double mobileDistanceGeom(mobileT * m1, mobileT * m2);
+float mobileDistanceCarre(mobileT * m1, mobileT * m2);
+float mobileDistanceGeom(mobileT * m1, mobileT * m2);
 
 void mobileInverseVy(mobileT * mobile, int hauteur);
 void mobileInverseVx(mobileT * mobile, int largeur);
 
 void mobileInverseVxThermique(mobileT * mobile, int largeur, float temperature);
 
-double mobileModuleVitesse(mobileT * mobile)
+float mobileModuleVitesse(mobileT * mobile)
 	{
-	return sqrt(mobileEnergieCinetique(mobile));
+	return (*mobile).vitesse;
 	}
-
-double mobileEnergieCinetique(mobileT * mobile)
+float mobileEnergieCinetique(mobileT * mobile)
 	{
+		// Mise à jour de l'énergie cinétique et de la vitesse
 	double vx, vy;
 
 		// Calcul de la vitesse
@@ -58,6 +58,7 @@ double mobileEnergieCinetique(mobileT * mobile)
 	vy=((*mobile).actuel.y)-((*mobile).ancien.y);
 
 	(*mobile).ec=(vx*vx+vy*vy);
+	(*mobile).vitesse=sqrt((*mobile).ec);
 
 	return (*mobile).ec;
 	}
@@ -92,6 +93,7 @@ void mobileInitialise(mobileT * mobile, montageT * montage, float vitesse, int n
 
 	(*mobile).nom = nom;
 	(*mobile).dernier = nom;
+	(*mobile).vitesse = vitesse;
 	(*mobile).ec = vitesse * vitesse ;
 	(*mobile).collision = 0;
 	(*mobile).droite = 1;
@@ -105,6 +107,8 @@ void mobileInertie(mobileT * mobile)
 	{		// Application du principe d'inertie
 	((*mobile).nouveau.x)=2.0*((*mobile).actuel.x)-((*mobile).ancien.x);
 	((*mobile).nouveau.y)=2.0*((*mobile).actuel.y)-((*mobile).ancien.y);
+
+		// Incrémentation du parcours moyen
 	return;
 	}
 
@@ -238,7 +242,7 @@ void mobileCollision(mobileT * m1, mobileT * m2)
 	return;
 	}
 
-void mobileCollisionElastique(mobileT * m1, mobileT * m2)
+int mobileCollisionElastique(mobileT * m1, mobileT * m2)
 	{
 	vecteurT p;// vitesse relative au centre de masse, vitesse du centre de masse
 	vecteurT v;// nouvelle vitesse relative au centre de masse
@@ -274,6 +278,22 @@ void mobileCollisionElastique(mobileT * m1, mobileT * m2)
 	(*m1).nouveau.y=(*m1).actuel.y + v.y + p.y;
 	(*m2).nouveau.x=(*m2).actuel.x - v.x + p.x;
 	(*m2).nouveau.y=(*m2).actuel.y - v.y + p.y;
+
+		// Remise à zéro du libre parcours moyen
+	(*m1).lpm=0.0;
+	(*m2).lpm=0.0;
+
+		// Mise à jour de l'énergie cinétique et de la vitesse
+	mobileEnergieCinetique(m1);
+	mobileEnergieCinetique(m2);
+
+	return 0;
+	}
+
+int mobileIncrementeLibreParcoursMoyen(mobileT * mobile)
+	{
+	(*mobile).lpm=(*mobile).lpm + (*mobile).vitesse;
+	return 0;
 	}
 
 void mobileTransparent(mobileT * m1, mobileT * m2)
@@ -298,9 +318,9 @@ void mobileIncremente(mobileT * mobile)
 	return;
 	}
 
-double mobileDistanceCarre(mobileT * m1, mobileT * m2)
+float mobileDistanceCarre(mobileT * m1, mobileT * m2)
 	{
-	double x2, y2;
+	float x2, y2;
 	x2=((*m1).nouveau.x)-((*m2).nouveau.x);
 	y2=((*m1).nouveau.y)-((*m2).nouveau.y);
 	x2=x2*x2;
@@ -308,9 +328,9 @@ double mobileDistanceCarre(mobileT * m1, mobileT * m2)
 	return(x2+y2);
 	}
 
-double mobileDistanceGeom(mobileT * m1, mobileT * m2)
+float mobileDistanceGeom(mobileT * m1, mobileT * m2)
 	{
-	double x, y, max;
+	float x, y, max;
 	x=((*m1).nouveau.x)-((*m2).nouveau.x);
 	y=((*m1).nouveau.y)-((*m2).nouveau.y);
 	if(x<0) x = -x;
@@ -358,6 +378,10 @@ void mobileInverseVxThermique(mobileT * mobile, int largeur, float temperature)
 		// Changement de vitesse
 	vecteurSomme(&(*mobile).actuel, &v, &(*mobile).nouveau);
 	vecteurDifference(&(*mobile).actuel, &v, &(*mobile).ancien);
+
+		// Mise à jour de l'énergie cinétique
+	(*mobile).ec=mobileEnergieCinetique(mobile);
+
 	return;
 	}
 

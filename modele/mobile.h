@@ -1,8 +1,7 @@
-
 /*
-Copyright septembre 2017, Stephan Runigo
+Copyright octobre 2018, Stephan Runigo
 runigo@free.fr
-SiGP 1.3.3  simulateur de gaz parfait
+SiGP 2.2  simulateur de gaz parfait
 Ce logiciel est un programme informatique servant à simuler un gaz parfait
 et à en donner une représentation graphique. Il permet d'observer une détente
 de Joule ainsi que des transferts thermiques avec des thermostats.
@@ -44,21 +43,29 @@ typedef struct MobileT mobileT;
 		vecteurT actuel;
 		vecteurT nouveau;
 
-		double ec;
+		float ec;
+		float vitesse;
+		float lpm;
+
 		int nom;
 		int dernier;
 		int collision;
 		int droite;
 
+		
+
 		int diametre;
-		double diamCarre;
+		float diamCarre;
 		};
 
 void mobileInitialise(mobileT * mobile, montageT * montage, float vitesse, int nom);
 void mobileIncremente(mobileT * mobile);
+int mobileIncrementeLibreParcoursMoyen(mobileT * mobile);
 
-double mobileEnergieCinetique(mobileT * mobile);
-double mobileModuleVitesse(mobileT * mobile);
+float mobileLibreParcoursMoyen(mobileT * mobile);
+
+float mobileEnergieCinetique(mobileT * mobile);
+float mobileModuleVitesse(mobileT * mobile);
 
 void mobileInertie(mobileT * mobile);
 

@@ -1,8 +1,7 @@
-
 /*
-Copyright septembre 2017, Stephan Runigo
+Copyright octobre 2018, Stephan Runigo
 runigo@free.fr
-SiGP 1.3.3  simulateur de gaz parfait
+SiGP 2.2  simulateur de gaz parfait
 Ce logiciel est un programme informatique servant à simuler un gaz parfait
 et à en donner une représentation graphique. Il permet d'observer une détente
 de Joule ainsi que des transferts thermiques avec des thermostats.
@@ -38,9 +37,17 @@ termes.
 
 #include "systeme.h"
 
-double observablesEnergieCinetique(systemeT * systeme);
-double observablesEcartCinetique(systemeT * systeme);
+typedef struct ObservablesT observablesT;
+	struct ObservablesT
+		{
+		float observable[DUREE_CAPTEURS][CAPTEURS];
+		int index; // instant présent
+		};
 
-void observablesAfficheEnergie(systemeT * systeme);
+int observablesInitialise(observablesT * observables);
+int observablesAffiche(observablesT * observables);
+
+		// Mise à jour des observables
+int observablesMiseAJour(observablesT * observables, systemeT * systeme);
 
 #endif

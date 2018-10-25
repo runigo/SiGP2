@@ -199,8 +199,8 @@ int projectionSystemeCapteurs(systemeT * systeme, projectionT * projection, capt
 		(*capteurs).xZero[i]=0; // Positon de l'origine
 		for(j=0;j<DUREE_CAPTEURS;j++)
 			{
-			(*capteurs).capteur[j][i].x=600+35*i+5*j;
-			(*capteurs).capteur[j][i].y=200+33*i+3*j;
+			(*capteurs).capteur[j][i].x=600+3*i+j;
+			(*capteurs).capteur[j][i].y=200+33*i+j;
 			}
 		}
 /*

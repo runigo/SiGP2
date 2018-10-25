@@ -106,6 +106,10 @@ int controleurInitialise(controleurT * controleur)
 	systemeInitialise(&(*controleur).systeme, TAILLE, sqrt((*controleur).options.temperature));
 
 
+		// Initialisation des observables
+	systemeInitialise(&(*controleur).systeme, TAILLE, sqrt((*controleur).options.temperature));
+
+
 		// Initialisation du graphe
 	//grapheInitialise(&(*controleur).graphe, (*controleur).options.cloison, (*controleur).options.thermostat);
 	grapheInitialise(&(*controleur).graphe);
@@ -142,6 +146,7 @@ int controleurInitialise(controleurT * controleur)
 
 		// Initialisation des capteurs
 	capteursInitialise(&(*controleur).capteurs);
+
 	return 0;
 	}
 
@@ -248,7 +253,7 @@ int controleurProjection(controleurT * controleur)
 	projectionSystemeCommandes(&(*controleur).systeme, &(*controleur).projection, &(*controleur).commandes, (*controleur).duree, (*controleur).modePause);
 
 		// Projection du système sur les capteurs
-	projectionSystemeCapteurs(&(*controleur).systeme, &(*controleur).projection, &(*controleur).capteurs);
+	//projectionSystemeCapteurs(&(*controleur).systeme, &(*controleur).projection, &(*controleur).capteurs);
 
 	return (*controleur).sortie;
 	}
@@ -257,6 +262,9 @@ int controleurEvolutionSysteme(controleurT * controleur)
 	{
 		// Évolution du système
 	systemeEvolue(&(*controleur).systeme, (*controleur).duree);
+
+		// Mise à jour des observables
+	//observablesMiseAJour(&(*controleur).observables, &(*controleur).systeme);
 
 	return 0;
 	}
@@ -498,7 +506,7 @@ int controleurClavier(controleurT * controleur)
 			controleurAfficheSouris(controleur);
 			break;
 		case SDLK_F5:	//	
-			observablesAfficheEnergie(&(*controleur).systeme);
+			observablesAffiche(&(*controleur).observables);
 			break;
 		case SDLK_F6:	//	
 			thermostatAfficheThermostat(&(*controleur).systeme.montage.thermostat);

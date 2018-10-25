@@ -1,8 +1,7 @@
-
 /*
-Copyright novembre 2017, Stephan Runigo
+Copyright octobre 2018, Stephan Runigo
 runigo@free.fr
-SiGP 1.3.4  simulateur de gaz parfait
+SiGP 2.2  simulateur de gaz parfait
 Ce logiciel est un programme informatique servant à simuler un gaz parfait
 et à en donner une représentation graphique. Il permet d'observer une détente
 de Joule ainsi que des transferts thermiques avec des thermostats.
@@ -33,29 +32,160 @@ termes.
 
 #include "observables.h"
 
+int observablesMiseAJourNombre(observablesT * observables, systemeT * systeme);
+int observablesMiseAJourLibreParcoursMoyen(observablesT * observables, systemeT * systeme);
+int observablesMiseAJourTemperature(observablesT * observables, systemeT * systeme);
 
-void observablesAfficheEnergie(systemeT * systeme)
+int observablesInitialise(observablesT * observables)
 	{
-	float ec;
-	ec = observablesEnergieCinetique(systeme);
-	printf("\nÉNERGIE\n");
-	printf("	Energie %f \n", ec);
-	printf("	Température %f \n", ec/NOMBRE);
-	return;
+	//(void) largeur;, int largeur, int hauteur
+	//(void) hauteur;
+	int i, j;
+	for(i=0;i<CAPTEURS;i++)
+		{
+		for(j=0;j<DUREE_CAPTEURS;j++)
+			{
+			(*observables).observable[j][i]=14*i+14*j;
+			}
+		}
+
+	(*observables).index=0;
+
+	return 0;
 	}
 
-double observablesEnergieCinetique(systemeT * systeme)
+		// Mise à jour des observables
+int observablesMiseAJour(observablesT * observables, systemeT * systeme)
+	{
+
+	observablesMiseAJourNombre(observables,systeme);
+
+	observablesMiseAJourLibreParcoursMoyen(observables, systeme);
+
+	observablesMiseAJourTemperature(observables, systeme);
+
+		// Évolution de l'index
+	(*observables).index++;
+	if((*observables).index==DUREE_CAPTEURS) (*observables).index=0;
+
+	return 0;
+	}
+
+int observablesAffiche(observablesT * observables)
+	{
+	printf("\nSTATISTIQUES\n");
+
+	printf("	temperature à gauche %f \n", (*observables).observable[(*observables).index][0]);
+	printf("	temperature à Droite %f \n\n", (*observables).observable[(*observables).index][1]);
+	printf("	nombre à gauche %f \n", (*observables).observable[(*observables).index][2]);
+	printf("	nombre à Droite %f \n\n", (*observables).observable[(*observables).index][3]);
+	printf("	libre parcours moyen à gauche %f \n", (*observables).observable[(*observables).index][4]);
+	printf("	libre parcours moyen à Droite %f \n\n", (*observables).observable[(*observables).index][5]);
+	return 0;
+	}
+
+int observablesMiseAJourNombre(observablesT * observables, systemeT * systeme)
 	{
 	int i;
-	double ec=0.0;
+	int nbGauche=0;
+	int nbDroite=0;
 
 	for(i=0;i<NOMBRE;i++)
 		{
-		ec=ec+mobileEnergieCinetique(&(*systeme).mobile[i]);
+		if(&(*systeme).mobile[i].droite==0)
+			{
+			nbGauche ++;
+			}
+		else
+			{
+			nbDroite ++;
+			}
 		}
-	return ec;
+
+	(*observables).observable[(*observables).index][2]=nbGauche;
+	(*observables).observable[(*observables).index][3]=nbDroite;
+
+	return 0;
 	}
 
+int observablesMiseAJourTemperature(observablesT * observables, systemeT * systeme)
+	{
+	int i;
+	double ecGauche=0.0;
+	double ecDroite=0.0;
+
+	for(i=0;i<NOMBRE;i++)
+		{
+		if(&(*systeme).mobile[i].droite==0)
+			{
+			ecGauche=ecGauche+mobileEnergieCinetique(&(*systeme).mobile[i]);
+			}
+		else
+			{
+			ecDroite=ecDroite+mobileEnergieCinetique(&(*systeme).mobile[i]);
+			}
+		}
+
+	if((*observables).observable[(*observables).index][2]!=0.0)
+		{
+		(*observables).observable[(*observables).index][0]=ecGauche/(*observables).observable[(*observables).index][2];
+		}
+	else
+		{
+		(*observables).observable[(*observables).index][0]=ecGauche;
+		}
+
+	if((*observables).observable[(*observables).index][3]!=0.0)
+		{
+		(*observables).observable[(*observables).index][1]=ecDroite/(*observables).observable[(*observables).index][3];
+		}
+	else
+		{
+		(*observables).observable[(*observables).index][1]=ecDroite;
+		}
+
+	return 0;
+	}
+
+int observablesMiseAJourLibreParcoursMoyen(observablesT * observables, systemeT * systeme)
+	{
+	int i;
+	double lpmGauche=0.0;
+	double lpmDroite=0.0;
+
+	for(i=0;i<NOMBRE;i++)
+		{
+		if(&(*systeme).mobile[i].droite==0)
+			{
+			lpmGauche = lpmGauche + (*systeme).mobile[i].lpm;
+			}
+		else
+			{
+			lpmDroite = lpmDroite + (*systeme).mobile[i].lpm;
+			}
+		}
+
+	if((*observables).observable[(*observables).index][2]!=0.0)
+		{
+		(*observables).observable[(*observables).index][4]=lpmGauche/(*observables).observable[(*observables).index][2];
+		}
+	else
+		{
+		(*observables).observable[(*observables).index][0]=lpmGauche;
+		}
+
+	if((*observables).observable[(*observables).index][3]!=0.0)
+		{
+		(*observables).observable[(*observables).index][5]=lpmDroite/(*observables).observable[(*observables).index][3];
+		}
+	else
+		{
+		(*observables).observable[(*observables).index][5]=lpmDroite;
+		}
+
+	return 0;
+	}
+/*
 double observableEcartCinetique(systemeT * systeme)
 	{
 	int i;
@@ -71,3 +201,4 @@ double observableEcartCinetique(systemeT * systeme)
 	ecart=sqrt(ecart);
 	return ecart;
 	}
+*/
