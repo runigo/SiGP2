@@ -41,10 +41,12 @@ typedef struct ObservablesT observablesT;
 	struct ObservablesT
 		{
 		float observable[DUREE_CAPTEURS][CAPTEURS];
+		float maximum[CAPTEURS];
 		int index; // instant présent
 		};
 
 int observablesInitialise(observablesT * observables);
+int observablesAffiche(observablesT * observables);
 int observablesAffiche(observablesT * observables);
 
 		// Mise à jour des observables

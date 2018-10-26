@@ -32,6 +32,8 @@ termes.
 
 #include "observables.h"
 
+int observablesMiseAJourAmplitude(observablesT * observables);
+
 int observablesMiseAJourNombre(observablesT * observables, systemeT * systeme);
 int observablesMiseAJourLibreParcoursMoyen(observablesT * observables, systemeT * systeme);
 int observablesMiseAJourTemperature(observablesT * observables, systemeT * systeme);
@@ -45,7 +47,7 @@ int observablesInitialise(observablesT * observables)
 		{
 		for(j=0;j<DUREE_CAPTEURS;j++)
 			{
-			(*observables).observable[j][i]=14*i+14*j;
+			(*observables).observable[j][i]=0;
 			}
 		}
 
@@ -54,9 +56,38 @@ int observablesInitialise(observablesT * observables)
 	return 0;
 	}
 
-		// Mise à jour des observables
-int observablesMiseAJour(observablesT * observables, systemeT * systeme)
+int observablesMiseAJourAmplitude(observablesT * observables)
 	{
+	int i, j;
+	float max = 0.0;
+
+	for(j=0;j<CAPTEURS;j++)
+		{
+		for(i=0;i<DUREE_CAPTEURS;i++)
+			{
+			if((*observables).observable[i][j] > max)
+				{
+				max = (*observables).observable[i][j];
+				}
+			}
+		(*observables).maximum[j] = max;
+		}
+
+	return 0;
+	}
+
+
+int observablesMiseAJour(observablesT * observables, systemeT * systeme)
+	{		// Mise à jour des observables
+
+		// Évolution de l'index
+	(*observables).index ++;
+	//fprintf(stderr, "(*observables).index = %d\n", (*observables).index);
+
+	if((*observables).index==DUREE_CAPTEURS)
+		{
+		(*observables).index=0;
+		}
 
 	observablesMiseAJourNombre(observables,systeme);
 
@@ -64,9 +95,7 @@ int observablesMiseAJour(observablesT * observables, systemeT * systeme)
 
 	observablesMiseAJourTemperature(observables, systeme);
 
-		// Évolution de l'index
-	(*observables).index++;
-	if((*observables).index==DUREE_CAPTEURS) (*observables).index=0;
+	observablesMiseAJourAmplitude(observables);
 
 	return 0;
 	}
@@ -76,11 +105,11 @@ int observablesAffiche(observablesT * observables)
 	printf("\nSTATISTIQUES\n");
 
 	printf("	temperature à gauche %f \n", (*observables).observable[(*observables).index][0]);
-	printf("	temperature à Droite %f \n\n", (*observables).observable[(*observables).index][1]);
+	printf("	temperature à droite %f \n\n", (*observables).observable[(*observables).index][1]);
 	printf("	nombre à gauche %f \n", (*observables).observable[(*observables).index][2]);
-	printf("	nombre à Droite %f \n\n", (*observables).observable[(*observables).index][3]);
+	printf("	nombre à droite %f \n\n", (*observables).observable[(*observables).index][3]);
 	printf("	libre parcours moyen à gauche %f \n", (*observables).observable[(*observables).index][4]);
-	printf("	libre parcours moyen à Droite %f \n\n", (*observables).observable[(*observables).index][5]);
+	printf("	libre parcours moyen à droite %f \n\n", (*observables).observable[(*observables).index][5]);
 	return 0;
 	}
 
@@ -92,7 +121,7 @@ int observablesMiseAJourNombre(observablesT * observables, systemeT * systeme)
 
 	for(i=0;i<NOMBRE;i++)
 		{
-		if(&(*systeme).mobile[i].droite==0)
+		if((*systeme).mobile[i].droite==0)
 			{
 			nbGauche ++;
 			}
@@ -116,7 +145,7 @@ int observablesMiseAJourTemperature(observablesT * observables, systemeT * syste
 
 	for(i=0;i<NOMBRE;i++)
 		{
-		if(&(*systeme).mobile[i].droite==0)
+		if((*systeme).mobile[i].droite==0)
 			{
 			ecGauche=ecGauche+mobileEnergieCinetique(&(*systeme).mobile[i]);
 			}
@@ -155,7 +184,7 @@ int observablesMiseAJourLibreParcoursMoyen(observablesT * observables, systemeT 
 
 	for(i=0;i<NOMBRE;i++)
 		{
-		if(&(*systeme).mobile[i].droite==0)
+		if((*systeme).mobile[i].droite==0)
 			{
 			lpmGauche = lpmGauche + (*systeme).mobile[i].lpm;
 			}

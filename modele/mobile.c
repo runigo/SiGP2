@@ -167,6 +167,16 @@ void mobileParoi(mobileT * mobile, montageT * montage)
 			// Chocs avec la paroi centrale
 
 	if((*montage).paroiCentrale == 0)	{// Pas de paroi
+				// Arrivé de gauche
+			if( (*mobile).nouveau.x > 0 && (*mobile).droite == 0)
+				{
+				(*mobile).droite = 1;
+				}
+				// Arrivé de droite
+			if( (*mobile).nouveau.x < 0 && (*mobile).droite == 1)
+				{
+				(*mobile).droite = 0;
+				}
 										}
 	else	// Paroi
 		{			// 	Rebond sur la cloison
@@ -195,6 +205,7 @@ void mobileParoi(mobileT * mobile, montageT * montage)
 				else
 					{
 					(*mobile).droite = 1;
+			//fprintf(stderr, "(*mobile).droite = %d\n", (*mobile).droite);
 					}
 				}
 				// Arrivé de droite
@@ -207,6 +218,7 @@ void mobileParoi(mobileT * mobile, montageT * montage)
 				else
 					{
 					(*mobile).droite = 0;
+			//fprintf(stderr, "(*mobile).droite = %d\n", (*mobile).droite);
 					}
 				}
 			}

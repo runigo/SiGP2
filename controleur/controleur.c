@@ -107,7 +107,7 @@ int controleurInitialise(controleurT * controleur)
 
 
 		// Initialisation des observables
-	systemeInitialise(&(*controleur).systeme, TAILLE, sqrt((*controleur).options.temperature));
+	observablesInitialise(&(*controleur).observables);
 
 
 		// Initialisation du graphe
@@ -264,7 +264,7 @@ int controleurEvolutionSysteme(controleurT * controleur)
 	systemeEvolue(&(*controleur).systeme, (*controleur).duree);
 
 		// Mise à jour des observables
-	//observablesMiseAJour(&(*controleur).observables, &(*controleur).systeme);
+	observablesMiseAJour(&(*controleur).observables, &(*controleur).systeme);
 
 	return 0;
 	}
