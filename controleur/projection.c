@@ -183,48 +183,24 @@ int projectionSystemeCommandes(systemeT * systeme, projectionT * projection, com
 	return 0;
 	}
 
-int projectionSystemeCapteurs(systemeT * systeme, projectionT * projection, capteursT * capteurs)
+int projectionObservablesCapteurs(observablesT * observables, projectionT * projection, capteursT * capteurs)
 	{
 	(void)projection;
-	(void)systeme;
-	(void)capteurs;
-		//	Projection du système sur le graphe
-/*
-	(*graphe).cloison = (*systeme).montage.paroiCentrale;
-	(*graphe).trou = (*graphe).facteur*(*systeme).montage.trou;
-	(*graphe).demon = (*systeme).montage.demonMaxwell;	// O ou 1
-	(*graphe).thermostat = (*systeme).montage.thermostat.actif;	// O, 1 ou 2.
-*/
-	int i, j;
-	for(i=0;i<CAPTEURS;i++)
+	float a;
+	int i, j, k, y0;
+
+	for(j=0;j<CAPTEURS/2;j++)
 		{
-		(*capteurs).yZero[i]=0; // Positon de l'origine
-		(*capteurs).xZero[i]=0; // Positon de l'origine
-		for(j=0;j<DUREE_CAPTEURS;j++)
+		a = -(*capteurs).hauteur / (*observables).maximumGrandeur[j];
+		k = 2*j;
+		y0 = (*capteurs).yZero[k];
+		for(i=0;i<DUREE_CAPTEURS;i++)
 			{
-			(*capteurs).capteur[j][i].x=600+3*i+j;
-			(*capteurs).capteur[j][i].y=200+33*i+j;
+			(*capteurs).capteur[i][2*j].y = a*(*observables).observable[i][k] + y0;
+			(*capteurs).capteur[i][2*j+1].y = a*(*observables).observable[i][k+1] + y0;
 			}
 		}
-/*
-	graphiqueChangeCouleur(graphique, (*graphique).orange);
-	SDL_RenderDrawLines((*graphique).rendu, (*capteurs).capteur[0], DUREE_CAPTEURS);
 
-	graphiqueChangeCouleur(graphique, (*graphique).gris);
-	SDL_RenderDrawLines((*graphique).rendu, (*capteurs).capteur[1], DUREE_CAPTEURS);
-
-	graphiqueChangeCouleur(graphique, (*graphique).cyan);
-	SDL_RenderDrawLines((*graphique).rendu, (*capteurs).capteur[2], DUREE_CAPTEURS);
-
-	graphiqueChangeCouleur(graphique, (*graphique).contraste);
-	SDL_RenderDrawLines((*graphique).rendu, (*capteurs).capteur[3], DUREE_CAPTEURS);
-
-	graphiqueChangeCouleur(graphique, (*graphique).vert);
-	SDL_RenderDrawLines((*graphique).rendu, (*capteurs).capteur[4], DUREE_CAPTEURS);
-
-	graphiqueChangeCouleur(graphique, (*graphique).contraste);
-	SDL_RenderDrawLines((*graphique).rendu, (*capteurs).capteur[5], DUREE_CAPTEURS);
-*/
 	return 0;
 	}
 

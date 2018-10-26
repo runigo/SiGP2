@@ -59,7 +59,7 @@ int projectionAffiche(projectionT * projection);
 
 //int projectionInitialiseLongueurs(projectionT * projection, int largeur, int hauteur);
 
-int projectionSystemeCapteurs(systemeT * systeme, projectionT * projection, capteursT * capteurs);
+int projectionObservablesCapteurs(observablesT * observables, projectionT * projection, capteursT * capteurs);
 int projectionSystemeCommandes(systemeT * systeme, projectionT * projection, commandesT * commandes, int duree, int mode);
 void projectionSystemeGraphe(systemeT * systeme, projectionT * projection, grapheT * graph);
 

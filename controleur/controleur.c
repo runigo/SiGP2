@@ -105,21 +105,18 @@ int controleurInitialise(controleurT * controleur)
 		// Initialisation du système
 	systemeInitialise(&(*controleur).systeme, TAILLE, sqrt((*controleur).options.temperature));
 
-
 		// Initialisation des observables
 	observablesInitialise(&(*controleur).observables);
 
 
 		// Initialisation du graphe
-	//grapheInitialise(&(*controleur).graphe, (*controleur).options.cloison, (*controleur).options.thermostat);
 	grapheInitialise(&(*controleur).graphe);
 
-		fprintf(stderr, " Initialisation SDL\n");
+		//fprintf(stderr, " Initialisation SDL\n");
 	interfaceInitialisationSDL();
 		//fprintf(stderr, " Création de l'interface SDL\n");
 	interfaceCreation(&(*controleur).interface);
 		//fprintf(stderr, " Création du rendu\n");
-	//graphiqueCreation(&(*controleur).graphique, &(*controleur).interface);
 	fprintf(stderr, " graphiqueCreation = %d\n",graphiqueCreation(&(*controleur).graphique, &(*controleur).interface));
 
 		//fprintf(stderr, " Initialisation des longueurs\n");
@@ -236,6 +233,7 @@ int controleurProjection(controleurT * controleur)
 		(*controleur).graphique.largeur=largeur;
 		(*controleur).graphique.hauteur=hauteur;
 		commandesInitialiseBoutons(&(*controleur).commandes, largeur, hauteur);
+		//capteursMiseAJourLongueur(&(*controleur).capteurs, largeur, hauteur);
 		}
 	grapheMiseAJourLongueur(&(*controleur).graphe, (*controleur).graphique.largeur, (*controleur).graphique.hauteur);
 
@@ -252,8 +250,8 @@ int controleurProjection(controleurT * controleur)
 		// Projection du système sur les commandes
 	projectionSystemeCommandes(&(*controleur).systeme, &(*controleur).projection, &(*controleur).commandes, (*controleur).duree, (*controleur).modePause);
 
-		// Projection du système sur les capteurs
-	//projectionSystemeCapteurs(&(*controleur).systeme, &(*controleur).projection, &(*controleur).capteurs);
+		// Projection des observables sur les capteurs
+	//projectionObservablesCapteurs(&(*controleur).observables, &(*controleur).projection, &(*controleur).capteurs);
 
 	return (*controleur).sortie;
 	}

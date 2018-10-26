@@ -41,46 +41,52 @@ int capteursInitialise(capteursT * capteurs, int largeur, int hauteur)
 		(*capteurs).xZero[i]=0; // Positon de l'origine
 		for(j=0;j<DUREE_CAPTEURS;j++)
 			{
-			(*capteurs).capteur[j][i].x=largeur;
-			(*capteurs).capteur[j][i].y=hauteur;
+			(*capteurs).capteur[j][i].x=300+9*i+3*j;
+			(*capteurs).capteur[j][i].y=300+9*i+(int)(5*sin(((float)j)/9.9));
 			}
 		}
+	(*capteurs).largeur = largeur; // axe x
+	(*capteurs).hauteur = hauteur; // axe y
 	return 0;
 	}
 
 int capteursMiseAJourLongueur(capteursT * capteurs, int largeur, int hauteur)
 	{
-	(*capteurs).yZero[0]=(int)(0.797856049*largeur); // Température à gauche
-	(*capteurs).xZero[0]=(int)(0.06822107*hauteur); // 	x
+	(*capteurs).yZero[0]=(int)(0.797856049*hauteur); // Température à gauche
+	(*capteurs).xZero[0]=(int)(0.06822107*largeur); // 	x
 
-	(*capteurs).yZero[1]=(int)(0.797856049*largeur); // Température à droite
-	(*capteurs).xZero[1]=(int)(0.06822107*hauteur); // x
+	(*capteurs).yZero[1]=(int)(0.797856049*hauteur); // Température à droite
+	(*capteurs).xZero[1]=(int)(0.06822107*largeur); // x
 
-	(*capteurs).yZero[2]=(int)(0.797856049*largeur); // Nombre à gauche
-	(*capteurs).xZero[2]=(int)(0.255613126*hauteur); // x
+	(*capteurs).yZero[2]=(int)(0.797856049*hauteur); // Nombre à gauche
+	(*capteurs).xZero[2]=(int)(0.255613126*largeur); // x
 
-	(*capteurs).yZero[3]=(int)(0.797856049*largeur); // Nombre à droite
-	(*capteurs).xZero[3]=(int)(0.255613126*hauteur); // x
+	(*capteurs).yZero[3]=(int)(0.797856049*hauteur); // Nombre à droite
+	(*capteurs).xZero[3]=(int)(0.255613126*largeur); // x
 
-	(*capteurs).yZero[4]=(int)(0.797856049*largeur); // l. p. m. à gauche
-	(*capteurs).xZero[4]=(int)(0.45164076*hauteur); // x
+	(*capteurs).yZero[4]=(int)(0.797856049*hauteur); // l. p. m. à gauche
+	(*capteurs).xZero[4]=(int)(0.45164076*largeur); // x
 
-	(*capteurs).yZero[5]=(int)(0.797856049*largeur); // l. p. m. à droite
-	(*capteurs).xZero[5]=(int)(0.45164076*hauteur); // x
+	(*capteurs).yZero[5]=(int)(0.797856049*hauteur); // l. p. m. à droite
+	(*capteurs).xZero[5]=(int)(0.45164076*largeur); // x
 
 	(*capteurs).largeur=(int)(0.1849776*largeur); // longueur de l'axe x 164 165 165 / 892
 	(*capteurs).hauteur=(int)(0.1393568*hauteur); // longueur de l'axe y 91 / 653
 
-			//(*capteurs).capteur[j][i].x=(int);
-/*	int i, j;
-	for(i=0;i<CAPTEURS;i++)
+	float a;
+	int i, j, k, x0;
+	for(j=0;j<CAPTEURS/2;j++)
 		{
-		for(j=0;j<DUREE_CAPTEURS;j++)
+		k=2*j;
+		a=(*capteurs).largeur/(*capteurs).xZero[k];
+		x0=(*capteurs).xZero[k];
+		for(i=0;i<DUREE_CAPTEURS;i++)
 			{
-			(*capteurs).capteur[j][i].x=(int);
+			(*capteurs).capteur[i][2*j].x=a*i+x0;
+			(*capteurs).capteur[i][2*j+1].x=a*i+x0;
 			}
 		}
-*/
+
 	return 0;
 	}
 

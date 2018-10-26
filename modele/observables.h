@@ -41,7 +41,8 @@ typedef struct ObservablesT observablesT;
 	struct ObservablesT
 		{
 		float observable[DUREE_CAPTEURS][CAPTEURS];
-		float maximum[CAPTEURS];
+		float maximumCapteur[CAPTEURS];
+		float maximumGrandeur[CAPTEURS/2];
 		int index; // instant présent
 		};
 

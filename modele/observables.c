@@ -32,7 +32,7 @@ termes.
 
 #include "observables.h"
 
-int observablesMiseAJourAmplitude(observablesT * observables);
+int observablesMiseAJourAmplitudes(observablesT * observables);
 
 int observablesMiseAJourNombre(observablesT * observables, systemeT * systeme);
 int observablesMiseAJourLibreParcoursMoyen(observablesT * observables, systemeT * systeme);
@@ -40,8 +40,6 @@ int observablesMiseAJourTemperature(observablesT * observables, systemeT * syste
 
 int observablesInitialise(observablesT * observables)
 	{
-	//(void) largeur;, int largeur, int hauteur
-	//(void) hauteur;
 	int i, j;
 	for(i=0;i<CAPTEURS;i++)
 		{
@@ -56,7 +54,7 @@ int observablesInitialise(observablesT * observables)
 	return 0;
 	}
 
-int observablesMiseAJourAmplitude(observablesT * observables)
+int observablesMiseAJourAmplitudes(observablesT * observables)
 	{
 	int i, j;
 	float max = 0.0;
@@ -70,7 +68,19 @@ int observablesMiseAJourAmplitude(observablesT * observables)
 				max = (*observables).observable[i][j];
 				}
 			}
-		(*observables).maximum[j] = max;
+		(*observables).maximumCapteur[j] = max;
+		}
+
+	for(j=0;j<CAPTEURS/2;j++)
+		{
+		if((*observables).maximumCapteur[2*j] > (*observables).maximumCapteur[2*j+1])
+			{
+			(*observables).maximumGrandeur[j]=(*observables).maximumCapteur[2*j];
+			}
+		else
+			{
+			(*observables).maximumGrandeur[j]=(*observables).maximumCapteur[2*j+1];
+			}
 		}
 
 	return 0;
@@ -95,7 +105,7 @@ int observablesMiseAJour(observablesT * observables, systemeT * systeme)
 
 	observablesMiseAJourTemperature(observables, systeme);
 
-	observablesMiseAJourAmplitude(observables);
+	observablesMiseAJourAmplitudes(observables);
 
 	return 0;
 	}
