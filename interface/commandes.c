@@ -43,16 +43,17 @@ int commandesInitialiseBoutons(commandesT * commandes, int largeur, int hauteur)
 	(*commandes).rotatifX=(int)(0.02*largeur); //    D-G /2 = 23 / 1158 // Rayon suivant X
 	(*commandes).rotatifsCentre=(int)(0.8929188*largeur); // 1034 // Positon X des boutons rotatifs
 		// BOUTONS ROTATIFS SUIVANT Y
-	(*commandes).rotatifY=(int)(0.03*hauteur); // 21 / 691	Rayon suivant Y
+	(*commandes).rotatifY=(int)(0.025*hauteur); // 21 / 691	Rayon suivant Y
 
-	(*commandes).rotatifCentre[0]=(int)(0.117221*hauteur); //	Trou
-	(*commandes).rotatifCentre[1]=(int)(0.248915*hauteur); //	Particules
+	(*commandes).rotatifCentre[0]=(int)(0.098009*hauteur); //	Trou
+	(*commandes).rotatifCentre[1]=(int)(0.2098009*hauteur); //	Particules
 
-	(*commandes).rotatifCentre[2]=(int)(0.429812*hauteur); // Température
-	(*commandes).rotatifCentre[3]=(int)(0.597685*hauteur); // Gauche
-	(*commandes).rotatifCentre[4]=(int)(0.767004*hauteur); // Droite
+	(*commandes).rotatifCentre[2]=(int)(0.362940*hauteur); // Température
+	(*commandes).rotatifCentre[3]=(int)(0.503828*hauteur); // Gauche
+	(*commandes).rotatifCentre[4]=(int)(0.646248*hauteur); // Droite
 
-	(*commandes).rotatifCentre[5]=(int)(0.923300*hauteur); // Nombre
+	(*commandes).rotatifCentre[5]=(int)(0.7963246*hauteur); // Simulation
+	(*commandes).rotatifCentre[6]=(int)(0.923430*hauteur); // Nombre
 
 		 // Zone des petits boutons
 	(*commandes).boutons=(int)(0.943005*largeur); // 1092 / 1158
@@ -62,21 +63,23 @@ int commandesInitialiseBoutons(commandesT * commandes, int largeur, int hauteur)
 		// PETITS BOUTONS SUIVANT Y
 	(*commandes).boutonY=(int)(0.015*largeur); // Rayon suivant Y // 10 / 667
 
-	(*commandes).boutonCentre[0]=(int)(0.078147612*hauteur); // CLoison
-	(*commandes).boutonCentre[1]=(int)(0.134587554*hauteur); // Trou
-	(*commandes).boutonCentre[2]=(int)(0.192474674*hauteur); // Démon
-	(*commandes).boutonCentre[3]=(int)(0.248914616*hauteur); // Supprim.
-	(*commandes).boutonCentre[4]=(int)(0.382054993*hauteur); // 224 Arrêt
-	(*commandes).boutonCentre[5]=(int)(0.429811867*hauteur); // 259 1 T.
-	(*commandes).boutonCentre[6]=(int)(0.479015919*hauteur); // 294 2 T.
+	(*commandes).boutonCentre[0]=(int)(0.0643185*hauteur); // CLoison
+	(*commandes).boutonCentre[1]=(int)(0.1117917*hauteur); // Trou
+	(*commandes).boutonCentre[2]=(int)(0.1623277*hauteur); // Démon
+	(*commandes).boutonCentre[3]=(int)(0.2098009*hauteur); // Supprim.
+	(*commandes).boutonCentre[4]=(int)(0.3215926*hauteur); // 224 Arrêt
+	(*commandes).boutonCentre[5]=(int)(0.36140888*hauteur); // 259 1 T.
+	(*commandes).boutonCentre[6]=(int)(0.4012251*hauteur); // 294 2 T.
 
-	(*commandes).boutonCentre[7]=(int)(0.571635311*hauteur); // 359	Marche
-	(*commandes).boutonCentre[8]=(int)(0.625180897*hauteur); // 395	Arrêt
+	(*commandes).boutonCentre[7]=(int)(0.48085758*hauteur); // 359	Marche
+	(*commandes).boutonCentre[8]=(int)(0.52526799*hauteur); // 395	Arrêt
 
-	(*commandes).boutonCentre[9]=(int)(0.742402315*hauteur); // 481	Marche
-	(*commandes).boutonCentre[10]=(int)(0.795947902*hauteur); // 516	Arrêt
+	(*commandes).boutonCentre[9]=(int)(0.626339969*hauteur); // 481	Marche
+	(*commandes).boutonCentre[10]=(int)(0.667687596*hauteur); // 516	Arrêt
 
-
+	(*commandes).boutonCentre[11]=(int)(0.52526799*hauteur); // 395	Pause
+	(*commandes).boutonCentre[12]=(int)(0.626339969*hauteur); // 481	Min
+	(*commandes).boutonCentre[13]=(int)(0.667687596*hauteur); // 516	Max
 
 	//	PANNEAU BAS
 

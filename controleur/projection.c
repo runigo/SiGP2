@@ -66,37 +66,40 @@ int projectionSystemeCommandes(systemeT * systeme, projectionT * projection, com
 	float ratioRotatif = 0.9;
 
 				//	Projection sur les boutons rotatifs
-	 //	Rayon du trou
+		//	Rayon du trou
 	theta = DEUXPI * (*projection).logTrou * log( (*systeme).montage.trou +1);
 	(*commandes).rotatifPositionX[0]=(int)(-ratioRotatif*(*commandes).rotatifX*sin(theta));
 	(*commandes).rotatifPositionY[0]=(int)(ratioRotatif*(*commandes).rotatifY*cos(theta));
 
-	 //	Taille des particules
+		//	Taille des particules
 	theta = DEUXPI * (*projection).logParticule * log( (*systeme).diametre / TAILLE_MIN );
 	(*commandes).rotatifPositionX[1]=(int)(-ratioRotatif*(*commandes).rotatifX*sin(theta));
 	(*commandes).rotatifPositionY[1]=(int)(ratioRotatif*(*commandes).rotatifY*cos(theta));
 
-	//	Température
+		//	Température
 	theta = DEUXPI * (*projection).logTemperature * log( (*systeme).montage.thermostat.temperature / TEMPERATURE_MIN );
 	(*commandes).rotatifPositionX[2]=(int)(-ratioRotatif*(*commandes).rotatifX*sin(theta));
 	(*commandes).rotatifPositionY[2]=(int)(ratioRotatif*(*commandes).rotatifY*cos(theta));
 
-	//	Température gauche
+		//	Température gauche
 	theta = DEUXPI * (*projection).logTemperature * log( (*systeme).montage.thermostat.gauche / TEMPERATURE_MIN );
 	(*commandes).rotatifPositionX[3]=(int)(-ratioRotatif*(*commandes).rotatifX*sin(theta));
 	(*commandes).rotatifPositionY[3]=(int)(ratioRotatif*(*commandes).rotatifY*cos(theta));
 
-	//	Température droite
+		//	Température droite
 	theta = DEUXPI * (*projection).logTemperature * log( (*systeme).montage.thermostat.droite / TEMPERATURE_MIN );
 	(*commandes).rotatifPositionX[4]=(int)(-ratioRotatif*(*commandes).rotatifX*sin(theta));
 	(*commandes).rotatifPositionY[4]=(int)(ratioRotatif*(*commandes).rotatifY*cos(theta));
 
-	//	Nombre
-	theta = PI;
-	//(*commandes).rotatifPositionX[5]=(int)(-ratioRotatif*(*commandes).rotatifX*sin(theta));
-	//(*commandes).rotatifPositionY[5]=(int)(ratioRotatif*(*commandes).rotatifY*cos(theta));
-	(*commandes).rotatifPositionX[5]=0;
-	(*commandes).rotatifPositionY[5]=0;
+		//	Simulation
+	theta = DEUXPI * duree/DUREE_MAX;
+	(*commandes).rotatifPositionX[5]=(int)(-ratioRotatif*(*commandes).rotatifX*sin(theta));
+	(*commandes).rotatifPositionY[5]=(ratioRotatif*(*commandes).rotatifY*cos(theta));
+		//	(*commandes).lineairePositionX=(int)((*commandes).a * duree + (*commandes).b);
+
+		//	Nombre
+	(*commandes).rotatifPositionX[6]=0;
+	(*commandes).rotatifPositionY[6]=0;
 
 
 	int i;
@@ -157,22 +160,22 @@ int projectionSystemeCommandes(systemeT * systeme, projectionT * projection, com
 
 	if(mode>0)
 		{
-		(*commandes).triangleEtat[7]=2;
+		(*commandes).boutonEtat[11]=2;
 		}
 
 	if(duree==1)
 		{
-		(*commandes).triangleEtat[8]=1;
+		(*commandes).triangleEtat[12]=1;
 		}
 	else
 		{
 		if(duree==DUREE_MAX)
 			{
-			(*commandes).triangleEtat[11]=2;
+			(*commandes).triangleEtat[13]=2;
 			}
 		else
 			{
-			(*commandes).triangleEtat[9]=-1;
+			//(*commandes).triangleEtat[9]=-1;
 			(*commandes).lineairePositionX=(int)((*commandes).a * duree + (*commandes).b);
 			}
 		}
@@ -242,9 +245,15 @@ void projectionSystemeGraphe(systemeT * systeme, projectionT * projection, graph
 	int i;
 	for(i=0;i<(NOMBRE);i++)
 		{
-
+		if((*graphe).cloison!=0)
+			{
 		(*graphe).abscisse[i] = (*graphe).bx + (0.5*(*systeme).mobile[i].droite-0.25) * (TRAIT_CLOISON + (*graphe).taille) + (*graphe).facteur*(*systeme).mobile[i].nouveau.x;
 		//(*graphe).abscisse[i] = (*graphe).bx + (0.5*(*systeme).mobile[i].droite-0.25) * (*graphe).taille + (*graphe).facteur*(*systeme).mobile[i].nouveau.x;
+			}
+		else
+			{
+			(*graphe).abscisse[i] = (*graphe).bx + (*graphe).facteur*(*systeme).mobile[i].nouveau.x;
+			}
 
 		if((*graphe).abscisse[i]>(*graphe).zoneX || (*graphe).abscisse[i]<0)
 			{

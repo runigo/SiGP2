@@ -39,31 +39,17 @@ termes.
 typedef struct CapteursT capteursT;
 	struct CapteursT
 		{
-/*
-		SDL_Point point[2048] = {{0}};
-	static int       i = 0;
-
-	point[i].x = p.coord2.x;
-	point[i].y = p.coord2.y;
-
-	if(++i > 2048)
-		i = 0;
-
-	SDL_SetRenderDrawColor(rendu, 0, 0, 255, SDL_ALPHA_OPAQUE);
-	SDL_RenderDrawLines(rendu, point, i);
-    SDL_Point coord1;
-    SDL_Point coord2;
-*/
 		SDL_Point capteur[DUREE_CAPTEURS][CAPTEURS];
+
 		int yZero[CAPTEURS]; // Positon de l'origine
 		int xZero[CAPTEURS]; // Positon de l'origine
+
+		int largeur; // axe x
+		int hauteur; // axe y
 		};
 
-int capteursInitialise(capteursT * capteurs);
+int capteursInitialise(capteursT * capteurs, int largeur, int hauteur);
 
-int capteursMiseAJour(capteursT * capteurs, int numero);
-int capteursRotatifs(capteursT * capteurs);
-int capteursTriangles(capteursT * capteurs);
-int capteursLineaires(capteursT * capteurs);
+int capteursMiseAJourLongueur(capteursT * capteurs, int largeur, int hauteur);
 
 #endif

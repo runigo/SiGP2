@@ -145,7 +145,7 @@ int controleurInitialise(controleurT * controleur)
 	horlogeCreation(&(*controleur).horloge);
 
 		// Initialisation des capteurs
-	capteursInitialise(&(*controleur).capteurs);
+	capteursInitialise(&(*controleur).capteurs, largeur, hauteur);
 
 	return 0;
 	}
@@ -843,11 +843,11 @@ int controleurCommandes(controleurT * controleur, int zone)
 			case 10: // Arrêt
 				thermostatChangeEtatDroite(&(*controleur).systeme.montage.thermostat, 0);break;
 			case 11:
-				;break;
+				controleurChangeMode(controleur);break;
 			case 12: // 
-				;break;
+				controleurChangeVitesse(controleur, -1.0);break;
 			case 13: // 
-				;break;
+				controleurChangeVitesse(controleur, -10);break;
 			case 14: // 
 				;break;
 			case 15: // 
@@ -997,6 +997,10 @@ int controleurDefileCommandes(controleurT * controleur, int zone)
 					thermostatChangeTemperatureGauche(&(*controleur).systeme.montage.thermostat,1.1);break;
 				case 4:	//	Température à droite
 					thermostatChangeTemperatureDroite(&(*controleur).systeme.montage.thermostat,1.1);break;
+				case 5:	//	Simulation
+					controleurChangeVitesse(controleur, 1.1);break;
+				case 6:	//	Nombre
+					;break;
 				default:
 					;
 				}
@@ -1015,6 +1019,10 @@ int controleurDefileCommandes(controleurT * controleur, int zone)
 					thermostatChangeTemperatureGauche(&(*controleur).systeme.montage.thermostat, 0.91);break;
 				case 4:
 					thermostatChangeTemperatureDroite(&(*controleur).systeme.montage.thermostat, 0.91);break;
+				case 5:	//	Simulation
+					controleurChangeVitesse(controleur, 0.91);break;
+				case 6:	//	Nombre
+					;break;
 				default:
 					;
 				}

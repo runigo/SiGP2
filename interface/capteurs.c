@@ -32,11 +32,8 @@ termes.
 
 #include "capteurs.h"
 
-int capteursInitialise(capteursT * capteurs)
+int capteursInitialise(capteursT * capteurs, int largeur, int hauteur)
 	{
-	(void) capteurs;
-	//(void) largeur;, int largeur, int hauteur
-	//(void) hauteur;
 	int i, j;
 	for(i=0;i<CAPTEURS;i++)
 		{
@@ -44,35 +41,46 @@ int capteursInitialise(capteursT * capteurs)
 		(*capteurs).xZero[i]=0; // Positon de l'origine
 		for(j=0;j<DUREE_CAPTEURS;j++)
 			{
-			//(*capteurs).capteur[j][i].x=14*i+14*j;
-			//(*capteurs).capteur[j][i].y=3*i+3*j;
+			(*capteurs).capteur[j][i].x=largeur;
+			(*capteurs).capteur[j][i].y=hauteur;
 			}
 		}
 	return 0;
 	}
 
-int capteursBoutons(capteursT * capteurs)
+int capteursMiseAJourLongueur(capteursT * capteurs, int largeur, int hauteur)
 	{
-	(void)capteurs;
-/*
-	static SDL_Point point[2048] = {{0}};
-	static int       i = 0;
+	(*capteurs).yZero[0]=(int)(0.797856049*largeur); // Température à gauche
+	(*capteurs).xZero[0]=(int)(0.06822107*hauteur); // 	x
 
-	point[i].x = p.coord2.x;
-	point[i].y = p.coord2.y;
+	(*capteurs).yZero[1]=(int)(0.797856049*largeur); // Température à droite
+	(*capteurs).xZero[1]=(int)(0.06822107*hauteur); // x
 
-	if(++i > 2048)
-		i = 0;
+	(*capteurs).yZero[2]=(int)(0.797856049*largeur); // Nombre à gauche
+	(*capteurs).xZero[2]=(int)(0.255613126*hauteur); // x
 
-	SDL_SetRenderDrawColor(rendu, 0, 0, 255, SDL_ALPHA_OPAQUE);
-	SDL_RenderDrawLines(rendu, point, i);
+	(*capteurs).yZero[3]=(int)(0.797856049*largeur); // Nombre à droite
+	(*capteurs).xZero[3]=(int)(0.255613126*hauteur); // x
+
+	(*capteurs).yZero[4]=(int)(0.797856049*largeur); // l. p. m. à gauche
+	(*capteurs).xZero[4]=(int)(0.45164076*hauteur); // x
+
+	(*capteurs).yZero[5]=(int)(0.797856049*largeur); // l. p. m. à droite
+	(*capteurs).xZero[5]=(int)(0.45164076*hauteur); // x
+
+	(*capteurs).largeur=(int)(0.1849776*largeur); // longueur de l'axe x 164 165 165 / 892
+	(*capteurs).hauteur=(int)(0.1393568*hauteur); // longueur de l'axe y 91 / 653
+
+			//(*capteurs).capteur[j][i].x=(int);
+/*	int i, j;
+	for(i=0;i<CAPTEURS;i++)
+		{
+		for(j=0;j<DUREE_CAPTEURS;j++)
+			{
+			(*capteurs).capteur[j][i].x=(int);
+			}
+		}
 */
-	return -1;
-	}
-
-int capteursRotatifs(capteursT * capteurs)
-	{
-	(void)capteurs;
-	return -1;
+	return 0;
 	}
 
