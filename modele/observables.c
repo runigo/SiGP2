@@ -41,11 +41,12 @@ int observablesMiseAJourTemperature(observablesT * observables, systemeT * syste
 int observablesInitialise(observablesT * observables)
 	{
 	int i, j;
-	for(i=0;i<CAPTEURS;i++)
+	for(j=0;j<CAPTEURS;j++)
 		{
-		for(j=0;j<DUREE_CAPTEURS;j++)
+		for(i=0;i<DUREE_CAPTEURS;i++)
 			{
-			(*observables).observable[j][i]=0;
+			(*observables).observable[j].gauche[i]=0;
+			(*observables).observable[j].droite[i]=0;
 			}
 		}
 
@@ -63,26 +64,17 @@ int observablesMiseAJourAmplitudes(observablesT * observables)
 		{
 		for(i=0;i<DUREE_CAPTEURS;i++)
 			{
-			if((*observables).observable[i][j] > max)
+			if((*observables).observable[j].gauche[i] > max)
 				{
-				max = (*observables).observable[i][j];
+				max = (*observables).observable[j].gauche[i];
+				}
+			if((*observables).observable[j].droite[i] > max)
+				{
+				max = (*observables).observable[j].droite[i];
 				}
 			}
-		(*observables).maximumCapteur[j] = max;
+		(*observables).observable[j].maximumCapteur = max;
 		}
-
-	for(j=0;j<CAPTEURS/2;j++)
-		{
-		if((*observables).maximumCapteur[2*j] > (*observables).maximumCapteur[2*j+1])
-			{
-			(*observables).maximumGrandeur[j]=(*observables).maximumCapteur[2*j];
-			}
-		else
-			{
-			(*observables).maximumGrandeur[j]=(*observables).maximumCapteur[2*j+1];
-			}
-		}
-
 	return 0;
 	}
 
@@ -114,12 +106,12 @@ int observablesAffiche(observablesT * observables)
 	{
 	printf("\nSTATISTIQUES\n");
 
-	printf("	temperature à gauche %f \n", (*observables).observable[(*observables).index][0]);
-	printf("	temperature à droite %f \n\n", (*observables).observable[(*observables).index][1]);
-	printf("	nombre à gauche %f \n", (*observables).observable[(*observables).index][2]);
-	printf("	nombre à droite %f \n\n", (*observables).observable[(*observables).index][3]);
-	printf("	libre parcours moyen à gauche %f \n", (*observables).observable[(*observables).index][4]);
-	printf("	libre parcours moyen à droite %f \n\n", (*observables).observable[(*observables).index][5]);
+	printf("	temperature à gauche %f \n", (*observables).observable[0].gauche[(*observables).index]);
+	printf("	temperature à droite %f \n\n", (*observables).observable[0].droite[(*observables).index]);
+	printf("	nombre à gauche %f \n", (*observables).observable[1].gauche[(*observables).index]);
+	printf("	nombre à droite %f \n\n", (*observables).observable[1].droite[(*observables).index]);
+	printf("	libre parcours moyen à gauche %f \n", (*observables).observable[2].gauche[(*observables).index]);
+	printf("	libre parcours moyen à droite %f \n\n", (*observables).observable[2].droite[(*observables).index]);
 	return 0;
 	}
 
@@ -141,8 +133,8 @@ int observablesMiseAJourNombre(observablesT * observables, systemeT * systeme)
 			}
 		}
 
-	(*observables).observable[(*observables).index][2]=nbGauche;
-	(*observables).observable[(*observables).index][3]=nbDroite;
+	(*observables).observable[1].gauche[(*observables).index]=nbGauche;
+	(*observables).observable[1].droite[(*observables).index]=nbDroite;
 
 	return 0;
 	}
@@ -165,22 +157,22 @@ int observablesMiseAJourTemperature(observablesT * observables, systemeT * syste
 			}
 		}
 
-	if((*observables).observable[(*observables).index][2]!=0.0)
+	if((*observables).observable[1].gauche[(*observables).index]!=0.0)
 		{
-		(*observables).observable[(*observables).index][0]=ecGauche/(*observables).observable[(*observables).index][2];
+		(*observables).observable[0].gauche[(*observables).index]=ecGauche/(*observables).observable[1].gauche[(*observables).index];
 		}
 	else
 		{
-		(*observables).observable[(*observables).index][0]=ecGauche;
+		(*observables).observable[0].gauche[(*observables).index]=ecGauche;
 		}
 
-	if((*observables).observable[(*observables).index][3]!=0.0)
+	if((*observables).observable[1].droite[(*observables).index]!=0.0)
 		{
-		(*observables).observable[(*observables).index][1]=ecDroite/(*observables).observable[(*observables).index][3];
+		(*observables).observable[0].droite[(*observables).index]=ecDroite/(*observables).observable[1].droite[(*observables).index];
 		}
 	else
 		{
-		(*observables).observable[(*observables).index][1]=ecDroite;
+		(*observables).observable[0].droite[(*observables).index]=ecDroite;
 		}
 
 	return 0;
@@ -204,22 +196,22 @@ int observablesMiseAJourLibreParcoursMoyen(observablesT * observables, systemeT 
 			}
 		}
 
-	if((*observables).observable[(*observables).index][2]!=0.0)
+	if((*observables).observable[1].gauche[(*observables).index]!=0.0)
 		{
-		(*observables).observable[(*observables).index][4]=lpmGauche/(*observables).observable[(*observables).index][2];
+		(*observables).observable[2].gauche[(*observables).index]=lpmGauche/(*observables).observable[1].gauche[(*observables).index];
 		}
 	else
 		{
-		(*observables).observable[(*observables).index][0]=lpmGauche;
+		(*observables).observable[2].gauche[(*observables).index]=lpmGauche;
 		}
 
-	if((*observables).observable[(*observables).index][3]!=0.0)
+	if((*observables).observable[1].droite[(*observables).index]!=0.0)
 		{
-		(*observables).observable[(*observables).index][5]=lpmDroite/(*observables).observable[(*observables).index][3];
+		(*observables).observable[2].droite[(*observables).index]=lpmDroite/(*observables).observable[1].droite[(*observables).index];
 		}
 	else
 		{
-		(*observables).observable[(*observables).index][5]=lpmDroite;
+		(*observables).observable[2].droite[(*observables).index]=lpmDroite;
 		}
 
 	return 0;

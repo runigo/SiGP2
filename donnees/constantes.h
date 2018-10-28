@@ -67,8 +67,8 @@ termes.
 #define LINEAIRE_COMMANDES 3 // Nombres de commandes linéaires
 #define TRIANGLE_COMMANDES 12 // Nombres de commandes triangulaires
 
-#define CAPTEURS 6 // Nombres de capteurs
-#define DUREE_CAPTEURS 100 // Nombre de points en mémoire
+#define CAPTEURS 3 // Nombres de capteurs
+#define DUREE_CAPTEURS 20 // Nombre de points en mémoire
 
 #define MARGE 17 // Marge fenêtre-montage
 

@@ -280,7 +280,7 @@ int controleurConstructionGraphique(controleurT * controleur)
 	graphiqueDessineGraphe(&(*controleur).graphique, &(*controleur).graphe);
 
 		//fprintf(stderr, "Dessin des capteurs\n");
-	//graphiqueCapteurs(&(*controleur).graphique, &(*controleur).capteurs);
+	graphiqueCapteurs(&(*controleur).graphique, &(*controleur).capteurs);
 
 		//fprintf(stderr, "Mise à jour de l'affichage\n");
 	graphiqueMiseAJour(&(*controleur).graphique);

@@ -36,16 +36,24 @@ termes.
 #include "../donnees/constantes.h"
 #include <SDL2/SDL.h>
 
-typedef struct CapteursT capteursT;
-	struct CapteursT
+typedef struct CapteurT capteurT;
+	struct CapteurT
 		{
-		SDL_Point capteur[DUREE_CAPTEURS][CAPTEURS];
+		SDL_Point gauche[DUREE_CAPTEURS];
+		SDL_Point droite[DUREE_CAPTEURS];
+		//SDL_Point moyenne[DUREE_CAPTEURS];
 
-		int yZero[CAPTEURS]; // Positon de l'origine
-		int xZero[CAPTEURS]; // Positon de l'origine
+		int yZero; // Positon de l'origine
+		int xZero; // Positon de l'origine
 
 		int largeur; // axe x
 		int hauteur; // axe y
+		};
+
+typedef struct CapteursT capteursT;
+	struct CapteursT
+		{
+		capteurT capteur[CAPTEURS];
 		};
 
 int capteursInitialise(capteursT * capteurs, int largeur, int hauteur);

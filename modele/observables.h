@@ -37,12 +37,18 @@ termes.
 
 #include "systeme.h"
 
+typedef struct ObservableT observableT;
+	struct ObservableT
+		{
+		float gauche[DUREE_CAPTEURS];
+		float droite[DUREE_CAPTEURS];
+		float maximumCapteur;
+		};
+
 typedef struct ObservablesT observablesT;
 	struct ObservablesT
 		{
-		float observable[DUREE_CAPTEURS][CAPTEURS];
-		float maximumCapteur[CAPTEURS];
-		float maximumGrandeur[CAPTEURS/2];
+		observableT observable[CAPTEURS];
 		int index; // instant présent
 		};
 
