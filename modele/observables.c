@@ -1,7 +1,7 @@
 /*
 Copyright octobre 2018, Stephan Runigo
 runigo@free.fr
-SiGP 2.2  simulateur de gaz parfait
+SiGP 2.2.1  simulateur de gaz parfait
 Ce logiciel est un programme informatique servant à simuler un gaz parfait
 et à en donner une représentation graphique. Il permet d'observer une détente
 de Joule ainsi que des transferts thermiques avec des thermostats.
@@ -57,11 +57,13 @@ int observablesInitialise(observablesT * observables)
 
 int observablesMiseAJourAmplitudes(observablesT * observables)
 	{
+				// Calcul le maximum de chaque capteur
 	int i, j;
-	float max = 0.0;
+	float max;
 
 	for(j=0;j<CAPTEURS;j++)
 		{
+		max = 0.0;
 		for(i=0;i<DUREE_CAPTEURS;i++)
 			{
 			if((*observables).observable[j].gauche[i] > max)
@@ -80,16 +82,16 @@ int observablesMiseAJourAmplitudes(observablesT * observables)
 
 
 int observablesMiseAJour(observablesT * observables, systemeT * systeme)
-	{		// Mise à jour des observables
+	{
+						// Évolution de l'index
 
-		// Évolution de l'index
 	(*observables).index ++;
-	//fprintf(stderr, "(*observables).index = %d\n", (*observables).index);
-
 	if((*observables).index==DUREE_CAPTEURS)
 		{
 		(*observables).index=0;
 		}
+
+						// Mise à jour des observables
 
 	observablesMiseAJourNombre(observables,systeme);
 
@@ -102,21 +104,9 @@ int observablesMiseAJour(observablesT * observables, systemeT * systeme)
 	return 0;
 	}
 
-int observablesAffiche(observablesT * observables)
-	{
-	printf("\nSTATISTIQUES\n");
-
-	printf("	temperature à gauche %f \n", (*observables).observable[0].gauche[(*observables).index]);
-	printf("	temperature à droite %f \n\n", (*observables).observable[0].droite[(*observables).index]);
-	printf("	nombre à gauche %f \n", (*observables).observable[1].gauche[(*observables).index]);
-	printf("	nombre à droite %f \n\n", (*observables).observable[1].droite[(*observables).index]);
-	printf("	libre parcours moyen à gauche %f \n", (*observables).observable[2].gauche[(*observables).index]);
-	printf("	libre parcours moyen à droite %f \n\n", (*observables).observable[2].droite[(*observables).index]);
-	return 0;
-	}
-
 int observablesMiseAJourNombre(observablesT * observables, systemeT * systeme)
 	{
+						// Calcul du nombre de particules à gauche et à droite
 	int i;
 	int nbGauche=0;
 	int nbDroite=0;
@@ -141,6 +131,7 @@ int observablesMiseAJourNombre(observablesT * observables, systemeT * systeme)
 
 int observablesMiseAJourTemperature(observablesT * observables, systemeT * systeme)
 	{
+						// Calcul de la température à gauche et à droite
 	int i;
 	double ecGauche=0.0;
 	double ecDroite=0.0;
@@ -180,6 +171,7 @@ int observablesMiseAJourTemperature(observablesT * observables, systemeT * syste
 
 int observablesMiseAJourLibreParcoursMoyen(observablesT * observables, systemeT * systeme)
 	{
+						// Calcul du libre parcours moyen à gauche et à droite
 	int i;
 	double lpmGauche=0.0;
 	double lpmDroite=0.0;
@@ -216,20 +208,17 @@ int observablesMiseAJourLibreParcoursMoyen(observablesT * observables, systemeT 
 
 	return 0;
 	}
-/*
-double observableEcartCinetique(systemeT * systeme)
+
+int observablesAffiche(observablesT * observables)
 	{
-	int i;
-	double moyenne, ecp, ecart;
-	ecart=0.0;
-	moyenne=observablesEnergieCinetique(systeme)/NOMBRE;
-	for(i=0;i<NOMBRE;i++)
-		{
-		ecp=((*systeme).mobile[i].ec)-moyenne;
-		ecp=ecp*ecp;
-		ecart=ecart+ecp;
-		}
-	ecart=sqrt(ecart);
-	return ecart;
+	printf("\nSTATISTIQUES\n");
+
+	printf("	temperature à gauche %f \n", (*observables).observable[0].gauche[(*observables).index]);
+	printf("	temperature à droite %f \n\n", (*observables).observable[0].droite[(*observables).index]);
+	printf("	nombre à gauche %f \n", (*observables).observable[1].gauche[(*observables).index]);
+	printf("	nombre à droite %f \n\n", (*observables).observable[1].droite[(*observables).index]);
+	printf("	libre parcours moyen à gauche %f \n", (*observables).observable[2].gauche[(*observables).index]);
+	printf("	libre parcours moyen à droite %f \n\n", (*observables).observable[2].droite[(*observables).index]);
+	return 0;
 	}
-*/
+

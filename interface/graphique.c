@@ -1,7 +1,7 @@
 /*
 Copyright octobre 2018, Stephan Runigo
 runigo@free.fr
-SiGP 2.2  simulateur de gaz parfait
+SiGP 2.2.1  simulateur de gaz parfait
 Ce logiciel est un programme informatique servant à simuler un gaz et à
 en donner une représentation graphique. Il permet d'observer une détente
 de Joule ainsi que des transferts thermiques avec des thermostats.
@@ -41,6 +41,7 @@ int graphiqueDestruction(graphiqueT * graphique)
 
 int graphiqueCreation(graphiqueT * graphique, interfaceT * interface)
 	{
+
 	int largeur;
 	int hauteur;
 	SDL_GetWindowSize((*interface).fenetre, &largeur, &hauteur);
@@ -56,32 +57,33 @@ int graphiqueCreation(graphiqueT * graphique, interfaceT * interface)
 		return EXIT_FAILURE;
 		}
 
-	int fond = 255;
-	//SDL_Color orange = {255, 127, 40, 255};
-	(*graphique).fond.r = fond;
-	(*graphique).fond.g = fond;
-	(*graphique).fond.b = fond;
-	(*graphique).fond.a = 255;
-	(*graphique).contraste.r = 255-fond;
-	(*graphique).contraste.g = 255-fond;
-	(*graphique).contraste.b = 255-fond;
-	(*graphique).contraste.a = 255;
-	(*graphique).orange.r = 255;
-	(*graphique).orange.g = 127;
-	(*graphique).orange.b = 40;
-	(*graphique).orange.a = 255;
-	(*graphique).gris.r = 127;
-	(*graphique).gris.g = 127;
-	(*graphique).gris.b = 127;
-	(*graphique).gris.a = 255;
-	(*graphique).cyan.r = 127;
-	(*graphique).cyan.g = 40;
-	(*graphique).cyan.b = 255;
-	(*graphique).cyan.a = 255;
-	(*graphique).vert.r = 173;
-	(*graphique).vert.g = 255;
-	(*graphique).vert.b = 47;
-	(*graphique).vert.a = 255;
+	(*graphique).orange.r = 255; (*graphique).orange.g = 127; (*graphique).orange.b = 40; (*graphique).orange.a = 255;
+	(*graphique).orangeF.r = 198; (*graphique).orangeF.g = 8; (*graphique).orangeF.b = 0; (*graphique).orangeF.a = 255;
+
+	(*graphique).gris.r = 127; (*graphique).gris.g = 127; (*graphique).gris.b = 127; (*graphique).gris.a = 255;
+	(*graphique).grisF.r = 27; (*graphique).grisF.g = 27; (*graphique).grisF.b = 27; (*graphique).grisF.a = 255;
+
+	(*graphique).cyan.r = 127; (*graphique).cyan.g = 40; (*graphique).cyan.b = 255; (*graphique).cyan.a = 255;
+
+	(*graphique).vert.r = 173; (*graphique).vert.g = 255; (*graphique).vert.b = 47; (*graphique).vert.a = 255;
+	(*graphique).vertF.r = 0; (*graphique).vertF.g = 86; (*graphique).vertF.b = 27; (*graphique).vertF.a = 255;
+	//(*graphique).vertF.r = 27; (*graphique).vertF.g = 79; (*graphique).vertF.b = 8;
+
+	(*graphique).aubergine.r = 55; (*graphique).aubergine.g = 0; (*graphique).aubergine.b = 40; (*graphique).aubergine.a = 255;
+
+		//(253, 63, 146) Fuschia
+		//(255, 0, 255) Magenta
+	(*graphique).gauche.r = 253;
+	(*graphique).gauche.g = 63;
+	(*graphique).gauche.b = 146;
+	(*graphique).gauche.a = 255;
+
+		//(52, 201, 36) Pomme
+	(*graphique).droite.r = 52;
+	(*graphique).droite.g = 201;
+	(*graphique).droite.b = 36;
+	(*graphique).droite.a = 255;
+
 
 	int retour = 0;
 
@@ -211,70 +213,48 @@ int graphiqueChangeCouleur(graphiqueT * graphique, SDL_Color couleur)
 
 int graphiqueCapteurs(graphiqueT * graphique, capteursT * capteurs)
 	{
-/*
-	static SDL_Point point[2048] = {{0}};
-	static int       i = 0;
 
-	point[i].x = p.coord2.x;
-	point[i].y = p.coord2.y;
+	graphiqueChangeCouleur(graphique, (*graphique).gauche);
 
-	if(++i > 2048)
-		i = 0;
-*/
-
-	graphiqueChangeCouleur(graphique, (*graphique).orange);
 	SDL_RenderDrawLines((*graphique).rendu, (*capteurs).capteur[0].gauche, DUREE_CAPTEURS);
 	SDL_RenderDrawLines((*graphique).rendu, (*capteurs).capteur[1].gauche, DUREE_CAPTEURS);
 	SDL_RenderDrawLines((*graphique).rendu, (*capteurs).capteur[2].gauche, DUREE_CAPTEURS);
 
-	graphiqueChangeCouleur(graphique, (*graphique).vert);
+	graphiqueChangeCouleur(graphique, (*graphique).droite);
+
 	SDL_RenderDrawLines((*graphique).rendu, (*capteurs).capteur[0].droite, DUREE_CAPTEURS);
 	SDL_RenderDrawLines((*graphique).rendu, (*capteurs).capteur[1].droite, DUREE_CAPTEURS);
 	SDL_RenderDrawLines((*graphique).rendu, (*capteurs).capteur[2].droite, DUREE_CAPTEURS);
 
-/*
-	graphiqueChangeCouleur(graphique, (*graphique).cyan);
-	graphiqueChangeCouleur(graphique, (*graphique).gris);
-	graphiqueChangeCouleur(graphique, (*graphique).contraste);
-	graphiqueChangeCouleur(graphique, (*graphique).contraste);
-	int i, j;
-	for(i=0;i<CAPTEURS;i++)
-		{
-		(*capteurs).yZero[i]=0; // Positon de l'origine
-		(*capteurs).xZero[i]=0; // Positon de l'origine
-		for(j=0;j<DUREE_CAPTEURS;j++)
-			{
-			(*capteurs).capteur[j][i].x=0;
-			}
-		}
-*/
 	return 0;
 	}
 
 int graphiqueCommandes(graphiqueT * graphique, commandesT * commandes)
 	{
-		// Dessine le fond et les commandes sélectionées
+		// Image de fond
 	SDL_Rect coordonnee = {0, 0, (*graphique).largeur, (*graphique).hauteur};
 	SDL_RenderCopy((*graphique).rendu, (*graphique).SiGP, NULL, &coordonnee);
 	
+		// Commandes sélectionées
 	int centrage = 5;
 	coordonnee.w=10;
 	coordonnee.h=10;
-	coordonnee.x = (*commandes).boutonsCentre - centrage;	// Positon X de la zone des petits boutons
 	int i;
 	int X, Y, x, y;
-			
+
+	coordonnee.x = (*commandes).boutonsCentre - centrage;
 	for(i=0;i<BOUTON_COMMANDES;i++)
 		{
 		if((*commandes).boutonEtat[i]==1)
 			{
-			coordonnee.y = (*commandes).boutonCentre[i] - centrage; // Positon Y des petits boutons
-			//	Dessin des petits boutons
+			coordonnee.y = (*commandes).boutonCentre[i] - centrage;
 			SDL_RenderCopy((*graphique).rendu, (*graphique).particule, NULL, &coordonnee);
 			}
 		}
 
+		// Position des boutons rotatifs
 	graphiqueChangeCouleur(graphique, (*graphique).orange);
+
 	X=(*commandes).rotatifsCentre;
 	for(i=0;i<ROTATIF_COMMANDES;i++)
 		{
@@ -337,7 +317,7 @@ void graphiqueDessineGraphe(graphiqueT * graphique, grapheT * graphe)
 		}
 
 		//fprintf(stderr, "Dessin du montage\n");
-	graphiqueChangeCouleur(graphique, (*graphique).contraste);
+	graphiqueChangeCouleur(graphique, (*graphique).grisF);
 
 	for(i=0;i<TRAIT_ENCEINTE;i++)
 		{

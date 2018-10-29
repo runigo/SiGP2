@@ -1,7 +1,7 @@
 /*
 Copyright octobre 2018, Stephan Runigo
 runigo@free.fr
-SiGP 2.1.2  simulateur de gaz parfait
+SiGP 2.2.1  simulateur de gaz parfait
 Ce logiciel est un programme informatique servant à simuler un gaz et à
 en donner une représentation graphique. Il permet d'observer une détente
 de Joule ainsi que des transferts thermiques avec des thermostats.
@@ -43,13 +43,21 @@ struct GraphiqueT {
 
 	SDL_Renderer *rendu;
 
-	SDL_Color fond;
-	SDL_Color contraste;
 	SDL_Color orange;
-	SDL_Color gris;
-	SDL_Color cyan;
+	SDL_Color orangeF;
+
 	SDL_Color vert;
-  
+	SDL_Color vertF;
+
+	SDL_Color gris;
+	SDL_Color grisF;
+
+	SDL_Color cyan;
+	SDL_Color aubergine;
+
+	SDL_Color gauche;
+	SDL_Color droite;
+
 	SDL_Texture *particule;
 
 	SDL_Texture *lumiereVerte;
