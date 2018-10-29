@@ -213,18 +213,47 @@ int graphiqueChangeCouleur(graphiqueT * graphique, SDL_Color couleur)
 
 int graphiqueCapteurs(graphiqueT * graphique, capteursT * capteurs)
 	{
+	int i, j;
 
+		// Grandeurs à gauche
 	graphiqueChangeCouleur(graphique, (*graphique).gauche);
 
 	SDL_RenderDrawLines((*graphique).rendu, (*capteurs).capteur[0].gauche, DUREE_CAPTEURS);
 	SDL_RenderDrawLines((*graphique).rendu, (*capteurs).capteur[1].gauche, DUREE_CAPTEURS);
 	SDL_RenderDrawLines((*graphique).rendu, (*capteurs).capteur[2].gauche, DUREE_CAPTEURS);
 
+		// Grandeurs à droite
 	graphiqueChangeCouleur(graphique, (*graphique).droite);
 
 	SDL_RenderDrawLines((*graphique).rendu, (*capteurs).capteur[0].droite, DUREE_CAPTEURS);
 	SDL_RenderDrawLines((*graphique).rendu, (*capteurs).capteur[1].droite, DUREE_CAPTEURS);
 	SDL_RenderDrawLines((*graphique).rendu, (*capteurs).capteur[2].droite, DUREE_CAPTEURS);
+
+
+		// Epaississement du trait
+	for(j=0;j<CAPTEURS;j++)
+		{
+		for(i=0;i<DUREE_CAPTEURS;i++)
+			{
+			(*capteurs).capteur[j].droite[i].y = (*capteurs).capteur[j].droite[i].y + 1;
+			}
+		}
+	SDL_RenderDrawLines((*graphique).rendu, (*capteurs).capteur[0].droite, DUREE_CAPTEURS);
+	SDL_RenderDrawLines((*graphique).rendu, (*capteurs).capteur[1].droite, DUREE_CAPTEURS);
+	SDL_RenderDrawLines((*graphique).rendu, (*capteurs).capteur[2].droite, DUREE_CAPTEURS);
+
+	graphiqueChangeCouleur(graphique, (*graphique).gauche);
+	for(j=0;j<CAPTEURS;j++)
+		{
+		for(i=0;i<DUREE_CAPTEURS;i++)
+			{
+			(*capteurs).capteur[j].gauche[i].y = (*capteurs).capteur[j].gauche[i].y + 1;
+			}
+		}
+	SDL_RenderDrawLines((*graphique).rendu, (*capteurs).capteur[0].gauche, DUREE_CAPTEURS);
+	SDL_RenderDrawLines((*graphique).rendu, (*capteurs).capteur[1].gauche, DUREE_CAPTEURS);
+	SDL_RenderDrawLines((*graphique).rendu, (*capteurs).capteur[2].gauche, DUREE_CAPTEURS);
+
 
 	return 0;
 	}
@@ -317,15 +346,32 @@ void graphiqueDessineGraphe(graphiqueT * graphique, grapheT * graphe)
 		}
 
 		//fprintf(stderr, "Dessin du montage\n");
-	graphiqueChangeCouleur(graphique, (*graphique).grisF);
-
-	for(i=0;i<TRAIT_ENCEINTE;i++)
-		{
 			// Parois horizontales
-		SDL_RenderDrawLine((*graphique).rendu, (*graphe).ax-i, (*graphe).dy-i, (*graphe).cx+i, (*graphe).dy-i);
-		SDL_RenderDrawLine((*graphique).rendu, (*graphe).ax-i, (*graphe).gy+i, (*graphe).cx+i, (*graphe).gy+i);
+	graphiqueChangeCouleur(graphique, (*graphique).gauche);
+	if(TRAIT_ENCEINTE>2)
+		{
+		for(i=0;i<TRAIT_ENCEINTE;i++)
+			{
+			SDL_RenderDrawLine((*graphique).rendu, (*graphe).ax-i, (*graphe).dy-i, (*graphe).bx, (*graphe).dy-i);
+			SDL_RenderDrawLine((*graphique).rendu, (*graphe).ax-i, (*graphe).gy+i, (*graphe).bx, (*graphe).gy+i);
+			}
+		graphiqueChangeCouleur(graphique, (*graphique).droite);
+		for(i=0;i<TRAIT_ENCEINTE;i++)
+			{
+			SDL_RenderDrawLine((*graphique).rendu, (*graphe).bx, (*graphe).dy-i, (*graphe).cx+i, (*graphe).dy-i);
+			SDL_RenderDrawLine((*graphique).rendu, (*graphe).bx, (*graphe).gy+i, (*graphe).cx+i, (*graphe).gy+i);
+			}
+		}
+	graphiqueChangeCouleur(graphique, (*graphique).grisF);
+	SDL_RenderDrawLine((*graphique).rendu, (*graphe).ax, (*graphe).dy, (*graphe).cx, (*graphe).dy);
+	SDL_RenderDrawLine((*graphique).rendu, (*graphe).ax, (*graphe).gy, (*graphe).cx, (*graphe).gy);
+	SDL_RenderDrawLine((*graphique).rendu, (*graphe).ax-TRAIT_ENCEINTE+1, (*graphe).dy-TRAIT_ENCEINTE+1, (*graphe).cx+TRAIT_ENCEINTE-1, (*graphe).dy-TRAIT_ENCEINTE+1);
+	SDL_RenderDrawLine((*graphique).rendu, (*graphe).ax-TRAIT_ENCEINTE+1, (*graphe).gy+TRAIT_ENCEINTE-1, (*graphe).cx+TRAIT_ENCEINTE-1, (*graphe).gy+TRAIT_ENCEINTE-1);
 
 			// Parois verticales
+	graphiqueChangeCouleur(graphique, (*graphique).grisF);
+	for(i=0;i<TRAIT_ENCEINTE;i++)
+		{
 		SDL_RenderDrawLine((*graphique).rendu, (*graphe).ax-i, (*graphe).dy-i, (*graphe).ax-i, (*graphe).gy+i);
 		SDL_RenderDrawLine((*graphique).rendu, (*graphe).cx+i, (*graphe).dy-i, (*graphe).cx+i, (*graphe).gy+i);
 		}

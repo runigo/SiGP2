@@ -1,7 +1,7 @@
 /*
 Copyright octobre 2018, Stephan Runigo
 runigo@free.fr
-SiGP 2.1.3  simulateur de gaz parfait
+SiGP 2.2.1  simulateur de gaz parfait
 Ce logiciel est un programme informatique servant à simuler un gaz et à
 en donner une représentation graphique. Il permet d'observer une détente
 de Joule ainsi que des transferts thermiques avec des thermostats.
@@ -58,8 +58,8 @@ int commandesInitialiseBoutons(commandesT * commandes, int largeur, int hauteur)
 		 // Zone des petits boutons
 	(*commandes).boutons=(int)(0.943005*largeur); // 1092 / 1158
 		// PETITS BOUTONS SUIVANT X
-	(*commandes).boutonX=(int)(0.01*largeur); // Rayon suivant X // 12 / 1158
-	(*commandes).boutonsCentre=(int)(0.96373*largeur); // 1116 // Positon X des petits boutons
+	(*commandes).boutonX=(int)(0.013*largeur); // Rayon suivant X
+	(*commandes).boutonsCentre=(int)(0.96373*largeur); // Positon X des petits boutons
 		// PETITS BOUTONS SUIVANT Y
 	(*commandes).boutonY=(int)(0.015*largeur); // Rayon suivant Y // 10 / 667
 
@@ -77,9 +77,9 @@ int commandesInitialiseBoutons(commandesT * commandes, int largeur, int hauteur)
 	(*commandes).boutonCentre[9]=(int)(0.626339969*hauteur); // 481	Marche
 	(*commandes).boutonCentre[10]=(int)(0.667687596*hauteur); // 516	Arrêt
 
-	(*commandes).boutonCentre[11]=(int)(0.52526799*hauteur); // 395	Pause
-	(*commandes).boutonCentre[12]=(int)(0.626339969*hauteur); // 481	Min
-	(*commandes).boutonCentre[13]=(int)(0.667687596*hauteur); // 516	Max
+	(*commandes).boutonCentre[11]=(int)(0.7611026*hauteur); //		Pause
+	(*commandes).boutonCentre[12]=(int)(0.79938744*hauteur); //	Min
+	(*commandes).boutonCentre[13]=(int)(0.84226646*hauteur); //	Max
 
 	//	PANNEAU BAS
 
@@ -128,14 +128,13 @@ int commandesInitialiseBoutons(commandesT * commandes, int largeur, int hauteur)
 
 int commandesInitialiseSouris(commandesT * commandes, int sourisX, int sourisY)
 	{
-		// POSITION DE LA SOURIS
+		// Position de la souris
 	(*commandes).sourisX = sourisX; // position X de la souris
 	(*commandes).sourisY = sourisY; // position Y de la souris
-		 // Rayon des petits boutons
+
+		 // Rayon d'action de la souris
 	int rayonX=(*commandes).boutonX;
 	int rayonY=(*commandes).boutonY;
-
-		 
 	if(sourisX>(*commandes).rotatifs)
 		{
 		if(sourisX<(*commandes).boutons)// Zone des boutons rotatifs
@@ -152,15 +151,13 @@ int commandesInitialiseSouris(commandesT * commandes, int sourisX, int sourisY)
 			rayonY=(*commandes).triangleY;
 			}
 		}
-		//fprintf(stderr, "%d %d\n", sourisX, sourisY);
 
+		// Zone d'action de la souris
 	(*commandes).sourisGauche = sourisX-rayonX; // position X de la souris - RayonBoutonX
 	(*commandes).sourisDroite = sourisX+rayonX; // position X de la souris + RayonBoutonX
 	(*commandes).sourisHaut = sourisY-rayonY; // position Y de la souris - RayonBoutonY
 	(*commandes).sourisBas = sourisY+rayonY; // position Y de la souris + RayonBoutonY
 
-		//fprintf(stderr, "Commandes : %d %d\n", (*commandes).sourisX, (*commandes).sourisY);
-		//fprintf(stderr, "Commandes : %d %d\n", sourisX, sourisY);
 	return 0;
 	}
 

@@ -1,7 +1,7 @@
 /*
 Copyright octobre 2018, Stephan Runigo
 runigo@free.fr
-SiGP 2.2  simulateur de gaz parfait
+SiGP 2.2.1  simulateur de gaz parfait
 Ce logiciel est un programme informatique servant à simuler un gaz et à
 en donner une représentation graphique. Il permet d'observer une détente
 de Joule ainsi que des transferts thermiques avec des thermostats.
@@ -32,6 +32,12 @@ termes.
 
 #include "projection.h"
 
+float projectionAbsolue(float valeur)
+	{
+	if(valeur<0) return -valeur;
+	return valeur;
+	}
+
 int projectionInitialise(projectionT * projection)
 	{
 	(*projection).logTrou = 1.0 / log( (HAUTEUR/2) );
@@ -40,22 +46,6 @@ int projectionInitialise(projectionT * projection)
 	(*projection).logGauche = 1.0 / log( TEMPERATURE_MAX/TEMPERATURE_MIN );
 	(*projection).logDroite = 1.0 / log( TEMPERATURE_MAX/TEMPERATURE_MIN );
 	return 0;
-	}
-
-int projectionAffiche(projectionT * projection)
-	{
-	fprintf(stderr, "  (*projection).logTrou   = %f\n",(*projection).logTrou);
-	fprintf(stderr, "   (*projection).logParticule  = %f\n",(*projection).logParticule);
-	fprintf(stderr, "  (*projection).logTemperature   = %f\n",(*projection).logTemperature);
-	fprintf(stderr, "  (*projection).logGauche   = %f\n",(*projection).logGauche);
-	fprintf(stderr, "  (*projection).logDroite   = %f\n",(*projection).logDroite);
-	return 0;
-	}
-
-float projectionAbsolue(float valeur)
-	{
-	if(valeur<0) return -valeur;
-	return valeur;
 	}
 
 int projectionSystemeCommandes(systemeT * systeme, projectionT * projection, commandesT * commandes, int duree, int mode)
@@ -155,6 +145,11 @@ int projectionSystemeCommandes(systemeT * systeme, projectionT * projection, com
 			;
 		}
 
+	(*commandes).boutonEtat[11]=1;
+	if(mode<0)	(*commandes).boutonEtat[11]=0;
+	if(duree==DUREE_MIN)	(*commandes).boutonEtat[12]=1;
+	if(duree==DUREE_MAX)	(*commandes).boutonEtat[13]=1;
+
 		// Remise à zéro des boutons triangulaire
 	for(i=0;i<TRIANGLE_COMMANDES;i++) (*commandes).triangleEtat[i]=0;
 
@@ -214,8 +209,7 @@ void projectionSystemeGraphe(systemeT * systeme, projectionT * projection, graph
 	(*graphe).thermostat = (*systeme).montage.thermostat.actif;	// O, 1 ou 2.
 
 	(*graphe).taille = 1.9*((*systeme).diametre+1); // Diametre des particules
-	if((*graphe).taille < 1)
-		{(*graphe).taille = 1;}
+	if((*graphe).taille < 1) { (*graphe).taille = 1; }
 
 				// Projection des particules
 	int i;
@@ -244,6 +238,16 @@ void projectionSystemeGraphe(systemeT * systeme, projectionT * projection, graph
 			}
 		}
 	return;
+	}
+
+int projectionAffiche(projectionT * projection)
+	{
+	fprintf(stderr, "  (*projection).logTrou   = %f\n",(*projection).logTrou);
+	fprintf(stderr, "   (*projection).logParticule  = %f\n",(*projection).logParticule);
+	fprintf(stderr, "  (*projection).logTemperature   = %f\n",(*projection).logTemperature);
+	fprintf(stderr, "  (*projection).logGauche   = %f\n",(*projection).logGauche);
+	fprintf(stderr, "  (*projection).logDroite   = %f\n",(*projection).logDroite);
+	return 0;
 	}
 
 //////////////////////////////////////////////////////////////////////////////

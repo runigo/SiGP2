@@ -1,7 +1,7 @@
 /*
 Copyright octobre 2018, Stephan Runigo
 runigo@free.fr
-SiGP 2.2  simulateur de gaz parfait
+SiGP 2.2.1  simulateur de gaz parfait
 Ce logiciel est un programme informatique servant à simuler un gaz et à
 en donner une représentation graphique. Il permet d'observer une détente
 de Joule ainsi que des transferts thermiques avec des thermostats.
@@ -46,18 +46,12 @@ typedef struct ProjectionT projectionT;
 		float logTemperature;
 		float logGauche;
 		float logDroite;
-/*
-		int hauteur;
-		int largeur;
-*/
 		};
 
 
 
 int projectionInitialise(projectionT * projection);
 int projectionAffiche(projectionT * projection);
-
-//int projectionInitialiseLongueurs(projectionT * projection, int largeur, int hauteur);
 
 int projectionObservablesCapteurs(observablesT * observables, projectionT * projection, capteursT * capteurs);
 int projectionSystemeCommandes(systemeT * systeme, projectionT * projection, commandesT * commandes, int duree, int mode);
