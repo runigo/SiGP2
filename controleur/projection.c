@@ -187,7 +187,7 @@ int projectionObservablesCapteurs(observablesT * observables, projectionT * proj
 	{
 	(void)projection;
 	float a;
-	int i, j, y0;
+	int i, j, k, y0;
 
 	for(j=0;j<CAPTEURS;j++)
 		{
@@ -195,8 +195,9 @@ int projectionObservablesCapteurs(observablesT * observables, projectionT * proj
 		y0 = (*capteurs).capteur[j].yZero;
 		for(i=0;i<DUREE_CAPTEURS;i++)
 			{
-			(*capteurs).capteur[j].gauche[i].y = (int)(a*(*observables).observable[j].gauche[i]) + y0;
-			(*capteurs).capteur[j].droite[i].y = (int)(a*(*observables).observable[j].droite[i]) + y0;
+			k=(i+(*observables).index+1)%DUREE_CAPTEURS;
+			(*capteurs).capteur[j].gauche[i].y = (int)(a*(*observables).observable[j].gauche[k]) + y0;
+			(*capteurs).capteur[j].droite[i].y = (int)(a*(*observables).observable[j].droite[k]) + y0;
 			}
 		}
 

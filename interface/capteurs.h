@@ -56,7 +56,7 @@ typedef struct CapteursT capteursT;
 		capteurT capteur[CAPTEURS];
 		};
 
-int capteursInitialise(capteursT * capteurs, int largeur, int hauteur);
+int capteursInitialise(capteursT * capteurs);
 
 int capteursMiseAJourLongueur(capteursT * capteurs, int largeur, int hauteur);
 

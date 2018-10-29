@@ -108,9 +108,11 @@ int controleurInitialise(controleurT * controleur)
 		// Initialisation des observables
 	observablesInitialise(&(*controleur).observables);
 
-
 		// Initialisation du graphe
 	grapheInitialise(&(*controleur).graphe);
+
+		// Initialisation des capteurs
+	capteursInitialise(&(*controleur).capteurs);
 
 		//fprintf(stderr, " Initialisation SDL\n");
 	interfaceInitialisationSDL();
@@ -126,6 +128,8 @@ int controleurInitialise(controleurT * controleur)
 	(*controleur).graphique.largeur=largeur;
 	(*controleur).graphique.hauteur=hauteur;
 
+	capteursMiseAJourLongueur(&(*controleur).capteurs, largeur, hauteur);
+
 	commandesInitialiseBoutons(&(*controleur).commandes, largeur, hauteur);
 
 	grapheMiseAJourLongueur(&(*controleur).graphe, largeur, hauteur);
@@ -140,9 +144,6 @@ int controleurInitialise(controleurT * controleur)
 
 		fprintf(stderr, " Initialisation horloge SDL\n");
 	horlogeCreation(&(*controleur).horloge);
-
-		// Initialisation des capteurs
-	capteursInitialise(&(*controleur).capteurs, largeur, hauteur);
 
 	return 0;
 	}
@@ -233,7 +234,7 @@ int controleurProjection(controleurT * controleur)
 		(*controleur).graphique.largeur=largeur;
 		(*controleur).graphique.hauteur=hauteur;
 		commandesInitialiseBoutons(&(*controleur).commandes, largeur, hauteur);
-		//capteursMiseAJourLongueur(&(*controleur).capteurs, largeur, hauteur);
+		capteursMiseAJourLongueur(&(*controleur).capteurs, largeur, hauteur);
 		}
 	grapheMiseAJourLongueur(&(*controleur).graphe, (*controleur).graphique.largeur, (*controleur).graphique.hauteur);
 
@@ -251,7 +252,7 @@ int controleurProjection(controleurT * controleur)
 	projectionSystemeCommandes(&(*controleur).systeme, &(*controleur).projection, &(*controleur).commandes, (*controleur).duree, (*controleur).modePause);
 
 		// Projection des observables sur les capteurs
-	//projectionObservablesCapteurs(&(*controleur).observables, &(*controleur).projection, &(*controleur).capteurs);
+	projectionObservablesCapteurs(&(*controleur).observables, &(*controleur).projection, &(*controleur).capteurs);
 
 	return (*controleur).sortie;
 	}
