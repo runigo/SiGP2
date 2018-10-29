@@ -48,7 +48,7 @@ int projectionInitialise(projectionT * projection)
 	return 0;
 	}
 
-int projectionSystemeCommandes(systemeT * systeme, projectionT * projection, commandesT * commandes, int duree, int mode)
+int projectionSystemeCommandes(systemeT * systeme, projectionT * projection, commandesT * commandes, int duree, int modePause)
 	{
 		// Projette le système sur les commandes
 
@@ -92,10 +92,13 @@ int projectionSystemeCommandes(systemeT * systeme, projectionT * projection, com
 	(*commandes).rotatifPositionY[6]=0;
 
 
-	int i;
 
 		// Remise à zéro des boutons
-	for(i=0;i<BOUTON_COMMANDES;i++) (*commandes).boutonEtat[i]=0;
+	int i;
+	for(i=0;i<BOUTON_COMMANDES;i++)
+		{
+		(*commandes).boutonEtat[i]=0;
+		}
 
 		// Sélection des boutons activés
 	switch((*systeme).montage.paroiCentrale)	//	Cloison centrale
@@ -145,35 +148,22 @@ int projectionSystemeCommandes(systemeT * systeme, projectionT * projection, com
 			;
 		}
 
-	(*commandes).boutonEtat[11]=1;
-	if(mode<0)	(*commandes).boutonEtat[11]=0;
-	if(duree==DUREE_MIN)	(*commandes).boutonEtat[12]=1;
-	if(duree==DUREE_MAX)	(*commandes).boutonEtat[13]=1;
+	//(*commandes).boutonEtat[11]=1;
+	if(modePause>0)
+		{
+		(*commandes).boutonEtat[11]=1;
+		}
+	if(duree==DUREE_MIN)
+		{
+		(*commandes).boutonEtat[12]=1;
+		}
+	if(duree==DUREE_MAX)
+		{
+		(*commandes).boutonEtat[13]=1;
+		}
 
 		// Remise à zéro des boutons triangulaire
 	for(i=0;i<TRIANGLE_COMMANDES;i++) (*commandes).triangleEtat[i]=0;
-
-	if(mode>0)
-		{
-		(*commandes).boutonEtat[11]=2;
-		}
-
-	if(duree==1)
-		{
-		(*commandes).triangleEtat[12]=1;
-		}
-	else
-		{
-		if(duree==DUREE_MAX)
-			{
-			(*commandes).triangleEtat[13]=2;
-			}
-		else
-			{
-			//(*commandes).triangleEtat[9]=-1;
-			(*commandes).lineairePositionX=(int)((*commandes).a * duree + (*commandes).b);
-			}
-		}
 
 	return 0;
 	}
