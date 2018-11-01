@@ -1,5 +1,5 @@
 /*
-Copyright octobre 2018, Stephan Runigo
+Copyright novembre 2018, Stephan Runigo
 runigo@free.fr
 SiGP 2.2  simulateur de gaz parfait
 Ce logiciel est un programme informatique servant à simuler un gaz et à
@@ -52,14 +52,8 @@ termes.
 
 #define TEMPS_AFFICHAGE 110 // Durée entre les affichages en ms
 
-//#define FENETRE_X 1158 // Largeur de la fenêtre
-//#define FENETRE_Y 714 // Hauteur de la fenêtre
-
 #define FENETRE_X 892 // Largeur de la fenêtre
 #define FENETRE_Y 653 // Hauteur de la fenêtre
-
-//#define FENETRE_X 892 // Largeur de la fenêtre
-//#define FENETRE_Y 550 // Hauteur de la fenêtre
 
 #define BOUTON_COMMANDES 14 // Nombres de petits boutons
 #define ROTATIF_COMMANDES 7 // Nombre de boutons rotatifs
@@ -74,6 +68,8 @@ termes.
 
 #define TRAIT_CLOISON 4
 #define TRAIT_ENCEINTE 8
+
+
 	//	PARAMÈTRES DU SYSTÈME
 
 
@@ -83,8 +79,7 @@ termes.
 #define HAUTEUR 300 // Hauteur du système
 
 #define NOMBRE 149 // Nombre de particules
-#define TAILLE 8 // Taille implicite des particules
-#define TAILLE_MIN 2 // Taille minimale des particules
+#define TAILLE_MIN 7 // Taille minimale des particules
 #define TAILLE_MAX 29 // Taille maximale des particules
 
 #define RAYON_TROU 7 // Rayon implicite du trou dans la cloison
@@ -92,12 +87,8 @@ termes.
 #define DUREE_MAX 99 // Nombre maximal d'itération du système par affichage
 #define DUREE_MIN 1 // Nombre d'itération initial
 
-#define TEMPERATURE_MAX 19666.1 // Température maximale
-#define TEMPERATURE_MIN 0.000003 // Température minimale
-
-#define TEMPERATURE 7.7;	// Température implicite
-#define TEMPERATURE_GAUCHE 0.03;	// Température implicite thermostat gauche
-#define TEMPERATURE_DROIT 77;	// Température implicite thermostat droit
+#define TEMPERATURE_MAX 33.3 // Température maximale
+#define TEMPERATURE_MIN 0.0333 // Température minimale
 
 #endif
 /////////////////////////////////////////////////////////////

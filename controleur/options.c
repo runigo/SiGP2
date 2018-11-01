@@ -1,9 +1,9 @@
 /*
-Copyright octobre 2018, Stephan Runigo
+Copyright novembre 2018, Stephan Runigo
 runigo@free.fr
-SiGP 2.1.4  simulateur de gaz parfait
-Ce logiciel est un programme informatique servant à simuler un gaz parfait
-et à en donner une représentation graphique. Il permet d'observer une détente
+SiGP 2.2  simulateur de gaz parfait
+Ce logiciel est un programme informatique servant à simuler un gaz et à
+en donner une représentation graphique. Il permet d'observer une détente
 de Joule ainsi que des transferts thermiques avec des thermostats.
 Ce logiciel est régi par la licence CeCILL soumise au droit français et
 respectant les principes de diffusion des logiciels libres. Vous pouvez
@@ -32,7 +32,6 @@ termes.
 
 #include "options.h"
 
-//void optionsFond(optionsT * options, char *opt);
 void optionsPause(optionsT * options, char *opt);
 void optionsDuree(optionsT * options, char *opt);
 
@@ -50,13 +49,11 @@ int optionsInitialise(optionsT * options)
 	{
 		// Préréglage des valeurs optionnelles
 
-	//(*options).fond=240;		// couleur du fond de l'affichage
-	//(*options).pause=25;		// temps de pause SDL en ms
 	(*options).duree=DUREE_MIN;		// nombre d'incrémentation du système par affichage
 
-	(*options).temperature = TEMPERATURE;	// Température initiale
-	(*options).gauche = TEMPERATURE_GAUCHE;	// Température thermostat gauche
-	(*options).droite = TEMPERATURE_DROIT;	// Température thermostat droit
+	(*options).temperature = sqrt(TEMPERATURE_MAX * (TEMPERATURE_MIN + TEMPERATURE_MAX)/2);	// Température initiale
+	(*options).gauche = TEMPERATURE_MIN;	// Température thermostat gauche
+	(*options).droite = TEMPERATURE_MAX;	// Température thermostat droit
 
 	(*options).thermostat=0;	// 0 : système isolé, 1 : système thermostaté.
 	(*options).cloison = 2;		// 0 : pas de paroi centrale. 1 : cloison fermé, 2 : détente de joule,
@@ -71,11 +68,6 @@ int optionsTraitement(optionsT * options, int nb, char *opt[])
 	int i=0;	//fprintf(stderr, "\nNombre d'options : %d\n", nb);
 	do
 		{
-
-		//if(strcmp(opt[i], "fond")==0 && opt[i+1]!=NULL)
-			//optionsFond(options, opt[i+1]);		// Couleur du fond de l'affichage
-		//if(strcmp(opt[i], "pause")==0 && opt[i+1]!=NULL)
-			//optionsPause(options, opt[i+1]);	// temps de pause en ms entre les affichages.
 		if(strcmp(opt[i], "duree")==0 && opt[i+1]!=NULL)
 			optionsDuree(options, opt[i+1]);	// Nombre d'évolution du système entre les affichages.
 
@@ -103,43 +95,11 @@ int optionsTraitement(optionsT * options, int nb, char *opt[])
 		while(i<nb);
 	return 0;
 	}
-/*
-void optionsFond(optionsT * options, char *opt)
-	{    	// Couleur du fond 
-	int fond = atoi(opt);
-	if(fond>0 && fond<255)
-		{
-		(*options).fond = fond;
-		printf("Option fond valide, fond = %d\n", (*options).fond);
-		}
-	else
-		{
-		printf("Option fond non valide, fond = %d\n", (*options).fond);
-		printf("Option fond : 0 < fond < 255\n");
-		}
-	return;
-	}
 
-void optionsPause(optionsT * options, char *opt)
-	{    	// Temps de pause en ms après affichage graphique
-	int pause = atoi(opt);
-	if(pause>5 && pause<99)
-		{
-		(*options).pause = pause;
-		printf("Option pause valide, pause = %d\n", (*options).pause);
-		}
-	else
-		{
-		printf("Option pause non valide, pause = %d\n", (*options).pause);
-		printf("Option pause : 5 < pause < 555\n");
-		}
-	return;
-	}
-*/
 void optionsDuree(optionsT * options, char *opt)
 	{    	// Nombre d'évolution du système entre les affichages
 	int duree = atoi(opt);
-	if ( duree > 0 && duree < DUREE_MAX)
+	if ( duree >= DUREE_MIN && duree < DUREE_MAX)
 		{
 		(*options).duree = duree;
 		printf("Option duree valide, duree = %d\n", (*options).duree);
@@ -147,7 +107,7 @@ void optionsDuree(optionsT * options, char *opt)
 	else
 		{
 		printf("Option duree non valide, duree = %d\n", (*options).duree);
-		printf("Option duree : 0.0 < duree < %d\n", DUREE_MAX);
+		printf("Option duree : %d < duree < %d\n", DUREE_MIN, DUREE_MAX);
 		}
 	return;
 	}

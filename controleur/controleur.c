@@ -1,5 +1,5 @@
 /*
-Copyright octobre 2018, Stephan Runigo
+Copyright novembre 2018, Stephan Runigo
 runigo@free.fr
 SiGP 2.2  simulateur de gaz parfait
 Ce logiciel est un programme informatique servant à simuler un gaz et à
@@ -103,7 +103,7 @@ int controleurInitialise(controleurT * controleur)
 	(*controleur).systeme.montage.thermostat.actif = (*controleur).options.thermostat;	//	0 : Système isolé, 1:température uniforme, 2:active gauche-droite
 
 		// Initialisation du système
-	systemeInitialise(&(*controleur).systeme, TAILLE, sqrt((*controleur).options.temperature));
+	systemeInitialise(&(*controleur).systeme, TAILLE_MIN + 1, sqrt((*controleur).options.temperature)/2);
 
 		// Initialisation des observables
 	observablesInitialise(&(*controleur).observables);
@@ -450,17 +450,22 @@ int controleurClavier(controleurT * controleur)
 			montageChangeTrou(&(*controleur).systeme.montage, -1);break;
 
 		case SDLK_w:	//	Pas de cloison central
-			systemeChangeCloison(&(*controleur).systeme, 0);break;
+			//systemeChangeCloison(&(*controleur).systeme, 0);
+	montageChangeParoiCentrale(&(*controleur).systeme.montage, 0);break;
 		case SDLK_x:	//	Cloison fermée
-			systemeChangeCloison(&(*controleur).systeme, 1);break;
+			//systemeChangeCloison(&(*controleur).systeme, 1);
+	montageChangeParoiCentrale(&(*controleur).systeme.montage, 0);break;
 		case SDLK_c:	//	Cloison percée
-			systemeChangeCloison(&(*controleur).systeme, 2);break;
+			//systemeChangeCloison(&(*controleur).systeme, 2);
+	montageChangeParoiCentrale(&(*controleur).systeme.montage, 0);break;
 		case SDLK_v:	//	cloison percée et démon de Maxwell
 			montageChangeDemonMaxwell(&(*controleur).systeme.montage);break;
 		case SDLK_b:	//	Démon de Maxwell
-			systemeChangeCloison(&(*controleur).systeme, -1);break;
+			//systemeChangeCloison(&(*controleur).systeme, -1);
+	montageChangeDemonMaxwell(&(*controleur).systeme.montage); break;
 		case SDLK_n:	//	Trou max et démon de Maxwell
-			systemeChangeCloison(&(*controleur).systeme, -2);break;
+			//systemeChangeCloison(&(*controleur).systeme, -2);
+			break;
 
 	// Thermostat
 
@@ -818,13 +823,17 @@ int controleurCommandes(controleurT * controleur, int zone)
 		switch(commande)	//	
 			{// 0 : Pas de cloison, 1 : Cloison fermée, 2 : Cloison percée, -1 : Maxwell
 			case 0: // Cloison
-				systemeChangeCloison(&(*controleur).systeme, 1);break;
+				//systemeChangeCloison(&(*controleur).systeme, 1);
+			montageChangeParoiCentrale(&(*controleur).systeme.montage, 1);break;
 			case 1: // Trou
-				systemeChangeCloison(&(*controleur).systeme, 2);break;
+				//systemeChangeCloison(&(*controleur).systeme, 2);
+			montageChangeParoiCentrale(&(*controleur).systeme.montage, 2);break;
 			case 2: // Démon
 				montageChangeDemonMaxwell(&(*controleur).systeme.montage);break;
 			case 3: // Supprim.
-				systemeChangeCloison(&(*controleur).systeme, 0);break;
+				//systemeChangeCloison(&(*controleur).systeme, 0);
+		// Changement du montage
+	montageChangeParoiCentrale(&(*controleur).systeme.montage, 0);break;
 
 			case 4:
 				thermostatChangeEtat(&(*controleur).systeme.montage.thermostat, 0);break;
@@ -913,7 +922,8 @@ int controleurCommandes(controleurT * controleur, int zone)
 
 int controleurInitialiseParametresCloison(controleurT * controleur)
 	{
-	systemeChangeCloison(&(*controleur).systeme, 0);
+	//systemeChangeCloison(&(*controleur).systeme, 0);
+		montageChangeParoiCentrale(&(*controleur).systeme.montage, 0);
 	montageSupprimeDemon(&(*controleur).systeme.montage);
 	(*controleur).systeme.montage.trou = RAYON_TROU; // Rayon implicite du trou dans la cloison
 
@@ -941,7 +951,8 @@ int controleurInitialiseParametres(controleurT * controleur, int forme)
 			controleurInitialiseParametresCloison(controleur);break;
 		case 1:
 			controleurInitialiseParametresCloison(controleur);
-			systemeChangeCloison(&(*controleur).systeme, 2);
+			//systemeChangeCloison(&(*controleur).systeme, 2);
+			montageChangeParoiCentrale(&(*controleur).systeme.montage, 2);
 			montageChangeDemonMaxwell(&(*controleur).systeme.montage);break;
 		case 2:
 			controleurInitialiseParametresTemperature(controleur);

@@ -1,5 +1,5 @@
 /*
-Copyright octobre 2018, Stephan Runigo
+Copyright novembre 2018, Stephan Runigo
 runigo@free.fr
 SiGP 2.2.1  simulateur de gaz parfait
 Ce logiciel est un programme informatique servant à simuler un gaz et à
@@ -40,11 +40,11 @@ float projectionAbsolue(float valeur)
 
 int projectionInitialise(projectionT * projection)
 	{
-	(*projection).logTrou = 1.0 / log( (HAUTEUR/2) );
-	(*projection).logParticule = 1.0 / log( TAILLE_MAX/TAILLE_MIN );
-	(*projection).logTemperature = 1.0 / log( TEMPERATURE_MAX/TEMPERATURE_MIN );
-	(*projection).logGauche = 1.0 / log( TEMPERATURE_MAX/TEMPERATURE_MIN );
-	(*projection).logDroite = 1.0 / log( TEMPERATURE_MAX/TEMPERATURE_MIN );
+	(*projection).logTrou = 0.9 * DEUXPI / log( (HAUTEUR/2) );
+	(*projection).logParticule = 0.9 * DEUXPI / log( TAILLE_MAX/TAILLE_MIN );
+	(*projection).logTemperature = 0.9 * DEUXPI / log( TEMPERATURE_MAX/TEMPERATURE_MIN );
+	(*projection).logGauche = 0.9 * DEUXPI / log( TEMPERATURE_MAX/TEMPERATURE_MIN );
+	(*projection).logDroite = 0.9 * DEUXPI / log( TEMPERATURE_MAX/TEMPERATURE_MIN );
 	return 0;
 	}
 
@@ -57,32 +57,32 @@ int projectionSystemeCommandes(systemeT * systeme, projectionT * projection, com
 
 				//	Projection sur les boutons rotatifs
 		//	Rayon du trou
-	theta = DEUXPI * (*projection).logTrou * log( (*systeme).montage.trou +1);
+	theta = (*projection).logTrou * log( (*systeme).montage.trou +1);
 	(*commandes).rotatifPositionX[0]=(int)(-ratioRotatif*(*commandes).rotatifX*sin(theta));
 	(*commandes).rotatifPositionY[0]=(int)(ratioRotatif*(*commandes).rotatifY*cos(theta));
 
 		//	Taille des particules
-	theta = DEUXPI * (*projection).logParticule * log( (*systeme).diametre / TAILLE_MIN );
+	theta =  (*projection).logParticule * log( (*systeme).diametre / TAILLE_MIN );
 	(*commandes).rotatifPositionX[1]=(int)(-ratioRotatif*(*commandes).rotatifX*sin(theta));
 	(*commandes).rotatifPositionY[1]=(int)(ratioRotatif*(*commandes).rotatifY*cos(theta));
 
 		//	Température
-	theta = DEUXPI * (*projection).logTemperature * log( (*systeme).montage.thermostat.temperature / TEMPERATURE_MIN );
+	theta = (*projection).logTemperature * log( (*systeme).montage.thermostat.temperature / TEMPERATURE_MIN );
 	(*commandes).rotatifPositionX[2]=(int)(-ratioRotatif*(*commandes).rotatifX*sin(theta));
 	(*commandes).rotatifPositionY[2]=(int)(ratioRotatif*(*commandes).rotatifY*cos(theta));
 
 		//	Température gauche
-	theta = DEUXPI * (*projection).logTemperature * log( (*systeme).montage.thermostat.gauche / TEMPERATURE_MIN );
+	theta = (*projection).logTemperature * log( (*systeme).montage.thermostat.gauche / TEMPERATURE_MIN );
 	(*commandes).rotatifPositionX[3]=(int)(-ratioRotatif*(*commandes).rotatifX*sin(theta));
 	(*commandes).rotatifPositionY[3]=(int)(ratioRotatif*(*commandes).rotatifY*cos(theta));
 
 		//	Température droite
-	theta = DEUXPI * (*projection).logTemperature * log( (*systeme).montage.thermostat.droite / TEMPERATURE_MIN );
+	theta = (*projection).logTemperature * log( (*systeme).montage.thermostat.droite / TEMPERATURE_MIN );
 	(*commandes).rotatifPositionX[4]=(int)(-ratioRotatif*(*commandes).rotatifX*sin(theta));
 	(*commandes).rotatifPositionY[4]=(int)(ratioRotatif*(*commandes).rotatifY*cos(theta));
 
 		//	Simulation
-	theta = DEUXPI * duree/DUREE_MAX;
+	theta = 0.9 * DEUXPI * duree/DUREE_MAX;
 	(*commandes).rotatifPositionX[5]=(int)(-ratioRotatif*(*commandes).rotatifX*sin(theta));
 	(*commandes).rotatifPositionY[5]=(ratioRotatif*(*commandes).rotatifY*cos(theta));
 		//	(*commandes).lineairePositionX=(int)((*commandes).a * duree + (*commandes).b);

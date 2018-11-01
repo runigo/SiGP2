@@ -1,9 +1,9 @@
 /*
-Copyright octobre 2018, Stephan Runigo
+Copyright novembre 2018, Stephan Runigo
 runigo@free.fr
 SiGP 2.2  simulateur de gaz parfait
-Ce logiciel est un programme informatique servant à simuler un gaz parfait
-et à en donner une représentation graphique. Il permet d'observer une détente
+Ce logiciel est un programme informatique servant à simuler un gaz et à
+en donner une représentation graphique. Il permet d'observer une détente
 de Joule ainsi que des transferts thermiques avec des thermostats.
 Ce logiciel est régi par la licence CeCILL soumise au droit français et
 respectant les principes de diffusion des logiciels libres. Vous pouvez
@@ -98,8 +98,8 @@ void mobileInitialise(mobileT * mobile, montageT * montage, float vitesse, int n
 	(*mobile).collision = 0;
 	(*mobile).droite = 1;
 
-	(*mobile).diametre=TAILLE;
-	(*mobile).diamCarre=TAILLE*TAILLE*0.71;
+	(*mobile).diametre=TAILLE_MIN;
+	(*mobile).diamCarre=TAILLE_MIN*TAILLE_MIN*0.71;
 	return;
 	}
 
@@ -166,18 +166,19 @@ void mobileParoi(mobileT * mobile, montageT * montage)
 
 			// Chocs avec la paroi centrale
 
-	if((*montage).paroiCentrale == 0)	{// Pas de paroi
+	if((*montage).paroiCentrale == 0) // Pas de paroi
+		{
 				// Arrivé de gauche
-			if( (*mobile).nouveau.x > 0 && (*mobile).droite == 0)
-				{
-				(*mobile).droite = 1;
-				}
-				// Arrivé de droite
-			if( (*mobile).nouveau.x < 0 && (*mobile).droite == 1)
-				{
-				(*mobile).droite = 0;
-				}
-										}
+		if( (*mobile).nouveau.x > 0 && (*mobile).droite == 0)
+			{
+			(*mobile).droite = 1;
+			}
+			// Arrivé de droite
+		if( (*mobile).nouveau.x < 0 && (*mobile).droite == 1)
+			{
+			(*mobile).droite = 0;
+			}
+		}
 	else	// Paroi
 		{			// 	Rebond sur la cloison
 		if( (*mobile).nouveau.y >= (*montage).trou || (*mobile).nouveau.y <= - (*montage).trou )
@@ -379,9 +380,7 @@ void mobileInverseVxThermique(mobileT * mobile, int largeur, float temperature)
 	mobileInverseVx(mobile, largeur);
 
 		// Calcul de lambda
-	(*mobile).ec = mobileEnergieCinetique(mobile);
 	lambda = sqrt( (1 + temperature/(*mobile).ec) / 2 );
-	//if (temperature < (*mobile).ec) lambda = - lambda;
 
 		// Vitesse et variation
 	vecteurDifference(&(*mobile).nouveau, &(*mobile).actuel, &v);

@@ -45,7 +45,7 @@ int grapheMiseAJourLongueur(grapheT * graphe, int largeur, int hauteur)
 		//		gy	-----------------
 
 	(*graphe).zoneX=0.8394*largeur;
-	(*graphe).zoneY=0.8546*hauteur;
+	(*graphe).zoneY=0.61562*hauteur;
 	float longueur=2*(*graphe).zoneY;
 
 	if((*graphe).zoneX<longueur) longueur=(*graphe).zoneX;
@@ -81,7 +81,7 @@ int grapheInitialise(grapheT * graphe)
 	{
 	int i;
 
-	(*graphe).taille = TAILLE;
+	(*graphe).taille = TAILLE_MIN + 1;
 	(*graphe).facteur=(0.8394*FENETRE_X/2 - MARGE -3-1.5*(*graphe).taille)/HAUTEUR;
 
 	for(i=0;i<(NOMBRE);i++)
@@ -118,7 +118,7 @@ int grapheInitialise(grapheT * graphe)
 	(*graphe).zoneX=0.8394*FENETRE_X;
 	(*graphe).zoneY=0.8546*FENETRE_Y;
 
-	(*graphe).taille = TAILLE*(*graphe).facteur;
+	(*graphe).taille = TAILLE_MIN*(*graphe).facteur;
 	(*graphe).cloison = 0;	//
 	(*graphe).thermostat = 0;	// 
 	(*graphe).trou = RAYON_TROU;

@@ -1,7 +1,7 @@
 /*
-Copyright octobre 2018, Stephan Runigo
+Copyright novembre 2018, Stephan Runigo
 runigo@free.fr
-SiGP 2.1.4  simulateur de gaz parfait
+SiGP 2.2  simulateur de gaz parfait
 Ce logiciel est un programme informatique servant à simuler un gaz et à
 en donner une représentation graphique. Il permet d'observer une détente
 de Joule ainsi que des transferts thermiques avec des thermostats.
@@ -42,9 +42,9 @@ void thermostatInitialise(thermostatT * thermostat)
 			//	Initialisation du thermostat
 	{
 	
-	(*thermostat).temperature = 7.0;//	Température moyenne du thermostat
-	(*thermostat).gauche = 0.0071;	//	Température gauche
-	(*thermostat).droite = 1111.0;	//	Température droite
+	(*thermostat).temperature = sqrt(TEMPERATURE_MAX * TEMPERATURE_MIN);//	Température moyenne du thermostat
+	(*thermostat).gauche = TEMPERATURE_MIN;	//	Température gauche
+	(*thermostat).droite = TEMPERATURE_MAX;	//	Température droite
 	(*thermostat).actif = 0;	//	0 : Système isolé, 1:température uniforme, 2:active gauche-droite
 	(*thermostat).etatDroite = 0;		//	0: isolé à droite, 1:températures droite
 	(*thermostat).etatGauche = 0;		//	0: isolé à gauche, 1:température gauche
@@ -145,8 +145,18 @@ void thermostatChangeTemperature(thermostatT * thermostat, float facteur)
 		}
 	else
 		{
-		printf("Température limite atteinte\n");
-		printf("Température = %f\n", (*thermostat).temperature);
+		if (temperature > TEMPERATURE_MAX)
+			{
+			(*thermostat).temperature = TEMPERATURE_MAX ;
+			printf("Température maximale atteinte\n");
+			printf("Température = %f\n", (*thermostat).temperature);
+			}
+		if (temperature < TEMPERATURE_MIN)
+			{
+			(*thermostat).temperature = TEMPERATURE_MIN ;
+			printf("Température minimale atteinte\n");
+			printf("Température = %f\n", (*thermostat).temperature);
+			}
 		}
 	return;
 	}
@@ -162,8 +172,18 @@ void thermostatChangeTemperatureDroite(thermostatT * thermostat, float facteur)
 		}
 	else
 		{
-		printf("Température limite atteinte\n");
-		printf("Température droite = %f\n", (*thermostat).droite);
+		if (temperature > TEMPERATURE_MAX)
+			{
+			(*thermostat).droite = TEMPERATURE_MAX ;
+			printf("Température maximale atteinte\n");
+			printf("Température droite = %f\n", (*thermostat).droite);
+			}
+		if (temperature < TEMPERATURE_MIN)
+			{
+			(*thermostat).droite = TEMPERATURE_MIN ;
+			printf("Température minimale atteinte\n");
+			printf("Température droite = %f\n", (*thermostat).droite);
+			}
 		}
 	return;
 	}
@@ -179,8 +199,18 @@ void thermostatChangeTemperatureGauche(thermostatT * thermostat, float facteur)
 		}
 	else
 		{
-		printf("Température limite atteinte\n");
-		printf("Température gauche = %f\n", (*thermostat).gauche);
+		if (temperature > TEMPERATURE_MAX)
+			{
+			(*thermostat).gauche = TEMPERATURE_MAX ;
+			printf("Température maximale atteinte\n");
+			printf("Température gauche = %f\n", (*thermostat).gauche);
+			}
+		if (temperature < TEMPERATURE_MIN)
+			{
+			(*thermostat).gauche = TEMPERATURE_MIN ;
+			printf("Température minimale atteinte\n");
+			printf("Température gauche = %f\n", (*thermostat).gauche);
+			}
 		}
 	return;
 	}
@@ -214,19 +244,19 @@ void thermostatAfficheThermostat(thermostatT * thermostat)
 	switch( (*thermostat).actif )
 		{
 		case 0:
-			printf("	(*thermostat).actif = %d : système isolé\n", (*thermostat).actif);break;
+			printf("	système isolé\n");break;
 		case 1:
-			printf("	(*thermostat).actif = %d : thermostat uniforme\n", (*thermostat).actif);
-			printf("	Température indicative = %f\n", (*thermostat).temperature);
+			printf("	thermostat uniforme\n");
 			break;
 		case 2:
-			printf("	(*thermostat).actif = %d : thermostats gauche-droite\n", (*thermostat).actif);
-			printf("	Température indicative à gauche = %f\n", (*thermostat).gauche);
-			printf("	Température indicative à droite = %f\n", (*thermostat).droite);
+			printf("	thermostats gauche-droite\n");
 			break;
 		default:
 			break;
 		}
+	printf("	Température indicative uniforme = %f\n", 0.666*(*thermostat).temperature);
+	printf("	Température indicative à gauche = %f\n", 0.666*(*thermostat).gauche);
+	printf("	Température indicative à droite = %f\n", 0.666*(*thermostat).droite);
 	return;
 	}
 
