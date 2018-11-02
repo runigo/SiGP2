@@ -1,7 +1,7 @@
 /*
 Copyright novembre 2018, Stephan Runigo
 runigo@free.fr
-SiGP 2.2  simulateur de gaz parfait
+SiGP 2.2.2  simulateur de gaz parfait
 Ce logiciel est un programme informatique servant à simuler un gaz et à
 en donner une représentation graphique. Il permet d'observer une détente
 de Joule ainsi que des transferts thermiques avec des thermostats.
@@ -35,6 +35,8 @@ termes.
 void systemeIncremente(systemeT * systeme); // L'ancien état reçoit l'état actuel qui reçoit le nouvel état.
 void systemeMoteur(systemeT * systeme); // Calcule le nouvel état du système en fonction de l'ancien et de l'actuel
 
+void sytemeAjouteParticule(systemeT * systeme); // Ajoute une particule au systeme
+
 void systemeParoi(systemeT * systeme);
 void systemeInertie(systemeT * systeme);
 void systemeChocsParticules(systemeT * systeme);
@@ -45,23 +47,26 @@ void systemeInitialisePosition(systemeT * systeme, int forme)
 	(void)forme;
 		// Initialisation des mobiles
 	int i;
-	for(i=0;i<NOMBRE;i++)
+	for(i=0;i<(*systeme).nombre;i++)
 		{
 		if(i%2==0)
 			{
-			mobileInitialise(&(*systeme).mobile[i], &(*systeme).montage, (*systeme).vitesseInitiale, i);
+			mobileInitialise(&(*systeme).mobile[i], &(*systeme).montage, i, (*systeme).diametre, (*systeme).vitesseInitiale);
 			}
 		else		// Possibilité vitesse = 0 pour la moitié des particules
 			{
-			mobileInitialise(&(*systeme).mobile[i], &(*systeme).montage, (*systeme).vitesseInitiale, i);
+			mobileInitialise(&(*systeme).mobile[i], &(*systeme).montage, i, (*systeme).diametre, (*systeme).vitesseInitiale);
 			//mobileInitialise(&(*systeme).mobile[i], &(*systeme).montage, 0, i);
 			}
 		}
 	return;
 	}
 
-void systemeInitialise(systemeT * systeme, int taille, float vitesse)
+void systemeInitialise(systemeT * systeme, int nombre, int taille, float vitesse)
 	{
+		// Nombre de particules
+	(*systeme).nombre = nombre;
+
 		// Taille des particules
 	(*systeme).diametre = taille;
 
@@ -116,7 +121,7 @@ void systemeInertie(systemeT * systeme)
 	{
 	int i;
 
-	for(i=0;i<NOMBRE;i++)			//	Application du principe d'inertie
+	for(i=0;i<(*systeme).nombre;i++)			//	Application du principe d'inertie
 		{
 		mobileInertie(&(*systeme).mobile[i]);
 		}
@@ -130,7 +135,7 @@ void systemeParoi(systemeT * systeme)
 	{
 	int i;
 
-	for(i=0;i<NOMBRE;i++)			//	Chocs avec les parois
+	for(i=0;i<(*systeme).nombre;i++)			//	Chocs avec les parois
 		{
 		mobileParoi(&(*systeme).mobile[i], &(*systeme).montage);
 		}
@@ -144,14 +149,14 @@ void systemeChocsParticules(systemeT * systeme)
 	{
 	int i, j;
 
-	for(i=0;i<NOMBRE;i++)		//	Réinitialisation
+	for(i=0;i<(*systeme).nombre;i++)		//	Réinitialisation
 		{
 		(*systeme).mobile[i].collision = 0;
 		}
 
-	for(i=0;i<NOMBRE;i++)			//	Chocs entre particules
+	for(i=0;i<(*systeme).nombre;i++)			//	Chocs entre particules
 		{
-		for(j=i+1;j<NOMBRE;j++)
+		for(j=i+1;j<(*systeme).nombre;j++)
 			{
 				{
 				//fprintf(stderr, "mobileCollision entre i et j %d %d\n", i, j);
@@ -166,7 +171,7 @@ void systemeChocsParticules(systemeT * systeme)
 void systemeIncrementeLibreParcoursMoyen(systemeT * systeme)
 	{
 	int i;
-	for(i=0;i<NOMBRE;i++)
+	for(i=0;i<(*systeme).nombre;i++)
 		{
 		mobileIncrementeLibreParcoursMoyen(&(*systeme).mobile[i]);
 		}
@@ -178,10 +183,55 @@ void systemeIncremente(systemeT * systeme)
 	//	l'état actuel reçoit le nouvel état.
 	{
 	int i;
-	for(i=0;i<NOMBRE;i++)
+	for(i=0;i<(*systeme).nombre;i++)
 		{
 		mobileIncremente(&(*systeme).mobile[i]);
 		}
+	return;
+	}
+
+void systemeChangeNombre(systemeT * systeme, int delta)
+/*
+		Change le nombre de particules
+*/
+	{
+	int nombre = (*systeme).nombre + delta;
+
+	if(delta==1 && nombre < NOMBRE_MAX)
+		{
+		(*systeme).nombre = nombre;
+		sytemeAjouteParticule(systeme);
+		}
+	else
+		{
+		if(nombre > NOMBRE_MIN && delta==-1)
+			{
+			(*systeme).nombre = nombre;
+			}
+		else
+			{
+			if(nombre < NOMBRE_MIN)
+				{
+				printf("Nombre minimal atteint. ");
+				}
+			if(nombre > NOMBRE_MAX)
+				{
+				printf("Nombre maximal atteint. ");
+				}
+			}
+		}
+
+	printf("Nombre de particules = %d\n", (*systeme).nombre);
+
+	return;
+	}
+
+void sytemeAjouteParticule(systemeT * systeme)
+/*
+		Changement de la surface efficace des particules
+*/
+	{
+	mobileInitialise(&(*systeme).mobile[(*systeme).nombre], &(*systeme).montage, (*systeme).nombre,(*systeme).diametre, (*systeme).vitesseInitiale);
 	return;
 	}
 
@@ -224,7 +274,7 @@ void systemeChangeDiametre(systemeT * systeme, float facteur)
 	diamCarre = diametre*diametre*0.71;
 
 		//	Réinitialisation surface efficace
-	for(i=0;i<NOMBRE;i++)
+	for(i=0;i<(*systeme).nombre;i++)
 		{
 		(*systeme).mobile[i].diametre = diametre;
 		(*systeme).mobile[i].diamCarre = diamCarre;

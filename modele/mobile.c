@@ -1,7 +1,7 @@
 /*
 Copyright novembre 2018, Stephan Runigo
 runigo@free.fr
-SiGP 2.2  simulateur de gaz parfait
+SiGP 2.2.2  simulateur de gaz parfait
 Ce logiciel est un programme informatique servant à simuler un gaz et à
 en donner une représentation graphique. Il permet d'observer une détente
 de Joule ainsi que des transferts thermiques avec des thermostats.
@@ -63,9 +63,8 @@ float mobileEnergieCinetique(mobileT * mobile)
 	return (*mobile).ec;
 	}
 
-void mobileInitialise(mobileT * mobile, montageT * montage, float vitesse, int nom)
+void mobileInitialise(mobileT * mobile, montageT * montage, int nom, int diametre, float vitesse)
 	{
-	//int marge = 0;
 	(*mobile).actuel.x = ((1.0/RAND_MAX)*((*montage).demiLargeur)*aleatoireRandMax());
 	(*mobile).actuel.y = ((1.0/RAND_MAX)*((*montage).hauteur)*aleatoireRandMax() - (*montage).demiHauteur);
 
@@ -98,8 +97,8 @@ void mobileInitialise(mobileT * mobile, montageT * montage, float vitesse, int n
 	(*mobile).collision = 0;
 	(*mobile).droite = 1;
 
-	(*mobile).diametre=TAILLE_MIN;
-	(*mobile).diamCarre=TAILLE_MIN*TAILLE_MIN*0.71;
+	(*mobile).diametre=diametre;
+	(*mobile).diamCarre=diametre*diametre*SECTION_EFFICACE;
 	return;
 	}
 
@@ -108,7 +107,6 @@ void mobileInertie(mobileT * mobile)
 	((*mobile).nouveau.x)=2.0*((*mobile).actuel.x)-((*mobile).ancien.x);
 	((*mobile).nouveau.y)=2.0*((*mobile).actuel.y)-((*mobile).ancien.y);
 
-		// Incrémentation du parcours moyen
 	return;
 	}
 
@@ -134,7 +132,7 @@ void mobileParoi(mobileT * mobile, montageT * montage)
 			case 0:
 				mobileInverseVx(mobile, (*montage).largeur);break;
 			case 1:
-				mobileInverseVxThermique(mobile, (*montage).largeur, (*montage).thermostat.temperature);break;
+				mobileInverseVxThermique(mobile, (*montage).largeur, (*montage).thermostat.uniforme);break;
 			case 2:
 				if((*montage).thermostat.etatDroite==1)
 				mobileInverseVxThermique(mobile, (*montage).largeur, (*montage).thermostat.droite);
@@ -152,7 +150,7 @@ void mobileParoi(mobileT * mobile, montageT * montage)
 			case 0:
 				mobileInverseVx(mobile, - (*montage).largeur);break;
 			case 1:
-				mobileInverseVxThermique(mobile, - (*montage).largeur, (*montage).thermostat.temperature);break;
+				mobileInverseVxThermique(mobile, - (*montage).largeur, (*montage).thermostat.uniforme);break;
 			case 2:
 				if((*montage).thermostat.etatGauche==1)
 				mobileInverseVxThermique(mobile, - (*montage).largeur, (*montage).thermostat.gauche);

@@ -1,7 +1,7 @@
 /*
 Copyright novembre 2018, Stephan Runigo
 runigo@free.fr
-SiGP 2.2.1  simulateur de gaz parfait
+SiGP 2.2.2  simulateur de gaz parfait
 Ce logiciel est un programme informatique servant à simuler un gaz et à
 en donner une représentation graphique. Il permet d'observer une détente
 de Joule ainsi que des transferts thermiques avec des thermostats.
@@ -60,14 +60,14 @@ int projectionSystemeCommandes(systemeT * systeme, projectionT * projection, com
 	theta = (*projection).logTrou * log( (*systeme).montage.trou +1);
 	(*commandes).rotatifPositionX[0]=(int)(-ratioRotatif*(*commandes).rotatifX*sin(theta));
 	(*commandes).rotatifPositionY[0]=(int)(ratioRotatif*(*commandes).rotatifY*cos(theta));
-
+	
 		//	Taille des particules
 	theta =  (*projection).logParticule * log( (*systeme).diametre / TAILLE_MIN );
 	(*commandes).rotatifPositionX[1]=(int)(-ratioRotatif*(*commandes).rotatifX*sin(theta));
 	(*commandes).rotatifPositionY[1]=(int)(ratioRotatif*(*commandes).rotatifY*cos(theta));
 
 		//	Température
-	theta = (*projection).logTemperature * log( (*systeme).montage.thermostat.temperature / TEMPERATURE_MIN );
+	theta = (*projection).logTemperature * log( (*systeme).montage.thermostat.uniforme / TEMPERATURE_MIN );
 	(*commandes).rotatifPositionX[2]=(int)(-ratioRotatif*(*commandes).rotatifX*sin(theta));
 	(*commandes).rotatifPositionY[2]=(int)(ratioRotatif*(*commandes).rotatifY*cos(theta));
 
@@ -84,12 +84,13 @@ int projectionSystemeCommandes(systemeT * systeme, projectionT * projection, com
 		//	Simulation
 	theta = 0.9 * DEUXPI * duree/DUREE_MAX;
 	(*commandes).rotatifPositionX[5]=(int)(-ratioRotatif*(*commandes).rotatifX*sin(theta));
-	(*commandes).rotatifPositionY[5]=(ratioRotatif*(*commandes).rotatifY*cos(theta));
+	(*commandes).rotatifPositionY[5]=(int)(ratioRotatif*(*commandes).rotatifY*cos(theta));
 		//	(*commandes).lineairePositionX=(int)((*commandes).a * duree + (*commandes).b);
 
 		//	Nombre
-	(*commandes).rotatifPositionX[6]=0;
-	(*commandes).rotatifPositionY[6]=0;
+	theta = 0.9 * ((DEUXPI * (*systeme).nombre)/NOMBRE_MAX);
+	(*commandes).rotatifPositionX[6]=(int)(-ratioRotatif*(*commandes).rotatifX*sin(theta));
+	(*commandes).rotatifPositionY[6]=(int)(ratioRotatif*(*commandes).rotatifY*cos(theta));
 
 
 
@@ -176,13 +177,40 @@ int projectionObservablesCapteurs(observablesT * observables, projectionT * proj
 
 	for(j=0;j<CAPTEURS;j++)
 		{
-		a = -(float)((*capteurs).capteur[j].hauteur) / (*observables).observable[j].maximumCapteur;
-		y0 = (*capteurs).capteur[j].yZero;
-		for(i=0;i<DUREE_CAPTEURS;i++)
+		if(j!=5)
 			{
-			k=(i+(*observables).index+1)%DUREE_CAPTEURS;
-			(*capteurs).capteur[j].gauche[i].y = (int)(a*(*observables).observable[j].gauche[k]) + y0;
-			(*capteurs).capteur[j].droite[i].y = (int)(a*(*observables).observable[j].droite[k]) + y0;
+			if((*observables).observable[j].maximumCapteur!=0.0)
+				{
+				a = -(float)((*capteurs).capteur[j].hauteur) / (*observables).observable[j].maximumCapteur;
+				}
+			else
+				{
+				a = 0.0;
+				}
+			y0 = (*capteurs).capteur[j].yZero;
+			for(i=0;i<DUREE_CAPTEURS;i++)
+				{
+				k=(i+(*observables).index+1)%DUREE_CAPTEURS;
+				(*capteurs).capteur[j].gauche[i].y = (int)(a*(*observables).observable[j].gauche[k]) + y0;
+				(*capteurs).capteur[j].droite[i].y = (int)(a*(*observables).observable[j].droite[k]) + y0;
+				}
+			}
+		else
+			{
+			if((*observables).observable[j].maximumCapteur!=0.0)
+				{
+				a = -(float)((*capteurs).capteur[j].hauteur) / (*observables).observable[j].maximumCapteur;
+				}
+			else
+				{
+				a = 0.0;
+				}
+			y0 = (*capteurs).capteur[j].yZero;
+			for(i=0;i<DY_ENERGIE;i++)
+				{
+				(*capteurs).capteur[j].gauche[i].y = (int)(a*(*observables).observable[j].gauche[i]) + y0;
+				(*capteurs).capteur[j].droite[i].y = (int)(a*(*observables).observable[j].droite[i]) + y0;
+				}
 			}
 		}
 
@@ -193,6 +221,7 @@ void projectionSystemeGraphe(systemeT * systeme, projectionT * projection, graph
 	{
 	(void)projection;
 		//	Projection du système sur le graphe
+	(*graphe).nombre = (*systeme).nombre;
 	(*graphe).cloison = (*systeme).montage.paroiCentrale;
 	(*graphe).trou = (*graphe).facteur*(*systeme).montage.trou;
 	(*graphe).demon = (*systeme).montage.demonMaxwell;	// O ou 1
@@ -203,7 +232,7 @@ void projectionSystemeGraphe(systemeT * systeme, projectionT * projection, graph
 
 				// Projection des particules
 	int i;
-	for(i=0;i<(NOMBRE);i++)
+	for(i=0;i<((*graphe).nombre);i++)
 		{
 		if((*graphe).cloison!=0)
 			{

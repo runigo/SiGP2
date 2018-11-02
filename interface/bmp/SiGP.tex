@@ -32,67 +32,57 @@
 %
 %        ENCEINTE
 %
-    \fill[white,draw=black,thick](-20,10.4) rectangle (19,29.9);
+  %  \fill[white,draw=black,thick](-20,10.4) rectangle (19,29.9);
 %
+	% CAPTEURS HAUT
+    \def\hauteur{3.7}
 %   AXES TEMPÉRATURE
-%
-  \begin{scope}[xshift=-16.7 cm,yshift=2.3cm]
+  \begin{scope}[xshift=-16.7 cm,yshift=\hauteur cm]
     % Draw axes
     \draw [<->,draw=gray,thick] (0,5) node (yaxis) [above] {$temp\acute{e}rature$}
         |- (9,0) node (xaxis) [right] {$t$};
   \end{scope}
-%
 %   AXES NOMBRE
-%
-  \begin{scope}[xshift=-4.7 cm,yshift=2.3cm]
+  \begin{scope}[xshift=-4.7 cm,yshift=\hauteur cm]
     % Draw axes
     \draw [<->,draw=gray,thick] (0,5) node (yaxis) [above] {$nombre$}
         |- (9,0) node (xaxis) [right] {$t$};
   \end{scope}
-%
-%   AXES LIBRE PARCOURS MOYEN
-%
-  \begin{scope}[xshift=7.7 cm,yshift=2.3cm]
+%   AXES LIBRE PARCOURS MOYE
+  \begin{scope}[xshift=7.7 cm,yshift=\hauteur cm]
     % Draw axes
     \draw [<->,draw=gray,thick] (0,5) node (yaxis) [above] {$libre\ parcours\ moyen$}
         |- (9,0) node (xaxis) [right] {$t$};
   \end{scope}
 %
-%      PANNEAU  BAS 1
-%
-  \fill[panneaucontroles] (-20.5,-4.5) rectangle (19.1,-0.2);
-%       Réinitialisation
-  \begin{scope}[xshift=-19.7 cm,yshift=-4.3cm]
-  \draw[blue,rounded corners,thin] (-0.5,0.2) rectangle (11.2,3.8);
-
-    \node[scale=\scl] at (5.1,3.3) {\LARGE \textbf{Initialisation}};
-
-    \node[scale=\scl] at (2.1,0.8) {\Large \textbf{Position}};
-
-    \fill[blue!50!black!20!,draw=black,thick] (0.5,2.0) circle (0.43cm);
-    \node[scale=\scl] at (0.5,2.0) {\Large \textbf{1}};
-    \fill[blue!50!black!20!,draw=black,thick] (1.9,2.0) circle (0.43cm);
-    \node[scale=\scl] at (1.9,2.0) {\Large \textbf{2}};
-    \fill[blue!50!black!20!,draw=black,thick] (3.3,2.0) circle (0.43cm);
-    \node[scale=\scl] at (3.3,2.0) {\Large \textbf{3}};
-
-    \node[scale=\scl] at (8.1,0.8) {\Large \textbf{Parametres}};
-
-    \fill[blue!50!black!20!,draw=black,thick] (6.0,2.0) circle (0.43cm);
-    \node[scale=\scl] at (6.0,2.0) {\Large \textbf{1}};
-    \fill[blue!50!black!20!,draw=black,thick] (7.4,2.0) circle (0.43cm);
-    \node[scale=\scl] at (7.4,2.0) {\Large \textbf{2}};
-    \fill[blue!50!black!20!,draw=black,thick] (8.8,2.0) circle (0.43cm);
-    \node[scale=\scl] at (8.8,2.0) {\Large \textbf{3}};
-    \fill[blue!50!black!20!,draw=black,thick] (10.2,2.0) circle (0.43cm);
-    \node[scale=\scl] at (10.2,2.0) {\Large \textbf{4}};
-
+	% CAPTEURS BAS
+    \def\hauteur{-3.9}
+%   AXES ÉNERGIE
+  \begin{scope}[xshift=-16.7 cm,yshift=\hauteur cm]
+    % Draw axes
+    \draw [<->,draw=gray,thick] (0,5) node (yaxis) [above] {$\acute{e}nergie$}
+        |- (9,0) node (xaxis) [right] {$t$};
   \end{scope}
+%   AXES PRESSION
+  \begin{scope}[xshift=-4.7 cm,yshift=\hauteur cm]
+    % Draw axes
+    \draw [<->,draw=gray,thick] (0,5) node (yaxis) [above] {$pression$}
+        |- (9,0) node (xaxis) [right] {$t$};
+  \end{scope}
+%   AXES DENSITÉ D'ÉNERGIE
+ % \begin{scope}[xshift=7.7 cm,yshift=\hauteur cm]
+ %   % Draw axes
+ %   \draw [<->,draw=gray,thick] (0,5) node (yaxis) [above] {$densit\acute{e}$}
+ %       |- (9,0) node (xaxis) [right] {$\acute{e}nergie$};
+ % \end{scope}
 %
 %
-%      PANNEAU  BAS 2
+%      PANNEAU  DROIT
 %
   \fill[panneaucontroles] (20.1,-4.5) rectangle (27.6,5.1);
+%
+%
+%        VITESSE DE LA SIMULATION
 %
   \begin{scope}[xshift=22.7 cm,yshift=2.7cm]
     \fill[petitbouton] (3.5,-2.05) circle (0.3cm);
@@ -104,9 +94,6 @@
   %  \fill[petitbouton] (3.5,2.35) circle (0.3cm);
   %  \node[scale=\scl] at (3.5,2.95) {\Large{Marche}};
   \end{scope}
-
-%
-%        VITESSE DE LA SIMULATION
 %
   \begin{scope}[xshift=22.7 cm,yshift=2.4cm,scale=0.75]
     \node[scale=\scl] at (0,2.6) {\Large \textbf{Simulation}};
@@ -121,8 +108,15 @@
 %
 %        NOMBRE
 %
+  \begin{scope}[xshift=22.7 cm,yshift=-1.7cm]
+    \fill[blue!30!black!60!,draw=black,thick] (3.5,-1.35) circle (0.3cm);
+    \node[scale=\scl] at (3.5,-0.57) {\Large{Thermo.}};
+    \fill[blue!30!black!60!,draw=black,thick] (3.5,0.27) circle (0.3cm);
+    \node[scale=\scl] at (3.5,0.95) {\Large{Initialise}};
+  \end{scope}
+%
   \begin{scope}[xshift=22.7 cm,yshift=-2.1cm,scale=0.75]
-%    \node[scale=\scl] at (0,2.6) {\Large \textbf{Nombre}};
+    \node[scale=\scl] at (0,2.6) {\Large \textbf{Nombre}};
     \clip[rounded corners] (-2,-2) rectangle (2,2);
     \fill[black!30!,rounded corners,draw=black,thick] (-2,-2) rectangle (2,2);
     \draw[very thick,rounded corners](-2,-2) rectangle (2,2);
@@ -130,13 +124,6 @@
     \foreach \i in {0,30,...,330} \draw[thick] (\i:1.2)--(\i:2.5);
     \foreach \i/\j in {15/8,45/7,75/6,105/5,135/4,165/3,195/2,225/1,255/0,285/,315/10,345/9} \node[scale=\scl,black] at (\i:1.7) {\j};
     \fill[blue!30!black!60!,draw=black,thick] (0,0) circle (0.8cm);
-  \end{scope}
-%
-  \begin{scope}[xshift=25.7 cm,yshift=-3.9cm]
-   % Vumètre
-\fill[lumiereeteinte] (0,0.4) rectangle (1,3.4);
-\foreach \i in {0.9,1.4,...,3.4} \draw[lumiereeteinte] (0,\i)-- (1,\i);
-%
   \end{scope}
 %
 %
@@ -195,7 +182,7 @@
   \end{scope}
 
   \begin{scope}[xshift=22.7 cm,yshift=18cm,scale=0.85]
-    \node[scale=\scl] at (0,2.6) {\LARGE \textbf{Température}};
+    \node[scale=\scl] at (0,2.6) {\LARGE \textbf{Thermostat}};
     \clip[rounded corners] (-2,-2) rectangle (2,2);
     \fill[black!30!,rounded corners,draw=black,thick] (-2,-2) rectangle (2,2);
     \draw[very thick,rounded corners](-2,-2) rectangle (2,2);
@@ -248,6 +235,44 @@
 \end{document}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%      PANNEAU  BAS 1
+%
+  \fill[panneaucontroles] (-20.5,-4.5) rectangle (19.1,-0.2);
+%       Réinitialisation
+  \begin{scope}[xshift=-19.7 cm,yshift=-4.3cm]
+  \draw[blue,rounded corners,thin] (-0.5,0.2) rectangle (11.2,3.8);
+
+    \node[scale=\scl] at (5.1,3.3) {\LARGE \textbf{Initialisation}};
+
+    \node[scale=\scl] at (2.1,0.8) {\Large \textbf{Position}};
+
+    \fill[blue!50!black!20!,draw=black,thick] (0.5,2.0) circle (0.43cm);
+    \node[scale=\scl] at (0.5,2.0) {\Large \textbf{1}};
+    \fill[blue!50!black!20!,draw=black,thick] (1.9,2.0) circle (0.43cm);
+    \node[scale=\scl] at (1.9,2.0) {\Large \textbf{2}};
+    \fill[blue!50!black!20!,draw=black,thick] (3.3,2.0) circle (0.43cm);
+    \node[scale=\scl] at (3.3,2.0) {\Large \textbf{3}};
+
+    \node[scale=\scl] at (8.1,0.8) {\Large \textbf{Parametres}};
+
+    \fill[blue!50!black!20!,draw=black,thick] (6.0,2.0) circle (0.43cm);
+    \node[scale=\scl] at (6.0,2.0) {\Large \textbf{1}};
+    \fill[blue!50!black!20!,draw=black,thick] (7.4,2.0) circle (0.43cm);
+    \node[scale=\scl] at (7.4,2.0) {\Large \textbf{2}};
+    \fill[blue!50!black!20!,draw=black,thick] (8.8,2.0) circle (0.43cm);
+    \node[scale=\scl] at (8.8,2.0) {\Large \textbf{3}};
+    \fill[blue!50!black!20!,draw=black,thick] (10.2,2.0) circle (0.43cm);
+    \node[scale=\scl] at (10.2,2.0) {\Large \textbf{4}};
+
+  \end{scope}
+%
+  \begin{scope}[xshift=25.7 cm,yshift=-3.9cm]
+   % Vumètre
+\fill[lumiereeteinte] (0,0.4) rectangle (1,3.4);
+\foreach \i in {0.9,1.4,...,3.4} \draw[lumiereeteinte] (0,\i)-- (1,\i);
+%
+  \end{scope}
+%
 %      PANNEAU  PARTICULE
 %
   \fill[panneaucontroles] (20.1,18) rectangle (27.6,23.7);

@@ -1,9 +1,9 @@
 /*
-Copyright octobre 2018, Stephan Runigo
+Copyright novembre 2018, Stephan Runigo
 runigo@free.fr
-SiGP 2.2.1  simulateur de gaz parfait
-Ce logiciel est un programme informatique servant à simuler un gaz parfait
-et à en donner une représentation graphique. Il permet d'observer une détente
+SiGP 2.2.2  simulateur de gaz parfait
+Ce logiciel est un programme informatique servant à simuler un gaz et à
+en donner une représentation graphique. Il permet d'observer une détente
 de Joule ainsi que des transferts thermiques avec des thermostats.
 Ce logiciel est régi par la licence CeCILL soumise au droit français et
 respectant les principes de diffusion des logiciels libres. Vous pouvez
@@ -33,16 +33,29 @@ termes.
 #include "observables.h"
 
 int observablesMiseAJourAmplitudes(observablesT * observables);
+float observablesMiseAJourAmplitude(observableT * observable);
 
 int observablesMiseAJourNombre(observablesT * observables, systemeT * systeme);
 int observablesMiseAJourLibreParcoursMoyen(observablesT * observables, systemeT * systeme);
 int observablesMiseAJourTemperature(observablesT * observables, systemeT * systeme);
+
+int observablesMiseAJourPression(observablesT * observables, systemeT * systeme);
+int observablesMiseAJourDensite(observablesT * observables, systemeT * systeme);
+
+float observablesAbsolue(float valeur);
+
+float observablesAbsolue(float valeur)
+	{
+	if(valeur<0) return -valeur;
+	return valeur;
+	}
 
 int observablesInitialise(observablesT * observables)
 	{
 	int i, j;
 	for(j=0;j<CAPTEURS;j++)
 		{
+		(*observables).observable[j].dureeCapteur=DUREE_CAPTEURS;
 		for(i=0;i<DUREE_CAPTEURS;i++)
 			{
 			(*observables).observable[j].gauche[i]=0;
@@ -50,36 +63,47 @@ int observablesInitialise(observablesT * observables)
 			}
 		}
 
+	(*observables).observable[5].dureeCapteur=DY_ENERGIE;
+
 	(*observables).index=0;
 
 	return 0;
 	}
 
+float observablesMiseAJourAmplitude(observableT * observable)
+	{
+				// Calcul le maximum d'un capteur
+	int i;
+	float max;
+
+	max = 0.0;
+	for(i=0;i<DUREE_CAPTEURS;i++)
+		{
+		if((*observable).gauche[i] > max)
+			{
+			max = (*observable).gauche[i];
+			}
+		if((*observable).droite[i] > max)
+			{
+			max = (*observable).droite[i];
+			}
+		}
+	(*observable).maximumCapteur = max;
+
+	return max;
+	}
+
 int observablesMiseAJourAmplitudes(observablesT * observables)
 	{
-				// Calcul le maximum de chaque capteur
-	int i, j;
-	float max;
+				// Mise à jour des maximum des capteurs
+	int j;
 
 	for(j=0;j<CAPTEURS;j++)
 		{
-		max = 0.0;
-		for(i=0;i<DUREE_CAPTEURS;i++)
-			{
-			if((*observables).observable[j].gauche[i] > max)
-				{
-				max = (*observables).observable[j].gauche[i];
-				}
-			if((*observables).observable[j].droite[i] > max)
-				{
-				max = (*observables).observable[j].droite[i];
-				}
-			}
-		(*observables).observable[j].maximumCapteur = max;
+		observablesMiseAJourAmplitude(&(*observables).observable[j]);
 		}
 	return 0;
 	}
-
 
 int observablesMiseAJour(observablesT * observables, systemeT * systeme)
 	{
@@ -99,7 +123,11 @@ int observablesMiseAJour(observablesT * observables, systemeT * systeme)
 
 	observablesMiseAJourTemperature(observables, systeme);
 
-	observablesMiseAJourAmplitudes(observables);
+	observablesMiseAJourPression(observables, systeme);
+
+	//observablesMiseAJourDensite(observables, systeme);
+
+	//observablesMiseAJourAmplitudes(observables);
 
 	return 0;
 	}
@@ -111,7 +139,7 @@ int observablesMiseAJourNombre(observablesT * observables, systemeT * systeme)
 	int nbGauche=0;
 	int nbDroite=0;
 
-	for(i=0;i<NOMBRE;i++)
+	for(i=0;i<(*systeme).nombre;i++)
 		{
 		if((*systeme).mobile[i].droite==0)
 			{
@@ -125,6 +153,8 @@ int observablesMiseAJourNombre(observablesT * observables, systemeT * systeme)
 
 	(*observables).observable[1].gauche[(*observables).index]=nbGauche;
 	(*observables).observable[1].droite[(*observables).index]=nbDroite;
+	
+	observablesMiseAJourAmplitude(&(*observables).observable[1]);
 
 	return 0;
 	}
@@ -136,7 +166,7 @@ int observablesMiseAJourTemperature(observablesT * observables, systemeT * syste
 	double ecGauche=0.0;
 	double ecDroite=0.0;
 
-	for(i=0;i<NOMBRE;i++)
+	for(i=0;i<(*systeme).nombre;i++)
 		{
 		if((*systeme).mobile[i].droite==0)
 			{
@@ -148,6 +178,11 @@ int observablesMiseAJourTemperature(observablesT * observables, systemeT * syste
 			}
 		}
 
+		// Mise à jour de l'énergie
+	(*observables).observable[3].gauche[(*observables).index]=ecGauche;
+	(*observables).observable[3].droite[(*observables).index]=ecDroite;
+
+		// Mise à jour de la température
 	if((*observables).observable[1].gauche[(*observables).index]!=0.0)
 		{
 		(*observables).observable[0].gauche[(*observables).index]=ecGauche/(*observables).observable[1].gauche[(*observables).index];
@@ -166,6 +201,9 @@ int observablesMiseAJourTemperature(observablesT * observables, systemeT * syste
 		(*observables).observable[0].droite[(*observables).index]=ecDroite;
 		}
 
+	observablesMiseAJourAmplitude(&(*observables).observable[3]);
+	observablesMiseAJourAmplitude(&(*observables).observable[0]);
+
 	return 0;
 	}
 
@@ -176,7 +214,7 @@ int observablesMiseAJourLibreParcoursMoyen(observablesT * observables, systemeT 
 	double lpmGauche=0.0;
 	double lpmDroite=0.0;
 
-	for(i=0;i<NOMBRE;i++)
+	for(i=0;i<(*systeme).nombre;i++)
 		{
 		if((*systeme).mobile[i].droite==0)
 			{
@@ -206,8 +244,100 @@ int observablesMiseAJourLibreParcoursMoyen(observablesT * observables, systemeT 
 		(*observables).observable[2].droite[(*observables).index]=lpmDroite;
 		}
 
+	observablesMiseAJourAmplitude(&(*observables).observable[2]);
+
 	return 0;
 	}
+
+int observablesMiseAJourPression(observablesT * observables, systemeT * systeme)
+	{
+						// Calcul de la pression à gauche et à droite
+	int i;
+	float pressionGauche=0.0;
+	float pressionDroite=0.0;
+
+	for(i=0;i<(*systeme).nombre;i++)
+		{
+		//if(observablesAbsolue((*systeme).mobile[i].actuel.x) < DY_PRESSION)
+			{
+			if((*systeme).mobile[i].droite==0)
+				{
+				pressionGauche = pressionGauche + observablesAbsolue(((*systeme).mobile[i].actuel.y)-((*systeme).mobile[i].ancien.y));
+				//pressionGauche = pressionGauche + observablesAbsolue(((*systeme).mobile[i].nouveau.y)-((*systeme).mobile[i].actuel.y));
+				}
+			else
+				{
+				pressionDroite = pressionDroite + observablesAbsolue(((*systeme).mobile[i].actuel.y)-((*systeme).mobile[i].ancien.y));
+				//pressionDroite = pressionDroite + observablesAbsolue(((*systeme).mobile[i].actuel.y)-((*systeme).mobile[i].ancien.y));
+				}
+			}
+		}
+
+	(*observables).observable[4].gauche[(*observables).index]=pressionGauche;
+
+	(*observables).observable[4].droite[(*observables).index]=pressionDroite;
+
+	observablesMiseAJourAmplitude(&(*observables).observable[4]);
+
+	return 0;
+	}
+
+int observablesMiseAJourDensite(observablesT * observables, systemeT * systeme)
+	{
+						// Calcul de la fonction de répartition de l'énergie
+	int i;
+	int index = 0;
+	float a;
+
+		// Maximum de l'énergie des particules -> maximum de l'axe oy
+	float max = 0.0;
+	for(i=0;i<(*systeme).nombre;i++)
+		{
+		if((*systeme).mobile[i].ec > max)
+			{
+			max = (*systeme).mobile[i].ec;
+			}
+		}
+
+		// Remise à zéro
+	for(i=0;i<DY_ENERGIE;i++)
+		{
+		(*observables).observable[5].gauche[i]=0.0;
+		(*observables).observable[5].droite[i]=0.0;
+		}
+
+		// Coeficient directeur
+	if(max!=0.0)
+		{
+		a = DY_ENERGIE / max ;
+		}
+	else
+		{
+		a = DY_ENERGIE ;
+		}
+
+		// Calcul des densités
+	for(i=0;i<(*systeme).nombre;i++)
+		{
+		index = (int) (a * (*systeme).mobile[i].ec);
+		if(index < DY_ENERGIE && index >= 0)
+			{
+			if((*systeme).mobile[i].droite==0)
+				{
+				(*observables).observable[5].gauche[index] = (*observables).observable[5].gauche[index] + 1;
+				}
+			else
+				{
+				(*observables).observable[5].droite[index] = (*observables).observable[5].droite[index] + 1;
+				}
+			}
+		}
+
+	observablesMiseAJourAmplitude(&(*observables).observable[5]);
+
+	return 0;
+	}
+
 
 int observablesAffiche(observablesT * observables)
 	{

@@ -1,7 +1,7 @@
 /*
-Copyright octobre 2018, Stephan Runigo
+Copyright novembre 2018, Stephan Runigo
 runigo@free.fr
-SiGP 2.2.1  simulateur de gaz parfait
+SiGP 2.2.2  simulateur de gaz parfait
 Ce logiciel est un programme informatique servant à simuler un gaz et à
 en donner une représentation graphique. Il permet d'observer une détente
 de Joule ainsi que des transferts thermiques avec des thermostats.
@@ -222,12 +222,20 @@ int graphiqueCapteurs(graphiqueT * graphique, capteursT * capteurs)
 	SDL_RenderDrawLines((*graphique).rendu, (*capteurs).capteur[1].gauche, DUREE_CAPTEURS);
 	SDL_RenderDrawLines((*graphique).rendu, (*capteurs).capteur[2].gauche, DUREE_CAPTEURS);
 
+	SDL_RenderDrawLines((*graphique).rendu, (*capteurs).capteur[3].gauche, DUREE_CAPTEURS);
+	SDL_RenderDrawLines((*graphique).rendu, (*capteurs).capteur[4].gauche, DUREE_CAPTEURS);
+	//SDL_RenderDrawLines((*graphique).rendu, (*capteurs).capteur[5].gauche, DY_ENERGIE);
+
 		// Grandeurs à droite
 	graphiqueChangeCouleur(graphique, (*graphique).droite);
 
 	SDL_RenderDrawLines((*graphique).rendu, (*capteurs).capteur[0].droite, DUREE_CAPTEURS);
 	SDL_RenderDrawLines((*graphique).rendu, (*capteurs).capteur[1].droite, DUREE_CAPTEURS);
 	SDL_RenderDrawLines((*graphique).rendu, (*capteurs).capteur[2].droite, DUREE_CAPTEURS);
+
+	SDL_RenderDrawLines((*graphique).rendu, (*capteurs).capteur[3].droite, DUREE_CAPTEURS);
+	SDL_RenderDrawLines((*graphique).rendu, (*capteurs).capteur[4].droite, DUREE_CAPTEURS);
+	//SDL_RenderDrawLines((*graphique).rendu, (*capteurs).capteur[5].droite, DY_ENERGIE);
 
 
 		// Epaississement du trait
@@ -336,7 +344,7 @@ void graphiqueDessineGraphe(graphiqueT * graphique, grapheT * graphe)
 	SDL_Rect coordonnee = {0, 0, (*graphe).taille, (*graphe).taille};
 
 		//fprintf(stderr, "Dessin des particules\n");
-	for(i=0;i<NOMBRE;i++)
+	for(i=0;i<(*graphe).nombre;i++)
 		{
 		x=(*graphe).abscisse[i];
 		y=(*graphe).ordonnee[i];

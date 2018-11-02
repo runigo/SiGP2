@@ -1,7 +1,7 @@
 /*
 Copyright novembre 2018, Stephan Runigo
 runigo@free.fr
-SiGP 2.2  simulateur de gaz parfait
+SiGP 2.2.2  simulateur de gaz parfait
 Ce logiciel est un programme informatique servant à simuler un gaz et à
 en donner une représentation graphique. Il permet d'observer une détente
 de Joule ainsi que des transferts thermiques avec des thermostats.
@@ -83,27 +83,22 @@ int controleurInitialise(controleurT * controleur)
 
 		fprintf(stderr, " Initialisation du système\n");
 		// Initialisation géométrique de l'enceinte
-
 	(*controleur).systeme.montage.largeur = LARGEUR; // Largeur
 	(*controleur).systeme.montage.hauteur = HAUTEUR;// Hauteur
 	(*controleur).systeme.montage.demiLargeur = LARGEUR/2; // Demi largeur
 	(*controleur).systeme.montage.demiHauteur = HAUTEUR/2;// Demi hauteur
-
 	(*controleur).systeme.montage.paroiCentrale = (*controleur).options.cloison; 
-		//fprintf(stderr, " (*controleur).systeme.montage.paroiCentrale = %d\n",(*controleur).systeme.montage.paroiCentrale);
 	(*controleur).systeme.montage.demonMaxwell = 0;// 0 : pas de démon de Maxwell
 	(*controleur).systeme.montage.trou = (*controleur).options.trou;// Rayon du trou, sur 2
 
 		// Initialisation du thermostat
-
-	(*controleur).systeme.montage.thermostat.temperature = (*controleur).options.temperature;//	Température initiale
+	(*controleur).systeme.montage.thermostat.uniforme = (*controleur).options.temperature;//	Température initiale
 	(*controleur).systeme.montage.thermostat.gauche = (*controleur).options.gauche;	//	Température thermostat gauche
 	(*controleur).systeme.montage.thermostat.droite = (*controleur).options.droite;	//	Température thermostat droite
-
 	(*controleur).systeme.montage.thermostat.actif = (*controleur).options.thermostat;	//	0 : Système isolé, 1:température uniforme, 2:active gauche-droite
 
 		// Initialisation du système
-	systemeInitialise(&(*controleur).systeme, TAILLE_MIN + 1, sqrt((*controleur).options.temperature)/2);
+	systemeInitialise(&(*controleur).systeme, NOMBRE_MAX/2, TAILLE_MIN + 1, sqrt((*controleur).options.temperature)/2);
 
 		// Initialisation des observables
 	observablesInitialise(&(*controleur).observables);
@@ -142,7 +137,7 @@ int controleurInitialise(controleurT * controleur)
 	SDL_GetMouseState(&x,&y);
 	commandesInitialiseSouris(&(*controleur).commandes, x, y);
 
-		fprintf(stderr, " Initialisation horloge SDL\n");
+		//fprintf(stderr, " Initialisation horloge SDL\n");
 	horlogeCreation(&(*controleur).horloge);
 
 	return 0;
@@ -857,9 +852,9 @@ int controleurCommandes(controleurT * controleur, int zone)
 			case 13: // 
 				controleurChangeVitesse(controleur, -10);break;
 			case 14: // 
-				;break;
+				systemeInitialisePosition(&(*controleur).systeme, 0);break;
 			case 15: // 
-				;break;
+				controleurInitialiseParametres(controleur, 3);break;
 			case 16: // 
 				;break;
 			default:
@@ -933,7 +928,7 @@ int controleurInitialiseParametresCloison(controleurT * controleur)
 int controleurInitialiseParametresTemperature(controleurT * controleur)
 	{
 
-	(*controleur).systeme.montage.thermostat.temperature = sqrt(TEMPERATURE_MAX * TEMPERATURE_MIN ); //	Température moyenne du thermostat
+	(*controleur).systeme.montage.thermostat.uniforme = sqrt(TEMPERATURE_MAX * TEMPERATURE_MIN ); //	Température moyenne du thermostat
 	(*controleur).systeme.montage.thermostat.gauche = 2*TEMPERATURE_MIN;	//	Température gauche
 	(*controleur).systeme.montage.thermostat.droite = sqrt(TEMPERATURE_MAX * TEMPERATURE_MIN );	//	Température droite
 	(*controleur).systeme.montage.thermostat.actif = 0;	//	0 : Système isolé, 1:température uniforme, 2:active gauche-droite
@@ -1010,7 +1005,7 @@ int controleurDefileCommandes(controleurT * controleur, int zone)
 				case 5:	//	Simulation
 					controleurChangeVitesse(controleur, 1.1);break;
 				case 6:	//	Nombre
-					;break;
+					systemeChangeNombre(&(*controleur).systeme, 1);break;
 				default:
 					;
 				}
@@ -1032,7 +1027,7 @@ int controleurDefileCommandes(controleurT * controleur, int zone)
 				case 5:	//	Simulation
 					controleurChangeVitesse(controleur, 0.91);break;
 				case 6:	//	Nombre
-					;break;
+					systemeChangeNombre(&(*controleur).systeme, -1);break;
 				default:
 					;
 				}

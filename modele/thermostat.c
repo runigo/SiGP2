@@ -42,7 +42,7 @@ void thermostatInitialise(thermostatT * thermostat)
 			//	Initialisation du thermostat
 	{
 	
-	(*thermostat).temperature = sqrt(TEMPERATURE_MAX * TEMPERATURE_MIN);//	Température moyenne du thermostat
+	(*thermostat).uniforme = sqrt(TEMPERATURE_MAX * TEMPERATURE_MIN);//	Température moyenne du thermostat
 	(*thermostat).gauche = TEMPERATURE_MIN;	//	Température gauche
 	(*thermostat).droite = TEMPERATURE_MAX;	//	Température droite
 	(*thermostat).actif = 0;	//	0 : Système isolé, 1:température uniforme, 2:active gauche-droite
@@ -137,25 +137,25 @@ void thermostatChangeTemperature(thermostatT * thermostat, float facteur)
 
 			//	Change température moyenne
 	{
-	float temperature = (*thermostat).temperature * facteur;
-	if (temperature < TEMPERATURE_MAX && temperature > TEMPERATURE_MIN)
+	float uniforme = (*thermostat).uniforme * facteur;
+	if (uniforme < TEMPERATURE_MAX && uniforme > TEMPERATURE_MIN)
 		{
-		(*thermostat).temperature = (*thermostat).temperature * facteur;
-		printf("Température = %f\n", (*thermostat).temperature);
+		(*thermostat).uniforme = (*thermostat).uniforme * facteur;
+		printf("Température = %f\n", (*thermostat).uniforme);
 		}
 	else
 		{
-		if (temperature > TEMPERATURE_MAX)
+		if (uniforme > TEMPERATURE_MAX)
 			{
-			(*thermostat).temperature = TEMPERATURE_MAX ;
+			(*thermostat).uniforme = TEMPERATURE_MAX ;
 			printf("Température maximale atteinte\n");
-			printf("Température = %f\n", (*thermostat).temperature);
+			printf("Température = %f\n", (*thermostat).uniforme);
 			}
-		if (temperature < TEMPERATURE_MIN)
+		if (uniforme < TEMPERATURE_MIN)
 			{
-			(*thermostat).temperature = TEMPERATURE_MIN ;
+			(*thermostat).uniforme = TEMPERATURE_MIN ;
 			printf("Température minimale atteinte\n");
-			printf("Température = %f\n", (*thermostat).temperature);
+			printf("Température = %f\n", (*thermostat).uniforme);
 			}
 		}
 	return;
@@ -164,21 +164,21 @@ void thermostatChangeTemperatureDroite(thermostatT * thermostat, float facteur)
 
 			//	Change température droite
 	{
-	float temperature = (*thermostat).droite * facteur;
-	if (temperature < TEMPERATURE_MAX && temperature > TEMPERATURE_MIN)
+	float droite = (*thermostat).droite * facteur;
+	if (droite < TEMPERATURE_MAX && droite > TEMPERATURE_MIN)
 		{
-		(*thermostat).droite = temperature ;
+		(*thermostat).droite = droite ;
 		printf("Température droite = %f\n", (*thermostat).droite);
 		}
 	else
 		{
-		if (temperature > TEMPERATURE_MAX)
+		if (droite > TEMPERATURE_MAX)
 			{
 			(*thermostat).droite = TEMPERATURE_MAX ;
 			printf("Température maximale atteinte\n");
 			printf("Température droite = %f\n", (*thermostat).droite);
 			}
-		if (temperature < TEMPERATURE_MIN)
+		if (droite < TEMPERATURE_MIN)
 			{
 			(*thermostat).droite = TEMPERATURE_MIN ;
 			printf("Température minimale atteinte\n");
@@ -191,21 +191,21 @@ void thermostatChangeTemperatureGauche(thermostatT * thermostat, float facteur)
 
 			//	Change température gauche
 	{
-	float temperature = (*thermostat).gauche * facteur;
-	if (temperature < TEMPERATURE_MAX && temperature > TEMPERATURE_MIN)
+	float gauche = (*thermostat).gauche * facteur;
+	if (gauche < TEMPERATURE_MAX && gauche > TEMPERATURE_MIN)
 		{
-		(*thermostat).gauche = temperature;
+		(*thermostat).gauche = gauche;
 		printf("Température gauche = %f\n", (*thermostat).gauche);
 		}
 	else
 		{
-		if (temperature > TEMPERATURE_MAX)
+		if (gauche > TEMPERATURE_MAX)
 			{
 			(*thermostat).gauche = TEMPERATURE_MAX ;
 			printf("Température maximale atteinte\n");
 			printf("Température gauche = %f\n", (*thermostat).gauche);
 			}
-		if (temperature < TEMPERATURE_MIN)
+		if (gauche < TEMPERATURE_MIN)
 			{
 			(*thermostat).gauche = TEMPERATURE_MIN ;
 			printf("Température minimale atteinte\n");
@@ -215,22 +215,11 @@ void thermostatChangeTemperatureGauche(thermostatT * thermostat, float facteur)
 	return;
 	}
 
-void thermostatInverseTemperature(thermostatT * thermostat)
-	{
-	float temperature;
-	temperature = (*thermostat).droite;
-	(*thermostat).droite = (*thermostat).gauche;
-	(*thermostat).gauche = temperature;
-	printf("(*thermostat).gauche = %f\n", (*thermostat).gauche);
-	printf("(*thermostat).droite = %f\n", (*thermostat).droite);
-	return;
-	}
-
 void thermostatAfficheTemperature(thermostatT * thermostat)
 
 			// 	Affiche la valeur des paramètres du thermostat
 	{
-	printf("(*thermostat).temperature = %f\n", (*thermostat).temperature);
+	printf("(*thermostat).uniforme = %f\n", (*thermostat).uniforme);
 	printf("(*thermostat).gauche = %f\n", (*thermostat).gauche);
 	printf("(*thermostat).droite = %f\n", (*thermostat).droite);
 	return;
@@ -240,23 +229,23 @@ void thermostatAfficheThermostat(thermostatT * thermostat)
 
 			// 	Affiche la valeur des paramètres du thermostat
 	{
-	printf("\nÉTATS DES THERMOSTATS\n");
 	switch( (*thermostat).actif )
 		{
 		case 0:
-			printf("	système isolé\n");break;
+			printf("\nSYSTEME ISOLÉ\n");
+			break;
 		case 1:
-			printf("	thermostat uniforme\n");
+			printf("\nTHERMOSTAT UNIFORME\n");
 			break;
 		case 2:
-			printf("	thermostats gauche-droite\n");
+			printf("\nTHERMOSTAT GAUCHE-DROITE\n");
 			break;
 		default:
 			break;
 		}
-	printf("	Température indicative uniforme = %f\n", 0.666*(*thermostat).temperature);
-	printf("	Température indicative à gauche = %f\n", 0.666*(*thermostat).gauche);
-	printf("	Température indicative à droite = %f\n", 0.666*(*thermostat).droite);
+	printf("	Thermostat uniforme = %f\n", (*thermostat).uniforme);
+	printf("	Thermostat gauche = %f\n", (*thermostat).gauche);
+	printf("	Thermostat droite = %f\n", (*thermostat).droite);
 	return;
 	}
 

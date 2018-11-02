@@ -63,23 +63,27 @@ int commandesInitialiseBoutons(commandesT * commandes, int largeur, int hauteur)
 		// PETITS BOUTONS SUIVANT Y
 	(*commandes).boutonY=(int)(0.015*largeur); // Rayon suivant Y // 10 / 667
 
-	(*commandes).boutonCentre[0]=(int)(0.0643185*hauteur); // CLoison
-	(*commandes).boutonCentre[1]=(int)(0.1117917*hauteur); // Trou
-	(*commandes).boutonCentre[2]=(int)(0.1623277*hauteur); // Démon
-	(*commandes).boutonCentre[3]=(int)(0.2098009*hauteur); // Supprim.
-	(*commandes).boutonCentre[4]=(int)(0.3215926*hauteur); // 224 Arrêt
-	(*commandes).boutonCentre[5]=(int)(0.36140888*hauteur); // 259 1 T.
-	(*commandes).boutonCentre[6]=(int)(0.4012251*hauteur); // 294 2 T.
+	(*commandes).boutonCentre[0]=(int)(0.06738*hauteur); // CLoison
+	(*commandes).boutonCentre[1]=(int)(0.11485*hauteur); // Trou
+	(*commandes).boutonCentre[2]=(int)(0.164*hauteur); // Démon
+	(*commandes).boutonCentre[3]=(int)(0.212*hauteur); // Supprim.
 
-	(*commandes).boutonCentre[7]=(int)(0.48085758*hauteur); // 359	Marche
-	(*commandes).boutonCentre[8]=(int)(0.52526799*hauteur); // 395	Arrêt
+	(*commandes).boutonCentre[4]=(int)(0.324*hauteur); // 224 Arrêt
+	(*commandes).boutonCentre[5]=(int)(0.362*hauteur); // 259 1 T.
+	(*commandes).boutonCentre[6]=(int)(0.403*hauteur); // 294 2 T.
+
+	(*commandes).boutonCentre[7]=(int)(0.483*hauteur); // 359	Marche
+	(*commandes).boutonCentre[8]=(int)(0.527*hauteur); // 395	Arrêt
 
 	(*commandes).boutonCentre[9]=(int)(0.626339969*hauteur); // 481	Marche
-	(*commandes).boutonCentre[10]=(int)(0.667687596*hauteur); // 516	Arrêt
+	(*commandes).boutonCentre[10]=(int)(0.670*hauteur); // 516	Arrêt
 
-	(*commandes).boutonCentre[11]=(int)(0.7611026*hauteur); //		Pause
-	(*commandes).boutonCentre[12]=(int)(0.79938744*hauteur); //	Min
-	(*commandes).boutonCentre[13]=(int)(0.84226646*hauteur); //	Max
+	(*commandes).boutonCentre[11]=(int)(0.763*hauteur); //		Pause
+	(*commandes).boutonCentre[12]=(int)(0.803*hauteur); //	Min
+	(*commandes).boutonCentre[13]=(int)(0.844*hauteur); //	Max
+
+	(*commandes).boutonCentre[14]=(int)(0.901*hauteur); //	Initialise
+	(*commandes).boutonCentre[15]=(int)(0.947*hauteur); //	Paramètre
 
 	//	PANNEAU BAS
 

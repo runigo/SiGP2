@@ -60,19 +60,28 @@ int capteursMiseAJourLongueur(capteursT * capteurs, int largeur, int hauteur)
 	{
 
 	(*capteurs).capteur[0].xZero=(int)(0.08744395*largeur); // 	x
-	(*capteurs).capteur[0].yZero=(int)(0.797856049*hauteur); // Température
+	(*capteurs).capteur[0].yZero=(int)(0.755*hauteur); // Température
 
 	(*capteurs).capteur[1].xZero=(int)(0.33295964*largeur); // x
-	(*capteurs).capteur[1].yZero=(int)(0.797856049*hauteur); // Nombre
+	(*capteurs).capteur[1].yZero=(int)(0.755*hauteur); // Nombre
 
 	(*capteurs).capteur[2].xZero=(int)(0.58632287*largeur); // x
-	(*capteurs).capteur[2].yZero=(int)(0.797856049*hauteur); // l. p. m.
+	(*capteurs).capteur[2].yZero=(int)(0.755*hauteur); // l. p. m.
+
+	(*capteurs).capteur[3].xZero=(int)(0.08744395*largeur); // 	x
+	(*capteurs).capteur[3].yZero=(int)(0.972*hauteur); // Température
+
+	(*capteurs).capteur[4].xZero=(int)(0.33295964*largeur); // x
+	(*capteurs).capteur[4].yZero=(int)(0.972*hauteur); // Nombre
+
+	(*capteurs).capteur[5].xZero=(int)(0.58632287*largeur); // x
+	(*capteurs).capteur[5].yZero=(int)(0.972*hauteur); // l. p. m.
 
 	int j;
 	for(j=0;j<CAPTEURS;j++)
 		{
 		(*capteurs).capteur[j].largeur=(int)(0.17713*largeur); // longueur de l'axe x 164 165 165 / 892
-		(*capteurs).capteur[j].hauteur=(int)(0.13170*hauteur); // longueur de l'axe y 91 / 653
+		(*capteurs).capteur[j].hauteur=(int)(0.123*hauteur); // longueur de l'axe y 91 / 653
 		}
 
 
@@ -80,12 +89,25 @@ int capteursMiseAJourLongueur(capteursT * capteurs, int largeur, int hauteur)
 	int i, x0;
 	for(j=0;j<CAPTEURS;j++)
 		{
-		x0=(*capteurs).capteur[j].xZero;
-		a=(float)((*capteurs).capteur[j].largeur) / (float)(DUREE_CAPTEURS);
-		for(i=0;i<DUREE_CAPTEURS;i++)
+		if(j!=5)
 			{
-			(*capteurs).capteur[j].gauche[i].x=(int)(a*i)+x0;
-			(*capteurs).capteur[j].droite[i].x=(int)(a*i)+x0;
+			x0=(*capteurs).capteur[j].xZero;
+			a=(float)((*capteurs).capteur[j].largeur) / (float)(DUREE_CAPTEURS);
+			for(i=0;i<DUREE_CAPTEURS;i++)
+				{
+				(*capteurs).capteur[j].gauche[i].x=(int)(a*i)+x0;
+				(*capteurs).capteur[j].droite[i].x=(int)(a*i)+x0;
+				}
+			}
+		else
+			{
+			x0=(*capteurs).capteur[j].xZero;
+			a=(float)((*capteurs).capteur[j].largeur) / (float)(DY_ENERGIE);
+			for(i=0;i<DY_ENERGIE;i++)
+				{
+				(*capteurs).capteur[j].gauche[i].x=(int)(a*i)+x0;
+				(*capteurs).capteur[j].droite[i].x=(int)(a*i)+x0;
+				}
 			}
 		}
 
