@@ -68,7 +68,7 @@ termes.
 #define MARGE 17 // Marge fenêtre-montage
 
 #define TRAIT_CLOISON 4
-#define TRAIT_ENCEINTE 8
+#define TRAIT_ENCEINTE 6
 
 
 	//	PARAMÈTRES DU SYSTÈME

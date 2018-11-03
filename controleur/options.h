@@ -50,6 +50,9 @@ typedef struct OptionsT optionsT;
 		int cloison;		// 0 : pas de paroi centrale. 1 : détente, 2 : chaleur, 3 : maxwell, 4 : carré
 		int trou;		// trou dans la paroi
 
+		int diametre;		// Diamètre des particules.
+		int nombre;			// Nombre de particules.
+
 		};
 
 int optionsInitialise(optionsT * options);

@@ -42,6 +42,8 @@ void optionsDroite(optionsT * options, char *opt);
 void optionsThermostat(optionsT * options, char *opt);
 void optionsCloison(optionsT * options, char *opt);
 void optionsTrou(optionsT * options, char *opt);
+void optionsDiametre(optionsT * options, char *opt);
+void optionsNombre(optionsT * options, char *opt);
 
 void optionsAide(void);
 
@@ -59,6 +61,8 @@ int optionsInitialise(optionsT * options)
 	(*options).cloison = 2;		// 0 : pas de paroi centrale. 1 : cloison fermé, 2 : détente de joule,
 					//	 -1, -2 : démon de maxwell.
 	(*options).trou = RAYON_TROU;
+	(*options).diametre = TAILLE_MAX/3;
+	(*options).nombre = NOMBRE_MAX/2;
 
 	return 0;
 	}
@@ -84,6 +88,10 @@ int optionsTraitement(optionsT * options, int nb, char *opt[])
 			optionsCloison(options, opt[i+1]);	// Activation cloison centrale.
 		if(strcmp(opt[i], "trou")==0 && opt[i+1]!=NULL)
 			optionsTrou(options, opt[i+1]);	// Trou dans la cloison centrale.
+		if(strcmp(opt[i], "diametre")==0 && opt[i+1]!=NULL)
+			optionsDiametre(options, opt[i+1]);	// Diamètre des particules.
+		if(strcmp(opt[i], "nombre")==0 && opt[i+1]!=NULL)
+			optionsNombre(options, opt[i+1]);	// Nombre de particules.
 
 		if(strcmp(opt[i], "aide")==0)
 			optionsAide();	// Affiche l'aide.
@@ -208,6 +216,40 @@ void optionsTrou(optionsT * options, char *opt)
 	return;
 	}
 
+
+void optionsDiametre(optionsT * options, char *opt)
+	{
+	int diametre = atoi(opt);
+	if(diametre > -1 && diametre < TAILLE_MAX+1)
+		{
+		(*options).diametre = diametre;
+		printf("Option diametre valide, diametre = %d\n", (*options).diametre);
+		}
+	else
+		{
+		printf("Option diametre non valide, diametre = %d\n", (*options).diametre);
+		printf("Option diametre : 0 <= diametre < %d\n", RAYON_TROU);
+		}
+	return;
+	}
+
+
+void optionsNombre(optionsT * options, char *opt)
+	{
+	int nombre = atoi(opt);
+	if(nombre > -1 && nombre < NOMBRE_MAX+1)
+		{
+		(*options).nombre = nombre;
+		printf("Option nombre valide, nombre = %d\n", (*options).nombre);
+		}
+	else
+		{
+		printf("Option nombre non valide, nombre = %d\n", (*options).nombre);
+		printf("Option nombre : 0 <= nombre < %d\n", NOMBRE_MAX);
+		}
+	return;
+	}
+
 void optionsAide(void)
 	{
 	printf("\n\nAide de SiGP\n\n");
@@ -239,6 +281,10 @@ void optionsAide(void)
 	printf("		2 : thermostats droite-gauche. \n");
 
 	printf("trou	-1 < trou < %d, taille du trou	\n", (HAUTEUR-MARGE)/2+1);
+
+	printf("diametre	-1 < diametre < %d, diametre des particules	\n", TAILLE_MAX+1);
+
+	printf("nombre	-1 < nombre < %d, nombre de particules	\n", NOMBRE_MAX+1);
 
 	printf("cloison	-3 < cloison < 3	Cloison si <> 0\n");
 	printf("		0 : pas de cloison, 1 : cloison percée,\n");

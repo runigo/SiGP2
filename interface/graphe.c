@@ -45,31 +45,42 @@ int grapheMiseAJourLongueur(grapheT * graphe, int largeur, int hauteur)
 		//		gy	-----------------
 
 	(*graphe).zoneX=0.8394*largeur;
-	(*graphe).zoneY=0.61562*hauteur;
-	float longueur=2*(*graphe).zoneY;
+	(*graphe).zoneY=0.57*hauteur;
 
+		// Longueur disponible au graphe
+	float longueur=2*(*graphe).zoneY;
 	if((*graphe).zoneX<longueur) longueur=(*graphe).zoneX;
 
-	float X = longueur/2 - MARGE - (*graphe).taille - TRAIT_ENCEINTE - TRAIT_CLOISON/2;
+		// Longueur disponible au système
+	float X;
+	if((*graphe).cloison==0)
+		{
+		X = longueur/2 - MARGE - TRAIT_ENCEINTE;
+		}
+	else
+		{
+		X = longueur/2 - MARGE - TRAIT_ENCEINTE - TRAIT_CLOISON/2;
+		}
 
-	(*graphe).facteur=X/HAUTEUR;
+		// Facteur entre le graphe et le système (de taille HAUTEUR) - (*graphe).taille
+	(*graphe).facteur=(X - 0.75*(*graphe).taille)/HAUTEUR;// - (*graphe).taille/2
 
 		// Absisses
-	(*graphe).bx = longueur/2;
-		if((*graphe).cloison==0)
-			{
-			(*graphe).ax = (*graphe).bx - X;// -(*graphe).taille/4
-			(*graphe).cx = (*graphe).bx + X + TRAIT_CLOISON/2 +(*graphe).taille/4;
-			}
-		else
-			{
-			(*graphe).ax = (*graphe).bx - X - TRAIT_CLOISON/2 -(*graphe).taille/2;
-			(*graphe).cx = (*graphe).bx + X + TRAIT_CLOISON/2 +(*graphe).taille/2;
-			}
+	(*graphe).bx = (*graphe).zoneX/2;
+	if((*graphe).cloison==0)
+		{
+		(*graphe).ax = (*graphe).bx - X;//
+		(*graphe).cx = (*graphe).bx + X;// + (*graphe).taille
+		}
+	else
+		{
+		(*graphe).ax = (*graphe).bx - X - TRAIT_CLOISON/2;// - (*graphe).taille
+		(*graphe).cx = (*graphe).bx + X + TRAIT_CLOISON/2;// + (*graphe).taille
+		}
 
 		// Ordonnées
 	(*graphe).dy = MARGE+TRAIT_ENCEINTE;
-	(*graphe).gy = MARGE+TRAIT_ENCEINTE+X+(*graphe).taille/2;
+	(*graphe).gy = MARGE+TRAIT_ENCEINTE+X;
 
 	(*graphe).ey = 0.5*((*graphe).dy+(*graphe).gy) - (*graphe).trou;
 	(*graphe).fy = 0.5*((*graphe).dy+(*graphe).gy) + (*graphe).trou;

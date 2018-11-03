@@ -98,7 +98,7 @@ int controleurInitialise(controleurT * controleur)
 	(*controleur).systeme.montage.thermostat.actif = (*controleur).options.thermostat;	//	0 : Système isolé, 1:température uniforme, 2:active gauche-droite
 
 		// Initialisation du système
-	systemeInitialise(&(*controleur).systeme, NOMBRE_MAX/2, TAILLE_MIN + 1, sqrt((*controleur).options.temperature)/2);
+	systemeInitialise(&(*controleur).systeme, (*controleur).options.nombre, (*controleur).options.diametre, sqrt((*controleur).options.temperature)/2);
 
 		// Initialisation des observables
 	observablesInitialise(&(*controleur).observables);
@@ -929,7 +929,7 @@ int controleurInitialiseParametresTemperature(controleurT * controleur)
 	{
 
 	(*controleur).systeme.montage.thermostat.uniforme = sqrt(TEMPERATURE_MAX * TEMPERATURE_MIN ); //	Température moyenne du thermostat
-	(*controleur).systeme.montage.thermostat.gauche = 2*TEMPERATURE_MIN;	//	Température gauche
+	(*controleur).systeme.montage.thermostat.gauche = TEMPERATURE_MIN + TEMPERATURE_MAX/5;	//	Température gauche
 	(*controleur).systeme.montage.thermostat.droite = sqrt(TEMPERATURE_MAX * TEMPERATURE_MIN );	//	Température droite
 	(*controleur).systeme.montage.thermostat.actif = 0;	//	0 : Système isolé, 1:température uniforme, 2:active gauche-droite
 	(*controleur).systeme.montage.thermostat.etatDroite = 0;		//	0: isolé à droite, 1:températures droite

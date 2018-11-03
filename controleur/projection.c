@@ -227,7 +227,7 @@ void projectionSystemeGraphe(systemeT * systeme, projectionT * projection, graph
 	(*graphe).demon = (*systeme).montage.demonMaxwell;	// O ou 1
 	(*graphe).thermostat = (*systeme).montage.thermostat.actif;	// O, 1 ou 2.
 
-	(*graphe).taille = 1.9*((*systeme).diametre+1); // Diametre des particules
+	(*graphe).taille = (int)(((*systeme).diametre+1)); // Diametre des particules
 	if((*graphe).taille < 1) { (*graphe).taille = 1; }
 
 				// Projection des particules

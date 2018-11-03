@@ -72,7 +72,7 @@ typedef struct GrapheT grapheT;
 		int thermostat;	// O, 1 ou 2.
 		int demon;	// O ou 1
 		int trou;	// Rayon du trou dans la cloison
-		int taille; // Rayon des particules
+		int taille; // Diamètre des particules
 
 		};
 
