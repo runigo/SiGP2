@@ -53,9 +53,9 @@ int interfaceCreation(interfaceT * interface)
 		// Sortie si = 0
 	(*interface).continu = 1;
 
-		// Création de la fenêtre //SDL_WINDOW_FULLSCREEN_DESKTOP |//SDL_WINDOW_MAXIMIZED |
-	(*interface).fenetre = SDL_CreateWindow("SiGP2", 0, 
-							0, FENETRE_X, FENETRE_Y, 
+		// Création de la fenêtre //SDL_WINDOW_FULLSCREEN_DESKTOP |//SDL_WINDOW_MAXIMIZED | SDL_WINDOW_FULLSCREEN_DESKTOP
+	(*interface).fenetre = SDL_CreateWindow("SiGP2", SDL_WINDOWPOS_UNDEFINED, 
+							SDL_WINDOWPOS_UNDEFINED, FENETRE_X, FENETRE_Y, 
 							SDL_WINDOW_RESIZABLE |
 							SDL_WINDOW_SHOWN
 							);
